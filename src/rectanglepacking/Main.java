@@ -7,7 +7,7 @@ package rectanglepacking;
 import rectanglepacking.input.FileInput;
 import rectanglepacking.input.InputInterface;
 import rectanglepacking.input.SystemInput;
-import rectanglepacking.output.OutputInterface;
+import rectanglepacking.output.AbstractOutput;
 import rectanglepacking.output.PlainText;
 
 /**
@@ -30,7 +30,7 @@ public class Main {
         Area area;
         area = input.read();
 
-        OutputInterface output = new PlainText(area);
+        AbstractOutput output = new PlainText(area);
         output.draw();
     }
     
