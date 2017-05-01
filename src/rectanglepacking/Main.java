@@ -7,7 +7,7 @@ package rectanglepacking;
 import rectanglepacking.input.FileInput;
 import rectanglepacking.input.InputInterface;
 import rectanglepacking.input.SystemInput;
-import rectanglepacking.output.OutputInterface;
+import rectanglepacking.output.AbstractOutput;
 import rectanglepacking.output.PlainText;
 import Strategy.StrategyPicker;
 import Strategy.AbstractStrategy;
@@ -37,7 +37,7 @@ public class Main {
 
         strategy.computeArea();
 
-        OutputInterface output = new PlainText(area);
+        AbstractOutput output = new PlainText(area);
         output.draw();
     }
     

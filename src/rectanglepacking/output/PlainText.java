@@ -4,12 +4,10 @@ import rectanglepacking.Area;
 import rectanglepacking.Rectangle;
 import java.util.Iterator;
 
-public class PlainText implements OutputInterface {
-
-    private Area area;
+public class PlainText extends AbstractOutput {
 
     public PlainText(Area area) {
-        this.area = area;
+        super(area);
     }
 
     @Override
