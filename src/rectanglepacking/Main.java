@@ -4,7 +4,11 @@
  */
 package rectanglepacking;
 
-import rectanglepacking.input.Input;
+import rectanglepacking.input.FileInput;
+import rectanglepacking.input.InputInterface;
+import rectanglepacking.input.SystemInput;
+import rectanglepacking.output.OutputInterface;
+import rectanglepacking.output.PlainText;
 
 /**
  *
@@ -15,14 +19,20 @@ public class Main {
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) {
-        Input input = new Input();
-
-        try {
-            input.read();
-        } catch (Exception e) {
-            System.err.println(e.getMessage());
+    public static void main(String[] args) throws Exception {
+        InputInterface input;
+        if (args.length > 0 && args[0].equals("-f")) {
+            input = new FileInput();
+        } else {
+            input = new SystemInput();
         }
+
+        Area area;
+
+        area = input.read();
+
+        OutputInterface output = new PlainText(area);
+        output.draw();
     }
     
 }
