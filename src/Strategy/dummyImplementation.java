@@ -10,16 +10,23 @@ import rectanglepacking.Area;
  * @author Abdel 
  * 01-05-2017
  */
-public class dummyImplementation extends AbstractStrategy {
+public class DummyImplementation extends AbstractStrategy {
     
-    public dummyImplementation (Area area) {
+    public DummyImplementation(Area area) {
         super(area);
     }
     
     @Override
     public Area computeArea() {
-        // To do: dummy implementation
-        return new Area(0, 0, true);
+        // Simple dummy implementation that places all rectangles next to eachother in one single strip
+        int curX = 0;
+        for (Rectangle rectangle : area.getRectangles()) {
+            rectangle.setX(curX);
+            curX += rectangle.getWidth;
+            rectangle.setY(0);
+        }
+
+        return area;
     }
     
 }

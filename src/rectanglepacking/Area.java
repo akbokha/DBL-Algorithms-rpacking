@@ -1,5 +1,6 @@
 package rectanglepacking;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -43,5 +44,23 @@ public class Area extends Rectangle {
     public Iterator<Rectangle> getRectangles() {
         return shapes.iterator();
     }
-
+    
+    /**
+     * 
+     * @return true if the area has none overlapping rectangles
+     */
+    public boolean isValid() {
+        ArrayList<Rectangle> checkedRecs = new ArrayList<>();
+        
+        for(Iterator<Rectangle> recs = getRectangles(); recs.hasNext();) {
+            Rectangle currentRec = recs.next();
+            for(Rectangle rec : checkedRecs) {
+                if(currentRec.x > rec.x && currentRec.x < (rec.x + rec.width) && currentRec.y > rec.y && currentRec.y < (rec.y + rec.height)) {
+                    return false;
+                }
+            }
+            checkedRecs.add(currentRec);
+        }
+        return true;
+    }
 }
