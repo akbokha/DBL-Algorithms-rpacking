@@ -25,7 +25,7 @@ public class StrategyPicker {
     }
     
     public static AbstractStrategy pickStrategy() {
-        return new dummyImplementation(area);
+        return new DummyImplementation(area);
     }
     
 }
