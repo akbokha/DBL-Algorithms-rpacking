@@ -1,6 +1,7 @@
 package rectanglepacking.output;
 
 import rectanglepacking.Area;
+import rectanglepacking.ShapeInterface;
 
 public class PlainText implements OutputInterface {
 
@@ -26,6 +27,10 @@ public class PlainText implements OutputInterface {
 
         // Draw the number of rectangles.
         System.out.println("number of rectangles: " + area.getAmount());
+        
+        for (ShapeInterface rectangle : area.getShapes()) {
+            System.out.println(rectangle.getX() + " " + rectangle.getY());
+        }
 
 
     }
