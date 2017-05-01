@@ -4,7 +4,9 @@
  * and open the template in the editor.
  */
 package Strategy;
+import java.util.Iterator;
 import rectanglepacking.Area;
+import rectanglepacking.Rectangle;
 
 /**
  * @author Abdel 
@@ -20,10 +22,11 @@ public class DummyImplementation extends AbstractStrategy {
     public Area computeArea() {
         // Simple dummy implementation that places all rectangles next to eachother in one single strip
         int curX = 0;
-        for (Rectangle rectangle : area.getRectangles()) {
-            rectangle.setX(curX);
-            curX += rectangle.getWidth;
-            rectangle.setY(0);
+        for (Iterator<Rectangle> recs = area.getRectangles(); recs.hasNext();) {
+            Rectangle currentRec = recs.next();
+            currentRec.setX(curX);
+            curX += currentRec.getWidth();
+            currentRec.setY(0);
         }
 
         return area;
