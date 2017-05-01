@@ -35,6 +35,8 @@ public class Main {
         StrategyPicker.area = area;
         AbstractStrategy strategy = StrategyPicker.pickStrategy();
 
+        strategy.computeArea();
+
         OutputInterface output = new PlainText(area);
         output.draw();
     }
