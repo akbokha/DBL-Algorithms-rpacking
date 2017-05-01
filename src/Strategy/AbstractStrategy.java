@@ -7,7 +7,7 @@ import rectanglepacking.Area;
 
 /**
  *
- * @author s158881
+ * @author Abdel
  * 01-05-2017 
  */
 public abstract class AbstractStrategy {
@@ -30,6 +30,6 @@ public abstract class AbstractStrategy {
      * The actual computation behind the placement of the rectangles
      * @return an area such that isValid()
      */
-    public abstract Area ComputeArea();
+    public abstract Area computeArea();
     
 }
