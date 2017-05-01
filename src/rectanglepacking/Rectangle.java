@@ -21,7 +21,6 @@ public class Rectangle implements ShapeInterface {
         this.flippable = flippable;
     }
 
-
     @Override
     public int getX() {
         return x;
