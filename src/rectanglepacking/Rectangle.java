@@ -43,12 +43,12 @@ public class Rectangle implements ShapeInterface {
 
     @Override
     public int getWidth() {
-        return flipped ? width : height;
+        return flipped ? height : width;
     }
 
     @Override
     public int getHeight() {
-        return flipped ? height : width;
+        return flipped ? width : height;
     }
 
     @Override

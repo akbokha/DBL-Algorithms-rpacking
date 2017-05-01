@@ -28,7 +28,6 @@ public class Main {
         }
 
         Area area;
-
         area = input.read();
 
         OutputInterface output = new PlainText(area);
