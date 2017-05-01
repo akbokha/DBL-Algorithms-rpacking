@@ -9,6 +9,8 @@ import rectanglepacking.input.InputInterface;
 import rectanglepacking.input.SystemInput;
 import rectanglepacking.output.OutputInterface;
 import rectanglepacking.output.PlainText;
+import Strategy.StrategyPicker;
+import Strategy.AbstractStrategy;
 
 /**
  *
@@ -29,6 +31,9 @@ public class Main {
 
         Area area;
         area = input.read();
+        
+        StrategyPicker.area = area;
+        AbstractStrategy strategy = StrategyPicker.pickStrategy();
 
         OutputInterface output = new PlainText(area);
         output.draw();
