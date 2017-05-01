@@ -2,6 +2,7 @@ package rectanglepacking;
 
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Set;
 
 /**
  * @date Apr 26, 2017
@@ -28,5 +29,9 @@ public class Area extends Rectangle {
         }
 
         return amount;
+    }
+    
+    public Collection getShapes() {
+        return shapes;
     }
 }
