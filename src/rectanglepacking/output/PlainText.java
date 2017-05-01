@@ -1,6 +1,9 @@
 package rectanglepacking.output;
 
 import rectanglepacking.Area;
+import rectanglepacking.Rectangle;
+
+import java.util.Iterator;
 
 public class PlainText implements OutputInterface {
 
@@ -27,6 +30,10 @@ public class PlainText implements OutputInterface {
         // Draw the number of rectangles.
         System.out.println("number of rectangles: " + area.getCount());
 
-
+        Iterator<Rectangle> i = area.getRectangles();
+        while (i.hasNext()) {
+            Rectangle rectangle = i.next();
+            System.out.println(rectangle.getX() + " " + rectangle.getY());
+        }
     }
 }

@@ -43,8 +43,5 @@ public class Area extends Rectangle {
     public Iterator<Rectangle> getRectangles() {
         return shapes.iterator();
     }
-    
-    public Collection getShapes() {
-        return shapes;
-    }
+
 }
