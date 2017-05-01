@@ -15,7 +15,7 @@ public abstract class AbstractStrategy {
     /**
      * Contains input data
      */
-    Area area;
+    protected Area area;
     
     /**
      * Constructor
