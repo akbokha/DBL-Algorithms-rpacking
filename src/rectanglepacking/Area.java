@@ -2,6 +2,7 @@ package rectanglepacking;
 
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Iterator;
 
 /**
  * @date Apr 26, 2017
@@ -9,24 +10,37 @@ import java.util.HashSet;
  */
 public class Area extends Rectangle {
 
-    protected Collection<ShapeInterface> shapes;
+    private Collection<Rectangle> shapes;
 
-    public Area(int width, int height, int x, int y, boolean flippable) {
-        super(width, height, x, y, flippable);
+    public Area(int width, int height, boolean flippable) {
+        super(width, height, 0, 0, flippable);
         shapes = new HashSet<>();
     }
 
-    public void add(ShapeInterface shape) {
+    /**
+     * Adds an rectangle to this area.
+     *
+     * @param shape
+     */
+    public void add(Rectangle shape) {
         shapes.add(shape);
     }
 
-    public int getAmount() {
-        // Recursively get the amount of rectangles.
-        int amount = 0;
-        for (ShapeInterface shape : shapes) {
-            amount += shape.getAmount();
-        }
+    /**
+     * Gives the amount of rectangles this area contains.
+     *
+     * @return the amount of rectangles this area contains.
+     */
+    public int getCount() {
+        return shapes.size();
+    }
 
-        return amount;
+    /**
+     * Constructs an iterator over all rectangles.
+     *
+     * @return iterator over all rectangles it contains.
+     */
+    public Iterator<Rectangle> getRectangles() {
+        return shapes.iterator();
     }
 }

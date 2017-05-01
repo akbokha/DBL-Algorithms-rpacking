@@ -49,6 +49,4 @@ public interface ShapeInterface {
     boolean getFlipped();
 
     boolean canFlip();
-
-    int getAmount();
 }

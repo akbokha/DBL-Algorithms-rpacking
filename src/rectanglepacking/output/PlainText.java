@@ -25,7 +25,7 @@ public class PlainText implements OutputInterface {
         }
 
         // Draw the number of rectangles.
-        System.out.println("number of rectangles: " + area.getAmount());
+        System.out.println("number of rectangles: " + area.getCount());
 
 
     }

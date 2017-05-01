@@ -83,7 +83,7 @@ public class Input {
         }
 
         // Read all rectangles and add them to the area.
-        area = new Area(0, this.height, 0, 0, flippable);
+        area = new Area(0, this.height, flippable);
 
         for (int i = 0; i < amount; i++) {
             if (! fileScanner.hasNextInt()) {

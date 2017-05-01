@@ -74,9 +74,4 @@ public class Rectangle implements ShapeInterface {
     public boolean canFlip() {
         return flippable;
     }
-
-    @Override
-    public int getAmount() {
-        return 1;
-    }
 }
