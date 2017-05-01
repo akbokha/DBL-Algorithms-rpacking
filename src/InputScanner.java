@@ -1,7 +1,5 @@
-package rectanglepacking.input;
 
-import rectanglepacking.Area;
-import rectanglepacking.Rectangle;
+
 
 import java.util.Scanner;
 import java.util.regex.Pattern;

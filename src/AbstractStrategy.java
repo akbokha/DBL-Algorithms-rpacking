@@ -2,8 +2,7 @@
  * Abstract Strategy
  * Will be extended by Concrete strategy implementations
  */
-package Strategy;
-import rectanglepacking.Area;
+
 
 /**
  *

@@ -1,4 +1,4 @@
-package rectanglepacking;
+
 
 /**
  * @date Apr 26, 2017

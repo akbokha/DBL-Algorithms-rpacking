@@ -2,15 +2,6 @@
  * DBL Algorithms - Q4 2016-2017
  * Rectangle Packing - Group 10
  */
-package rectanglepacking;
-
-import rectanglepacking.input.FileInput;
-import rectanglepacking.input.InputInterface;
-import rectanglepacking.input.SystemInput;
-import rectanglepacking.output.AbstractOutput;
-import rectanglepacking.output.PlainText;
-import Strategy.StrategyPicker;
-import Strategy.AbstractStrategy;
 
 /**
  *

@@ -1,4 +1,4 @@
-package rectanglepacking.input;
+
 
 import java.util.Scanner;
 

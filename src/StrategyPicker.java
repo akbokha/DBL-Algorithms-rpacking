@@ -1,8 +1,7 @@
 /**
  * StrategyPicker that picks a strategy based on data in an Area object
  */
-package Strategy;
-import rectanglepacking.Area;
+
 
 /**
  * @author Abdel

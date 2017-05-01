@@ -1,6 +1,5 @@
-package rectanglepacking.output;
 
-import rectanglepacking.Area;
+
 
 /**
  * @date 01-05-2017

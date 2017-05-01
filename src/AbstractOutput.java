@@ -1,6 +1,4 @@
-package rectanglepacking.output;
 
-import rectanglepacking.Area;
 
 public abstract class AbstractOutput {
 

@@ -3,10 +3,8 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Strategy;
+
 import java.util.Iterator;
-import rectanglepacking.Area;
-import rectanglepacking.Rectangle;
 
 /**
  * @author Abdel 

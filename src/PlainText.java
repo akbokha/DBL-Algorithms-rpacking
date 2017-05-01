@@ -1,7 +1,5 @@
-package rectanglepacking.output;
 
-import rectanglepacking.Area;
-import rectanglepacking.Rectangle;
+
 import java.util.Iterator;
 
 public class PlainText extends AbstractOutput {
