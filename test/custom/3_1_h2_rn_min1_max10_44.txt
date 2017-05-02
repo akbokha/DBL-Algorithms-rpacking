@@ -1,0 +1,6 @@
+container height: fixed 2
+rotations allowed: no
+number of rectangles: 3
+2 2
+2 2
+2 2

@@ -1,0 +1,28 @@
+container height: free
+rotations allowed: yes
+number of rectangles: 25
+5 5
+5 5
+5 5
+5 5
+5 5
+5 5
+5 5
+5 5
+5 5
+5 5
+5 5
+5 5
+5 5
+5 5
+5 5
+5 5
+5 5
+5 5
+5 5
+5 5
+5 5
+5 5
+5 5
+5 5
+5 5
