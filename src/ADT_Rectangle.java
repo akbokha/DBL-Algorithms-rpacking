@@ -6,6 +6,7 @@
  */
 public class ADT_Rectangle implements ADT_ShapeInterface {
 
+    public static final int INF = -1;
     private int width;
     private int height;
     private int x;
@@ -14,6 +15,9 @@ public class ADT_Rectangle implements ADT_ShapeInterface {
     private boolean flippable;
 
     public ADT_Rectangle(int width, int height, int x, int y, boolean flippable) {
+        assert height == INF || height > 0;
+        assert width == INF || width > 0;
+
         this.width = width;
         this.height = height;
         this.x = x;

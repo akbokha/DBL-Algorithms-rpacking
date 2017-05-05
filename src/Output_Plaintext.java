@@ -18,7 +18,7 @@ public class Output_Plaintext extends Output_AbstractOutput {
         // Draw the container height line.
         System.out.print("container height: ");
 
-        if (area.getHeight() > 0) {
+        if (area.getHeight() != ADT_Rectangle.INF) {
             System.out.println("fixed " + area.getHeight());
         } else {
             System.out.println("free");

@@ -26,7 +26,7 @@ public abstract class Input_Scanner implements Input_InputInterface {
         int height;
         switch (res) {
             case "free":
-                height = 0;
+                height = ADT_Rectangle.INF;
                 break;
             case "fixed":
                 height = scanner.nextInt();
@@ -61,7 +61,7 @@ public abstract class Input_Scanner implements Input_InputInterface {
         }
 
         // Read all rectangles and add them to the area.
-        ADT_Area area = new ADT_Area(0, height, flippable);
+        ADT_Area area = new ADT_Area(ADT_Rectangle.INF, height, flippable);
 
         for (int i = 0; i < amount; i++) {
             if (! scanner.hasNextInt()) {

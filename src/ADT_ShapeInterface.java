@@ -10,13 +10,13 @@ public interface ADT_ShapeInterface {
     
     /**
      * Returns the width of the rectangle.
-     * @return int 0 for infinity
+     * @return int -1 for infinity
      */
     int getWidth();
     
     /**
      * Returns the height of the rectangle.
-     * @return int 0 for infinity
+     * @return int -1 for infinity
      */
     int getHeight();
 

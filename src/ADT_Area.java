@@ -57,8 +57,8 @@ public class ADT_Area extends ADT_Rectangle {
             if (currentRec.getX() < 0 || currentRec.getY() < 0) {
                 return false;
             } else if (
-                    (this.getWidth() != 0 && currentRec.getX() + currentRec.getWidth() > this.getWidth()) // !(this.w != inf ==> rec.x + rec.w <= this.w)
-                    || (this.getHeight() != 0 && currentRec.getY() + currentRec.getHeight() > this.getHeight()) // !(this.h != inf ==> rec.y + rec.h <= this.h)
+                    (this.getWidth() != ADT_Rectangle.INF && currentRec.getX() + currentRec.getWidth() > this.getWidth()) // !(this.w != inf ==> rec.x + rec.w <= this.w)
+                    || (this.getHeight() != ADT_Rectangle.INF && currentRec.getY() + currentRec.getHeight() > this.getHeight()) // !(this.h != inf ==> rec.y + rec.h <= this.h)
                 ) {
                 return false;
             }
@@ -84,10 +84,10 @@ public class ADT_Area extends ADT_Rectangle {
     private boolean checkRectangleOverlap(ADT_Rectangle rec1, ADT_Rectangle rec2) {
         assert rec1 != null;
         assert rec2 != null;
-        assert rec1.getWidth() > 0;
-        assert rec2.getWidth() > 0;
-        assert rec1.getHeight() > 0;
-        assert rec2.getWidth() > 0;
+        assert rec1.getWidth() != ADT_Rectangle.INF;
+        assert rec2.getWidth() != ADT_Rectangle.INF;
+        assert rec1.getHeight() != ADT_Rectangle.INF;
+        assert rec2.getWidth() != ADT_Rectangle.INF;
 
         Point l1 = new Point(rec1.getX(), rec1.getY() + rec1.getHeight()); // Top left coordinate of first rectangle
         Point r1 = new Point(rec1.getX() + rec1.getWidth(), rec1.getY()); // Bottom right coordinate of first rectangle
