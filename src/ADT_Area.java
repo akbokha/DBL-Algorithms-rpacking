@@ -53,12 +53,45 @@ public class ADT_Area extends ADT_Rectangle {
         for(Iterator<ADT_Rectangle> recs = getRectangles(); recs.hasNext();) {
             ADT_Rectangle currentRec = recs.next();
             for(ADT_Rectangle rec : checkedRecs) {
-                if(currentRec.x > rec.x && currentRec.x < (rec.x + rec.width) && currentRec.y > rec.y && currentRec.y < (rec.y + rec.height)) {
+                if (rectangleIntersect(currentRec, rec)) {
                     return false;
                 }
             }
             checkedRecs.add(currentRec);
         }
         return true;
+    }
+
+    private boolean rectangleIntersect(ADT_Rectangle rec1, ADT_Rectangle rec2) {
+        Point l1 = new Point(rec1.getX(), rec1.getY() + rec1.getHeight()); // Top left coordinate of first rectangle
+        Point r1 = new Point(rec1.getX() + rec1.getWidth(), rec1.getY()); // Bottom right coordinate of first rectangle
+        Point l2 = new Point(rec2.getX(), rec2.getY() + rec2.getHeight()); // Top left coordinate of second rectangle
+        Point r2 = new Point(rec2.getX() + rec2.getWidth(), rec2.getY()); // Bottom right coordinate of second rectangle
+
+        if (l1.getX() >= r2.getX() || l2.getX() >= r1.getX()) { // Check if one rectangle is on the left side of the other rectangle.
+            return false;
+        } else if (l1.getY() <= r2.getY() || l2.getY() <= r1.getY()) { // Check if one rectangle is above the other rectangle.
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    private class Point {
+        private int x;
+        private int y;
+
+        Point(int x, int y) {
+            this.x = x;
+            this.y = y;
+        }
+
+        int getX() {
+            return x;
+        }
+
+        int getY() {
+            return y;
+        }
     }
 }

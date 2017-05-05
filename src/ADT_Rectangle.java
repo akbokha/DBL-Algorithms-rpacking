@@ -6,12 +6,12 @@
  */
 public class ADT_Rectangle implements ADT_ShapeInterface {
 
-    protected int width;
-    protected int height;
-    protected int x;
-    protected int y;
-    protected boolean flipped = false;
-    protected boolean flippable;
+    private int width;
+    private int height;
+    private int x;
+    private int y;
+    private boolean flipped = false;
+    private boolean flippable;
 
     public ADT_Rectangle(int width, int height, int x, int y, boolean flippable) {
         this.width = width;

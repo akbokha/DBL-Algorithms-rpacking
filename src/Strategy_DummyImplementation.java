@@ -18,7 +18,7 @@ public class Strategy_DummyImplementation extends Strategy_AbstractStrategy {
     
     @Override
     public ADT_Area computeArea() {
-        // Simple dummy implementation that places all rectangles next to eachother in one single strip
+        // Simple dummy implementation that places all rectangles next to each other in one single strip
         int curX = 0;
         for (Iterator<ADT_Rectangle> recs = area.getRectangles(); recs.hasNext();) {
             ADT_Rectangle currentRec = recs.next();
