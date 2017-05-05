@@ -23,6 +23,12 @@ public class Strategy_DummyImplementation extends Strategy_AbstractStrategy {
         for (Iterator<ADT_Rectangle> recs = area.getRectangles(); recs.hasNext();) {
             ADT_Rectangle currentRec = recs.next();
             currentRec.setX(curX);
+
+            // If the rectangle is flippable, rotate it such that the longest side is horizontally.
+            if (currentRec.canFlip() && (currentRec.getWidth() < currentRec.getHeight())) {
+                currentRec.toggleFlipped();
+            }
+
             curX += currentRec.getWidth();
             currentRec.setY(0);
         }

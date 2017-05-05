@@ -52,8 +52,20 @@ public class ADT_Area extends ADT_Rectangle {
         
         for(Iterator<ADT_Rectangle> recs = getRectangles(); recs.hasNext();) {
             ADT_Rectangle currentRec = recs.next();
+
+            // Check if the newly added rectangle has valid coordinates;
+            if (currentRec.getX() < 0 || currentRec.getY() < 0) {
+                return false;
+            } else if (
+                    (this.getWidth() != 0 && currentRec.getX() + currentRec.getWidth() > this.getWidth()) // !(this.w != inf ==> rec.x + rec.w <= this.w)
+                    || (this.getHeight() != 0 && currentRec.getY() + currentRec.getHeight() > this.getHeight()) // !(this.h != inf ==> rec.y + rec.h <= this.h)
+                ) {
+                return false;
+            }
+
+            // Check if the newly added rectangle intersects with any previously checked rectangle.
             for(ADT_Rectangle rec : checkedRecs) {
-                if (rectangleIntersect(currentRec, rec)) {
+                if (checkRectangleOverlap(currentRec, rec)) {
                     return false;
                 }
             }
@@ -62,7 +74,21 @@ public class ADT_Area extends ADT_Rectangle {
         return true;
     }
 
-    private boolean rectangleIntersect(ADT_Rectangle rec1, ADT_Rectangle rec2) {
+    /**
+     * Checks if the body of two rectangles overlap, the edges may intersect.
+     *
+     * @param rec1 The first rectangle to be taken into account
+     * @param rec2 The second rectangle to be taken into account
+     * @return False if the body of the rectangles intersect, true otherwise.
+     */
+    private boolean checkRectangleOverlap(ADT_Rectangle rec1, ADT_Rectangle rec2) {
+        assert rec1 != null;
+        assert rec2 != null;
+        assert rec1.getWidth() > 0;
+        assert rec2.getWidth() > 0;
+        assert rec1.getHeight() > 0;
+        assert rec2.getWidth() > 0;
+
         Point l1 = new Point(rec1.getX(), rec1.getY() + rec1.getHeight()); // Top left coordinate of first rectangle
         Point r1 = new Point(rec1.getX() + rec1.getWidth(), rec1.getY()); // Bottom right coordinate of first rectangle
         Point l2 = new Point(rec2.getX(), rec2.getY() + rec2.getHeight()); // Top left coordinate of second rectangle
