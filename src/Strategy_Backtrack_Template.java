@@ -1,12 +1,31 @@
+import java.util.ArrayList;
+import java.util.Collection;
+
+/**
+ * A template for a backtrack implementation, it uses a composite setup for the pruners.
+ */
 abstract public class Strategy_Backtrack_Template {
+
+    private Collection<Strategy_Backtrack_PrunerItf> pruners;
+
+    public Strategy_Backtrack_Template() {
+        pruners = new ArrayList<>(5);
+    }
+
+    /**
+     * Adds a pruner to the list of used pruners during computation.
+     * @param pruner the pruner to be added.
+     */
+    void addPruner(Strategy_Backtrack_PrunerItf pruner) {
+        pruners.add(pruner);
+    }
 
     /**
      * Attempts to compute a valid solution.
-     *
      * @param area the problem to be solved
      * @return a valid solution if it exists, else null.
      */
-    private ADT_Area compute(ADT_Area area) {
+    ADT_Area compute(ADT_Area area) {
         // Check if this iteration can be pruned.
         if (reject(area)) {
             return null;
@@ -33,16 +52,22 @@ abstract public class Strategy_Backtrack_Template {
     }
 
     /**
-     * Computes if the given problem can be evolved into a valid solution.
-     *
+     * Evaluates all pruners to detect if this branch could be rejected.
      * @param area the problem to be evaluated.
-     * @return true if this problem cannot evolve further into a valid solution.
+     * @return true if any of the pruners think that this branch should be rejected, else false.
      */
-    abstract boolean reject(ADT_Area area);
+    private boolean reject(ADT_Area area) {
+        for (Strategy_Backtrack_PrunerItf pruner : pruners) {
+            if (pruner.reject(area)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
 
     /**
      * Computes if the given problem satisfies all requirements of a valid solution.
-     *
      * @param area the problem to be evaluated.
      * @return true if the given problem is solved, else false.
      */
@@ -50,7 +75,6 @@ abstract public class Strategy_Backtrack_Template {
 
     /**
      * Gives the first branch which should be evaluated.
-     *
      * @param area the state of the problem prior to the branch we are generating.
      * @return the first branch to be evaluated
      */
@@ -58,7 +82,6 @@ abstract public class Strategy_Backtrack_Template {
 
     /**
      * Gives the next branch to be evaluated.
-     *
      * @param area the state of the problem prior to the branch we are currently working on.
      * @param s    the previous problem which was evaluated.
      * @return the next branch to be evaluated.
