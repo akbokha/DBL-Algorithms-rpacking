@@ -4,11 +4,12 @@ import java.util.Collection;
 /**
  * A template for a backtrack implementation, it uses a composite setup for the pruners.
  */
-abstract public class Strategy_Backtrack_Template {
+abstract public class Strat_BT_Template extends Strat_AbstractStrat {
 
-    private Collection<Strategy_Backtrack_PrunerItf> pruners;
+    private Collection<Strat_BT_PrunerItf> pruners;
 
-    public Strategy_Backtrack_Template() {
+    public Strat_BT_Template(ADT_Area area) {
+        super(area);
         pruners = new ArrayList<>(5);
     }
 
@@ -16,8 +17,13 @@ abstract public class Strategy_Backtrack_Template {
      * Adds a pruner to the list of used pruners during computation.
      * @param pruner the pruner to be added.
      */
-    void addPruner(Strategy_Backtrack_PrunerItf pruner) {
+    void addPruner(Strat_BT_PrunerItf pruner) {
         pruners.add(pruner);
+    }
+
+    @Override
+    public ADT_Area compute() {
+        return computeBranch(area);
     }
 
     /**
@@ -25,7 +31,7 @@ abstract public class Strategy_Backtrack_Template {
      * @param area the problem to be solved
      * @return a valid solution if it exists, else null.
      */
-    ADT_Area compute(ADT_Area area) {
+    ADT_Area computeBranch(ADT_Area area) {
         // Check if this iteration can be pruned.
         if (reject(area)) {
             return null;
@@ -40,7 +46,7 @@ abstract public class Strategy_Backtrack_Template {
         ADT_Area s = first(area); // Select the first branch.
         while (s != null) {
             // Compute the next result and check if it is valid.
-            ADT_Area result = compute(s);
+            ADT_Area result = computeBranch(s);
             if (result != null) {
                 return result;
             }
@@ -57,7 +63,7 @@ abstract public class Strategy_Backtrack_Template {
      * @return true if any of the pruners think that this branch should be rejected, else false.
      */
     private boolean reject(ADT_Area area) {
-        for (Strategy_Backtrack_PrunerItf pruner : pruners) {
+        for (Strat_BT_PrunerItf pruner : pruners) {
             if (pruner.reject(area)) {
                 return true;
             }

@@ -1,4 +1,4 @@
-interface Strategy_Backtrack_PrunerItf {
+interface Strat_BT_PrunerItf {
 
     /**
      * Computes if the given problem can be evolved into a valid solution.

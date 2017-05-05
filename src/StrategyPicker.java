@@ -22,8 +22,8 @@ public class StrategyPicker {
         StrategyPicker.area = area;
     }
     
-    static Strategy_AbstractStrategy pickStrategy() {
-        return new Strategy_DummyImplementation(area);
+    static Strat_AbstractStrat pickStrategy() {
+        return new Strat_DummyImplementation(area);
     }
     
 }

@@ -5,11 +5,10 @@
 
 
 /**
- *
  * @author Abdel
  * 01-05-2017 
  */
-public abstract class Strategy_AbstractStrategy {
+public abstract class Strat_AbstractStrat {
     
     /**
      * Contains input data
@@ -21,7 +20,7 @@ public abstract class Strategy_AbstractStrategy {
      * @param area contains input data such as 
      * Concrete strategies should call super() in constructor
      */
-    public Strategy_AbstractStrategy(ADT_Area area) {
+    public Strat_AbstractStrat(ADT_Area area) {
         this.area = area;
     }
     
@@ -29,6 +28,6 @@ public abstract class Strategy_AbstractStrategy {
      * The actual computation behind the placement of the rectangles
      * @return an area such that isValid()
      */
-    public abstract ADT_Area computeArea();
+    public abstract ADT_Area compute();
     
 }

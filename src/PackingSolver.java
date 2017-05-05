@@ -35,9 +35,9 @@ public class PackingSolver {
         area = input.read();
         
         StrategyPicker.area = area;
-        Strategy_AbstractStrategy strategy = StrategyPicker.pickStrategy();
+        Strat_AbstractStrat strategy = StrategyPicker.pickStrategy();
 
-        strategy.computeArea();
+        strategy.compute();
 
         Output_AbstractOutput output = new Output_Plaintext(area);
         output.draw();
