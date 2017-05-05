@@ -4,7 +4,7 @@
  * @date Apr 26, 2017
  * @author Adriaan Knapen <a.d.knapen@student.tue.nl>
  */
-public class Rectangle implements ShapeInterface {
+public class ADT_Rectangle implements ADT_ShapeInterface {
 
     protected int width;
     protected int height;
@@ -13,7 +13,7 @@ public class Rectangle implements ShapeInterface {
     protected boolean flipped = false;
     protected boolean flippable;
 
-    public Rectangle(int width, int height, int x, int y, boolean flippable) {
+    public ADT_Rectangle(int width, int height, int x, int y, boolean flippable) {
         this.width = width;
         this.height = height;
         this.x = x;

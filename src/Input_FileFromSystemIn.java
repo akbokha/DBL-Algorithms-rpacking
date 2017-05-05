@@ -8,11 +8,11 @@ import java.util.Scanner;
  * @date 01-05-2017
  * @author Adriaan Knapen <a.d.knapen@student.tue.nl>
  */
-public class FileInput extends InputScanner {
+public class Input_FileFromSystemIn extends Input_Scanner {
 
     private static final String EXTENSION = ".txt";
 
-    public FileInput() {
+    public Input_FileFromSystemIn() {
         Scanner input = new Scanner(System.in);
         File file;
 

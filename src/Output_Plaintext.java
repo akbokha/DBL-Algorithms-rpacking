@@ -2,9 +2,9 @@
 
 import java.util.Iterator;
 
-public class PlainText extends AbstractOutput {
+public class Output_Plaintext extends Output_AbstractOutput {
 
-    public PlainText(Area area) {
+    public Output_Plaintext(ADT_Area area) {
         super(area);
     }
 
@@ -32,11 +32,11 @@ public class PlainText extends AbstractOutput {
         System.out.println("number of rectangles: " + area.getCount());
 
         // Iterate through all rectangle to get their dimensions and locations.
-        Iterator<Rectangle> i = area.getRectangles();
+        Iterator<ADT_Rectangle> i = area.getRectangles();
         StringBuilder rectangleDimensions = new StringBuilder();
         StringBuilder rectangleLocations = new StringBuilder();
         while (i.hasNext()) {
-            Rectangle rectangle = i.next();
+            ADT_Rectangle rectangle = i.next();
             rectangleDimensions.append(rectangle.getWidth()).append(" ").append(rectangle.getHeight()).append("\n");
 
             if (area.canFlip()) {

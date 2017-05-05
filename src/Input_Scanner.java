@@ -1,6 +1,3 @@
-
-
-
 import java.util.Scanner;
 import java.util.regex.Pattern;
 
@@ -8,7 +5,7 @@ import java.util.regex.Pattern;
  * @date Apr 26, 2017
  * @author Adriaan Knapen <a.d.knapen@student.tue.nl>
  */
-public abstract class InputScanner implements InputInterface {
+public abstract class Input_Scanner implements Input_InputInterface {
 
     private Scanner scanner = null;
 
@@ -17,9 +14,9 @@ public abstract class InputScanner implements InputInterface {
     }
 
     @Override
-    public Area read() throws IllegalArgumentException, IllegalStateException {
+    public ADT_Area read() throws IllegalArgumentException, IllegalStateException {
         if (this.scanner==null) {
-            throw new IllegalStateException("InputScanner.read: scanner should be not null");
+            throw new IllegalStateException("Input_Scanner.read: scanner should be not null");
         }
 
         // Read the container height.
@@ -27,12 +24,15 @@ public abstract class InputScanner implements InputInterface {
         String res = scanner.next();
 
         int height;
-        if (res.equals("free")) {
-            height = 0;
-        } else if (res.equals("fixed")) {
-            height = scanner.nextInt();
-        } else {
-            throw new IllegalArgumentException("invalid container height specification.");
+        switch (res) {
+            case "free":
+                height = 0;
+                break;
+            case "fixed":
+                height = scanner.nextInt();
+                break;
+            default:
+                throw new IllegalArgumentException("invalid container height specification.");
         }
 
         // Read flippable allowed.
@@ -40,12 +40,15 @@ public abstract class InputScanner implements InputInterface {
         res = scanner.next();
 
         boolean flippable;
-        if (res.equals("no")) {
-            flippable = false;
-        } else if (res.equals("yes")) {
-            flippable = true;
-        } else {
-            throw new IllegalArgumentException("invalid flippable specification.");
+        switch (res) {
+            case "no":
+                flippable = false;
+                break;
+            case "yes":
+                flippable = true;
+                break;
+            default:
+                throw new IllegalArgumentException("invalid flippable specification.");
         }
 
         // Read the number of rectangles
@@ -58,7 +61,7 @@ public abstract class InputScanner implements InputInterface {
         }
 
         // Read all rectangles and add them to the area.
-        Area area = new Area(0, height, flippable);
+        ADT_Area area = new ADT_Area(0, height, flippable);
 
         for (int i = 0; i < amount; i++) {
             if (! scanner.hasNextInt()) {
@@ -74,7 +77,7 @@ public abstract class InputScanner implements InputInterface {
             int y = scanner.nextInt();
 
             // Add the new rectangle.
-            area.add(new Rectangle(x, y, -1, -1, flippable));
+            area.add(new ADT_Rectangle(x, y, -1, -1, flippable));
         }
 
         return area;

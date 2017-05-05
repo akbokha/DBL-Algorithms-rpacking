@@ -1,5 +1,5 @@
 /**
- * StrategyPicker that picks a strategy based on data in an Area object
+ * StrategyPicker that picks a strategy based on data in an ADT_Area object
  */
 
 
@@ -12,19 +12,18 @@ public class StrategyPicker {
     /**
      * Contains input data
      */
-    public static Area area;
+    static ADT_Area area;
     
     /**
      * Constructor
-     * @param area contains input data such as 
-     * store data that will be used to actually pick the strategy
+     * @param area contains input data which will be used to pick the strategy.
      */
-    public StrategyPicker (Area area) {
+    public StrategyPicker (ADT_Area area) {
         StrategyPicker.area = area;
     }
     
-    public static AbstractStrategy pickStrategy() {
-        return new DummyImplementation(area);
+    static Strategy_AbstractStrategy pickStrategy() {
+        return new Strategy_DummyImplementation(area);
     }
     
 }

@@ -1,5 +1,3 @@
-
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
@@ -9,11 +7,11 @@ import java.util.Iterator;
  * @date Apr 26, 2017
  * @author Adriaan Knapen <a.d.knapen@student.tue.nl>
  */
-public class Area extends Rectangle {
+public class ADT_Area extends ADT_Rectangle {
 
-    private Collection<Rectangle> shapes;
+    private Collection<ADT_Rectangle> shapes;
 
-    public Area(int width, int height, boolean flippable) {
+    public ADT_Area(int width, int height, boolean flippable) {
         super(width, height, 0, 0, flippable);
         shapes = new HashSet<>();
     }
@@ -23,7 +21,7 @@ public class Area extends Rectangle {
      *
      * @param shape
      */
-    public void add(Rectangle shape) {
+    public void add(ADT_Rectangle shape) {
         shapes.add(shape);
     }
 
@@ -41,7 +39,7 @@ public class Area extends Rectangle {
      *
      * @return iterator over all rectangles it contains.
      */
-    public Iterator<Rectangle> getRectangles() {
+    public Iterator<ADT_Rectangle> getRectangles() {
         return shapes.iterator();
     }
     
@@ -50,11 +48,11 @@ public class Area extends Rectangle {
      * @return true if the area has none overlapping rectangles
      */
     public boolean isValid() {
-        ArrayList<Rectangle> checkedRecs = new ArrayList<>();
+        ArrayList<ADT_Rectangle> checkedRecs = new ArrayList<>();
         
-        for(Iterator<Rectangle> recs = getRectangles(); recs.hasNext();) {
-            Rectangle currentRec = recs.next();
-            for(Rectangle rec : checkedRecs) {
+        for(Iterator<ADT_Rectangle> recs = getRectangles(); recs.hasNext();) {
+            ADT_Rectangle currentRec = recs.next();
+            for(ADT_Rectangle rec : checkedRecs) {
                 if(currentRec.x > rec.x && currentRec.x < (rec.x + rec.width) && currentRec.y > rec.y && currentRec.y < (rec.y + rec.height)) {
                     return false;
                 }

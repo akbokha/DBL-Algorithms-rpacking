@@ -6,7 +6,7 @@
  * @date Apr 26, 2017
  * @author Adriaan Knapen <a.d.knapen@student.tue.nl>
  */
-public interface ShapeInterface {
+public interface ADT_ShapeInterface {
     
     /**
      * Returns the width of the rectangle.

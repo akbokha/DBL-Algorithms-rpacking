@@ -13,22 +13,33 @@ public class PackingSolver {
      * @param args the command line arguments
      */
     public static void main(String[] args) throws Exception {
-        InputInterface input;
-        if (args.length > 0 && args[0].equals("-f")) {
-            input = new FileInput();
+        Input_InputInterface input;
+        if (args.length <= 0) {
+            input = new Input_SystemIn();
         } else {
-            input = new SystemInput();
+            switch (args[0]) {
+                case "-f":
+                    if (args.length >= 2) {
+                        input = new Input_File(args[1]);
+                    } else {
+                        input = new Input_FileFromSystemIn();
+                    }
+                    break;
+                default:
+                    System.err.println("Invalid parameter '" + args[0] + "' given.");
+                    return;
+            }
         }
 
-        Area area;
+        ADT_Area area;
         area = input.read();
         
         StrategyPicker.area = area;
-        AbstractStrategy strategy = StrategyPicker.pickStrategy();
+        Strategy_AbstractStrategy strategy = StrategyPicker.pickStrategy();
 
         strategy.computeArea();
 
-        AbstractOutput output = new PlainText(area);
+        Output_AbstractOutput output = new Output_Plaintext(area);
         output.draw();
     }
     
