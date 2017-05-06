@@ -8,30 +8,30 @@ import java.util.Iterator;
  */
 public class Output_GraphicalOutput extends Output_AbstractOutput {
 
-    private int width;
-    private int height;
-    private int maxWidth = 1000;
-    private int maxHeight = 1000;
-    private int border = 10;
+    private int rectWidth;
+    private int rectHeight;
+    private int maxWindowWidth = 500;
+    private int maxWindowHeight = 500;
+    private int border = 20;
     private float scale;
 
     Output_GraphicalOutput(ADT_Area area) {
         super(area);
         int[] dim = area.getMinDimensions();
-        width = dim[0];
-        height = dim[1];
+        rectWidth = dim[0];
+        rectHeight = dim[1];
     }
 
     @Override
     public void draw() {
-        float xScale = maxWidth / width;
-        float yScale = maxHeight / height;
-        scale = Math.min(xScale, yScale);
+        float areaScale = 1 / (float) Math.max(rectWidth, rectHeight);
+        float windowScale = 1 / (float) Math.max(maxWindowWidth, maxWindowHeight);
+        scale = areaScale / windowScale;
 
         JFrame window = new JFrame();
         window.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        int windowWidth = (int) Math.floor(width * scale + 2 * border);
-        int windowHeight = (int) Math.floor(height * scale + 2 * border);
+        int windowWidth = (int) Math.floor(maxWindowWidth * maxWindowWidth * Math.min(windowScale, areaScale) + 3 * border);
+        int windowHeight = (int) Math.floor(maxWindowHeight * maxWindowHeight * Math.min(windowScale, areaScale) + 3 * border);
         window.setBounds(30, 30, windowWidth, windowHeight);
         window.getContentPane().add(new RectanglesCanvas());
         window.setVisible(true);
@@ -39,7 +39,7 @@ public class Output_GraphicalOutput extends Output_AbstractOutput {
 
     class RectanglesCanvas extends JComponent {
         public void paint(Graphics g) {
-            g.drawRect(border, border, (int) (width * scale), (int) (height * scale));
+            g.drawRect(border, border, (int) (rectWidth * scale), (int) (rectHeight * scale));
 
             g.setColor(Color.red);
 
@@ -49,8 +49,8 @@ public class Output_GraphicalOutput extends Output_AbstractOutput {
                 int w = (int) Math.floor(rect.getWidth() * scale);
                 int h = (int) Math.floor(rect.getHeight() * scale);
                 int x = (int) Math.floor(rect.getX() * scale) + border;
-                int y = (int) Math.floor((height - rect.getY()) * scale + border - h);
-
+                //int y = (int) Math.floor((rectHeight - rect.getY()) * scale + border - h);
+                int y = (int) Math.floor((rect.getY()) * scale + border);
                 g.drawRect(x, y, w, h);
             }
         }
