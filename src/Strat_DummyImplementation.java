@@ -22,6 +22,9 @@ public class Strat_DummyImplementation extends Strat_AbstractStrat {
         int curX = 0;
         for (Iterator<ADT_Rectangle> recs = area.getRectangles(); recs.hasNext();) {
             ADT_Rectangle currentRec = recs.next();
+
+            // Set the x and y coordinate of the rectangle.
+            currentRec.setY(0);
             currentRec.setX(curX);
 
             // If the rectangle is flippable, rotate it such that the longest side is horizontally.
@@ -30,7 +33,6 @@ public class Strat_DummyImplementation extends Strat_AbstractStrat {
             }
 
             curX += currentRec.getWidth();
-            currentRec.setY(0);
         }
 
         return area;

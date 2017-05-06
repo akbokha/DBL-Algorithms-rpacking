@@ -39,7 +39,7 @@ public class PackingSolver {
 
         strategy.compute();
 
-        Output_AbstractOutput output = new Output_Plaintext(area);
+        Output_AbstractOutput output = new Output_GraphicalOutput(area);
         output.draw();
     }
     

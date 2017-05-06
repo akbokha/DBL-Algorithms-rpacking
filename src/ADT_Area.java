@@ -42,7 +42,23 @@ public class ADT_Area extends ADT_Rectangle {
     public Iterator<ADT_Rectangle> getRectangles() {
         return shapes.iterator();
     }
-    
+
+    int[] getMinDimensions() {
+        Iterator<ADT_Rectangle> i = getRectangles();
+        int maxX = 0;
+        int maxY = 0;
+
+        while (i.hasNext()) {
+            ADT_Rectangle r = i.next();
+            if (r.getWidth() != ADT_Rectangle.INF) {
+                maxX = Math.max(r.getWidth() + r.getX(), maxX);
+                maxY = Math.max(r.getHeight() + r.getY(), maxY);
+            }
+        }
+
+        return new int[]{maxX, maxY};
+    }
+
     /**
      * 
      * @return true if the area has none overlapping rectangles

@@ -5,7 +5,7 @@
 
 
 /**
- * @author Abdel
+ *Z @author Abdel
  * 01-05-2017 
  */
 public abstract class Strat_AbstractStrat {
