@@ -10,7 +10,7 @@ public class Output_GraphicalOutput extends Output_AbstractOutput {
 
     private int rectWidth;
     private int rectHeight;
-    private int maxWindowWidth = 500;
+    private int maxWindowWidth = 1500;
     private int maxWindowHeight = 500;
     private int border = 20;
     private float scale;
@@ -24,16 +24,17 @@ public class Output_GraphicalOutput extends Output_AbstractOutput {
 
     @Override
     public void draw() {
-        float areaScale = 1 / (float) Math.max(rectWidth, rectHeight);
-        float windowScale = 1 / (float) Math.max(maxWindowWidth, maxWindowHeight);
-        scale = areaScale / windowScale;
+        scale = Math.min(maxWindowWidth/rectWidth, maxWindowHeight/rectHeight);
+
+        int windowWidth = (int) (rectWidth * scale) + 2 * border + 15;
+        int windowHeight = (int) (rectHeight * scale) + 2 * border + 40;
 
         JFrame window = new JFrame();
         window.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        int windowWidth = (int) Math.floor(maxWindowWidth * maxWindowWidth * Math.min(windowScale, areaScale) + 3 * border);
-        int windowHeight = (int) Math.floor(maxWindowHeight * maxWindowHeight * Math.min(windowScale, areaScale) + 3 * border);
         window.setBounds(30, 30, windowWidth, windowHeight);
+        window.setPreferredSize(new Dimension(windowWidth + 2 * border, windowHeight + 2 * border));
         window.getContentPane().add(new RectanglesCanvas());
+        window.setTitle("Width: " + rectWidth + " Height: " + rectHeight + " Area: " + rectWidth * rectHeight);
         window.setVisible(true);
     }
 
@@ -49,8 +50,9 @@ public class Output_GraphicalOutput extends Output_AbstractOutput {
                 int w = (int) Math.floor(rect.getWidth() * scale);
                 int h = (int) Math.floor(rect.getHeight() * scale);
                 int x = (int) Math.floor(rect.getX() * scale) + border;
-                //int y = (int) Math.floor((rectHeight - rect.getY()) * scale + border - h);
-                int y = (int) Math.floor((rect.getY()) * scale + border);
+                int y = (int) Math.floor((rectHeight - rect.getY()) * scale + border - h);
+                //int y = (int) Math.floor((rect.getY()) * scale) + border;
+
                 g.drawRect(x, y, w, h);
             }
         }
