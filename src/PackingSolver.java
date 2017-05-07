@@ -13,22 +13,34 @@ public class PackingSolver {
      * @param args the command line arguments
      */
     public static void main(String[] args) throws Exception {
-        Input_InputInterface input;
-        if (args.length <= 0) {
-            input = new Input_SystemIn();
-        } else {
-            switch (args[0]) {
+        Input_InputInterface input = null;
+        boolean graphical = false;
+
+        // Handle all program arguments.
+        int index = 0;
+        while (args.length > index) {
+            switch (args[index]) {
                 case "-f":
-                    if (args.length >= 2) {
-                        input = new Input_File(args[1]);
+                    if (args.length >= index + 2) {
+                        String filePath = args[++index];
+                        input = new Input_File(filePath);
                     } else {
                         input = new Input_FileFromSystemIn();
                     }
                     break;
+                case "-g":
+                    graphical = true;
+                    break;
                 default:
-                    System.err.println("Invalid parameter '" + args[0] + "' given.");
+                    System.err.println("Invalid parameter '" + args[index] + "' given.");
                     return;
             }
+
+            ++index;
+        }
+
+        if (input==null) {
+            input = new Input_SystemIn();
         }
 
         ADT_Area area;
@@ -39,8 +51,15 @@ public class PackingSolver {
 
         strategy.compute();
 
-        Output_AbstractOutput output = new Output_GraphicalOutput(area);
+        // Do the plaintext output.
+        Output_AbstractOutput output = new Output_Plaintext(area);
         output.draw();
+
+        // Also add the graphical output if it was specified in the program arguments.
+        if (graphical) {
+            Output_AbstractOutput graphicalOutput = new Output_GraphicalOutput(area);
+            graphicalOutput.draw();
+        }
     }
     
 }
