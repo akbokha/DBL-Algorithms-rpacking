@@ -2,7 +2,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 /**
- * A template for a backtrack implementation, it uses a composite setup for the pruners.
+ * A template for a backtrack implementation, it uses a composite setup for the pruners. This template is based on the
+ * pseudo-code from https://en.wikipedia.org/wiki/Backtracking#Pseudocode.
  */
 abstract public class Strat_BT_Template extends Strat_AbstractStrat {
 

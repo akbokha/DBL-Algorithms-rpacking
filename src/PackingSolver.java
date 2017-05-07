@@ -4,7 +4,6 @@
  */
 
 /**
- *
  * @author s158881
  */
 public class PackingSolver {
