@@ -111,7 +111,7 @@ public class Strat_FixedHeightFixedOrient_FC extends Strat_AbstractStrat {
     }
     
     private boolean rectangleOverlap (Shelf shelf, ADT_Rectangle rec) {
-        for (Iterator<ADT_Rectangle> rectangles = area.getRectangles(); rectangles.hasNext();) {
+        for (Iterator<ADT_Rectangle> rectangles = area.getRectanglesIterator(); rectangles.hasNext();) {
             ADT_Rectangle cur_rec = rectangles.next();
             if (shelf.checkRectangleOverlap(cur_rec, rec)) {
                 return true;
@@ -136,7 +136,7 @@ public class Strat_FixedHeightFixedOrient_FC extends Strat_AbstractStrat {
      * is ordered based on their width.
      */
     private List<ADT_Rectangle> getOrderedRectangles() {
-        List<ADT_Rectangle> orderedWidth = new ArrayList<>();
+        List<ADT_Rectangle> orderedWidth = new ArrayList<>(area.getRectangles());
         /*
          * TO-DO: Will this work? Initialize an ArrayList with references to the 
          * rectangle object found in the HashSet of area. So do not make new 
@@ -144,12 +144,7 @@ public class Strat_FixedHeightFixedOrient_FC extends Strat_AbstractStrat {
          * rectangles in area (right?)
          */
         
-        for(Iterator<ADT_Rectangle> rectangles = area.getRectangles(); rectangles.hasNext();) {
-             ADT_Rectangle rec = rectangles.next();  
-             orderedWidth.add(rec);
-         }
-        
-        Collections.sort(orderedWidth, new Comparator<ADT_Rectangle>(){
+        orderedWidth.sort(new Comparator<ADT_Rectangle>() {
             @Override
             public int compare(ADT_Rectangle rec1, ADT_Rectangle rec2) {
                 return (rec2.getWidth() - rec1.getWidth());

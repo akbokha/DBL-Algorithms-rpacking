@@ -7,6 +7,7 @@
 public class ADT_Rectangle implements ADT_ShapeInterface {
 
     public static final int INF = -1;
+    public static final int NA = -1;
     private int width;
     private int height;
     private int x;
@@ -77,5 +78,20 @@ public class ADT_Rectangle implements ADT_ShapeInterface {
     @Override
     public boolean canFlip() {
         return flippable;
+    }
+
+    @Override
+    public boolean isPlaced() {
+        if (getWidth() == NA) {
+            assert getHeight() == NA;
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    @Override
+    public int getArea() {
+        return getWidth() * getHeight();
     }
 }

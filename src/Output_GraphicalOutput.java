@@ -44,7 +44,7 @@ public class Output_GraphicalOutput extends Output_AbstractOutput {
 
             g.setColor(Color.red);
 
-            Iterator<ADT_Rectangle> i = area.getRectangles();
+            Iterator<ADT_Rectangle> i = area.getRectanglesIterator();
             while (i.hasNext()) {
                 ADT_Rectangle rect = i.next();
                 int w = (int) Math.floor(rect.getWidth() * scale);

@@ -15,6 +15,11 @@ public class Output_Plaintext extends Output_AbstractOutput {
             System.err.println("Invalid output detected");
         }
 
+        // Check if all rectangles are placed
+        if (! area.areAllRectanglesPlaced()) {
+            System.err.println("Not all rectangles are placed");
+        }
+
         // Draw the container height line.
         System.out.print("container height: ");
 
@@ -37,7 +42,7 @@ public class Output_Plaintext extends Output_AbstractOutput {
         System.out.println("number of rectangles: " + area.getCount());
 
         // Iterate through all rectangle to get their dimensions and locations.
-        Iterator<ADT_Rectangle> i = area.getRectangles();
+        Iterator<ADT_Rectangle> i = area.getRectanglesIterator();
         StringBuilder rectangleDimensions = new StringBuilder();
         StringBuilder rectangleLocations = new StringBuilder();
         while (i.hasNext()) {
