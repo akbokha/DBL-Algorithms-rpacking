@@ -1,5 +1,5 @@
-
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
@@ -18,15 +18,17 @@ import java.util.List;
 public class Strat_FixedHeightFixedOrient_FC extends Strat_AbstractStrat {
     
     private List<ADT_Rectangle> orderedRectangles;
+    private final int fixed_height;
     
      public Strat_FixedHeightFixedOrient_FC (ADT_Area area) {
         super(area);
+        fixed_height = area.getHeight();
     }
     
     @Override
     public ADT_Area compute() {
         orderedRectangles = getOrderedRectangles();
-        // TO DO: Implementation
+        Shelf first_shelf = new Shelf(0, 0, orderedRectangles.get(0).getWidth());
         return area;
     }
     
@@ -51,5 +53,35 @@ public class Strat_FixedHeightFixedOrient_FC extends Strat_AbstractStrat {
             }
         });    
         return orderedWidth;
+    }
+    
+    private class Shelf {
+        private final int x;
+        private final int y;
+        private final int ceiling;
+        Collection<ADT_ShapeInterface> rectangles;
+        
+        public Shelf(int x, int y, int ceiling) {
+            this.x = x;
+            this.y = y;
+            this.ceiling = ceiling;
+            rectangles = new ArrayList<>();
+        }
+        
+        public int getX() {
+            return x;
+        }
+        
+        public int getY() {
+            return y;
+        }
+        
+        public int getCeiling() {
+            return ceiling;
+        }
+        
+        public void addRectangle(ADT_ShapeInterface rectangle) {
+            rectangles.add(rectangle);
+        }
     }
 }
