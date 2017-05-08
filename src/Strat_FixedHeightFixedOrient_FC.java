@@ -137,7 +137,7 @@ public class Strat_FixedHeightFixedOrient_FC extends Strat_AbstractStrat {
      */
     private List<ADT_Rectangle> getOrderedRectangles() {
         List<ADT_Rectangle> orderedWidth = new ArrayList<>();
-        /** 
+        /*
          * TO-DO: Will this work? Initialize an ArrayList with references to the 
          * rectangle object found in the HashSet of area. So do not make new 
          * rectangle objects. So when you setX/setY it will Set X and Y for the 
@@ -152,7 +152,7 @@ public class Strat_FixedHeightFixedOrient_FC extends Strat_AbstractStrat {
         Collections.sort(orderedWidth, new Comparator<ADT_Rectangle>(){
             @Override
             public int compare(ADT_Rectangle rec1, ADT_Rectangle rec2) {
-                return (rec2.getWidth() - rec1. getWidth());
+                return (rec2.getWidth() - rec1.getWidth());
             }
         });    
         return orderedWidth;

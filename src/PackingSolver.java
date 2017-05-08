@@ -63,7 +63,7 @@ public class PackingSolver {
         }
         
         long endTime = System.currentTimeMillis(); // end time
-        System.out.println(endTime - curTime + "ms");
+        System.err.println((endTime - curTime) + "ms");
     }
     
 }
