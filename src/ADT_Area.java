@@ -136,4 +136,22 @@ public class ADT_Area extends ADT_Rectangle {
             return y;
         }
     }
+    
+    
+    /**
+     * Query to obtain the total area of all the rectangles in this
+     * The difference between returning int area = getWidth() * getHeight() is 
+     * that this returns the total area of the "Enclosing Rectangle" while
+     * getTotalAreaRectangles returns only the summation of the areas of the 
+     * rectangles in this. This can be used for e.g. pruning
+     * @return the area of all the rectangles in this
+     */
+    public int getTotalAreaRectangles() {
+        int totalArea = 0;
+        for(Iterator<ADT_Rectangle> rectangles = getRectangles(); rectangles.hasNext();) {
+             ADT_Rectangle rec = rectangles.next();
+             totalArea += (rec.getWidth() * rec.getHeight());   
+         }
+        return totalArea;
+    }
 }
