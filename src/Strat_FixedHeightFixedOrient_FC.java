@@ -36,12 +36,12 @@ public class Strat_FixedHeightFixedOrient_FC extends Strat_AbstractStrat {
     }
     
     private void placeFirstRectangle() {
-        Shelf first_shelf = new Shelf(0, 0, 0, orderedRectangles.get(rectangleIndex).getWidth());
+        Shelf first_shelf = new Shelf(0, orderedRectangles.get(rectangleIndex).getWidth());
+        orderedRectangles.get(rectangleIndex).setX(0);
+        orderedRectangles.get(rectangleIndex).setY(0);
         first_shelf.addRectangle(orderedRectangles.get(rectangleIndex));
         first_shelf.setLastFloor(orderedRectangles.get(rectangleIndex));
         first_shelf.setLastCeiling(new ADT_Rectangle(0, 0, 0, fixed_height, false));
-        orderedRectangles.get(rectangleIndex).setX(0);
-        orderedRectangles.get(rectangleIndex).setY(0);
         rectangleIndex++;
         placeRectangles(first_shelf); // try to place other rectangles in this shelf
     }
@@ -49,25 +49,86 @@ public class Strat_FixedHeightFixedOrient_FC extends Strat_AbstractStrat {
     private void placeRectangles(Shelf shelf) {
         while (rectangleIndex != numberOfRectangles) {
             ADT_Rectangle current_rec = orderedRectangles.get(rectangleIndex);
-            ADT_Rectangle lastFloor = shelf.getLastFloor();
-            ADT_Rectangle lastCeiling = shelf.getLastCeiling();
-            if (lastCeiling.getY() - (lastFloor.getY() + lastFloor.getHeight()) >= current_rec.getHeight()
-                    || (2 + 3 == 5)) { // place on the ceiling
-                // TO-DO: Fix logic / apply BFDH
-                current_rec.setX(shelf.getCeiling() - current_rec.getWidth());
-                current_rec.setY(lastCeiling.getY() - current_rec.getHeight());
-                shelf.addRectangle(current_rec);
-                shelf.setLastCeiling(current_rec);
-                rectangleIndex++;
-                placeRectangles(shelf);
-            } else if (3 + 2 == 5) { //place on the floor 
-                
-            } else { // new shelf 
+            ADT_Rectangle lastFloor = shelf.lastPlacedFloor;
+            ADT_Rectangle lastCeiling = shelf.lastPlacedCeiling;
+            if (shelf.firstCeil) { // first item has already been placed on a ceiling
+               // costly (temporarily) solution
+               ADT_Rectangle dummyRecCeiling = dummyCeil(shelf, current_rec, lastCeiling);
+               ADT_Rectangle dummyRecFloor = dummyFloor(shelf, current_rec, lastFloor);
+               if (! rectangleOverlap(shelf, dummyRecCeiling)) { // can safely place it on the ceiling
+                   current_rec.setX(shelf.ceiling - current_rec.getWidth());
+                   current_rec.setY(fixed_height - current_rec.getHeight());
+                   rectangleIndex++;
+                   shelf.addRectangle(current_rec);
+                   shelf.setLastCeiling(current_rec);
+               } else if (! rectangleOverlap(shelf, dummyRecFloor)) { // can safely place it on the floor
+                   current_rec.setX(shelf.x);
+                   current_rec.setY(lastFloor.getY() + lastFloor.getHeight());
+                   shelf.addRectangle(current_rec);
+                   shelf.setLastFloor(current_rec);
+                   rectangleIndex++;  
+               } else { // new shelf
+                   Shelf newShelf = newShelf(shelf, current_rec);
+                   placeRectangles(newShelf);
+               }
+              
+            } else { // no rectangles have been placed on the ceiling yet
+                if (fixed_height - (lastFloor.getY() + lastFloor.getHeight()) >= current_rec.getHeight()) {
+                    // place rectangle on the same shelf on the floor
+                    current_rec.setX(shelf.x);
+                    current_rec.setY(lastFloor.getY() + lastFloor.getHeight());
+                    shelf.addRectangle(current_rec);
+                    shelf.setLastFloor(current_rec);
+                    rectangleIndex++;
+                } else if (! rectangleOverlap(shelf, dummyCeil(shelf, current_rec, lastCeiling))) { // place first rectangle on the ceiling
+                    current_rec.setX(shelf.ceiling - current_rec.getWidth());
+                    current_rec.setY(fixed_height - current_rec.getHeight());
+                    rectangleIndex++;
+                    shelf.addRectangle(current_rec);
+                    shelf.setLastCeiling(current_rec);
+                    shelf.setFirstCeil();
+                } else { // new shelf
+                   Shelf newShelf = newShelf(shelf, current_rec);
+                   placeRectangles(newShelf);
+                }
                 
             }
         }
     }
     
+    private ADT_Rectangle dummyCeil(Shelf shelf, ADT_Rectangle rec, ADT_Rectangle lastCeil) {
+        int x = shelf.ceiling - rec.getWidth();
+        int y = lastCeil.getY() - rec.getHeight();
+        ADT_Rectangle dummy = new ADT_Rectangle(rec.getWidth(), rec.getHeight(), x, y, false);
+        return dummy;
+    }
+    
+    private ADT_Rectangle dummyFloor(Shelf shelf, ADT_Rectangle rec, ADT_Rectangle lastFloor) {
+        int x = shelf.x;
+        int y = lastFloor.getY() + lastFloor.getHeight();
+        ADT_Rectangle dummy = new ADT_Rectangle(rec.getWidth(), rec.getHeight(), x, y, false);
+        return dummy;
+    }
+    
+    private boolean rectangleOverlap (Shelf shelf, ADT_Rectangle rec) {
+        for (Iterator<ADT_Rectangle> rectangles = area.getRectangles(); rectangles.hasNext();) {
+            ADT_Rectangle cur_rec = rectangles.next();
+            if (shelf.checkRectangleOverlap(cur_rec, rec)) {
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    private Shelf newShelf (Shelf shelf, ADT_Rectangle rec) {
+        Shelf newShelf = new Shelf(shelf.x + shelf.ceiling, rec.getWidth());
+        rec.setX(newShelf.x);
+        rec.setY(0);
+        newShelf.addRectangle(rec);
+        newShelf.setLastFloor(rec);
+        rectangleIndex++;
+        return newShelf;
+    }
     
     /**
      * Sorts the rectangles that can be found in area based on their width
@@ -91,7 +152,7 @@ public class Strat_FixedHeightFixedOrient_FC extends Strat_AbstractStrat {
         Collections.sort(orderedWidth, new Comparator<ADT_Rectangle>(){
             @Override
             public int compare(ADT_Rectangle rec1, ADT_Rectangle rec2) {
-                return (rec1.getWidth() - rec2. getWidth());
+                return (rec2.getWidth() - rec1. getWidth());
             }
         });    
         return orderedWidth;
@@ -100,37 +161,24 @@ public class Strat_FixedHeightFixedOrient_FC extends Strat_AbstractStrat {
     private class Shelf {
         
         private final int x;
-        private final int y;
         private final int ceiling;
-        private final int floor;
         private ADT_Rectangle lastPlacedFloor;
         private ADT_Rectangle lastPlacedCeiling;
         Collection<ADT_Rectangle> rectangles;
+        private boolean firstCeil;
         
-        public Shelf(int x, int y, int floor, int ceiling) {
+        public Shelf(int x, int ceiling) {
+            this.firstCeil = false;
             this.x = x;
-            this.y = y;
-            this.floor = floor;
             this.ceiling = ceiling;
             this.lastPlacedFloor = null;
             this.lastPlacedCeiling = null;
             rectangles = new ArrayList<>();
         }
         
-        public int getX() {
-            return x;
-        }
-        
-        public int getY() {
-            return y;
-        }
-        
-        public int getFloor() {
-            return floor;
-        }
-        
-        public int getCeiling() {
-            return ceiling;
+        // The first item packed on a ceiling can only be one which cannot be packed on the floor below
+        public void setFirstCeil() {
+            this.firstCeil = true;
         }
         
         public void addRectangle(ADT_Rectangle rectangle) {
@@ -145,12 +193,46 @@ public class Strat_FixedHeightFixedOrient_FC extends Strat_AbstractStrat {
             this.lastPlacedCeiling = lastCeiling;
         }
         
-        public ADT_Rectangle getLastFloor() {
-            return lastPlacedFloor;
+        public Iterator<ADT_Rectangle> getRectangles() {
+            return rectangles.iterator();
         }
         
-        public ADT_Rectangle getLastCeiling() {
-            return lastPlacedCeiling;
+        // copied from ADT_Area
+        private boolean checkRectangleOverlap(ADT_Rectangle rec1, ADT_Rectangle rec2) {
+            assert rec1 != null;
+            assert rec2 != null;
+            assert rec1.getWidth() != ADT_Rectangle.INF;
+            assert rec2.getWidth() != ADT_Rectangle.INF;
+            assert rec1.getHeight() != ADT_Rectangle.INF;
+            assert rec2.getWidth() != ADT_Rectangle.INF;
+
+            Point l1 = new Point(rec1.getX(), rec1.getY() + rec1.getHeight()); // Top left coordinate of first rectangle
+            Point r1 = new Point(rec1.getX() + rec1.getWidth(), rec1.getY()); // Bottom right coordinate of first rectangle
+            Point l2 = new Point(rec2.getX(), rec2.getY() + rec2.getHeight()); // Top left coordinate of second rectangle
+            Point r2 = new Point(rec2.getX() + rec2.getWidth(), rec2.getY()); // Bottom right coordinate of second rectangle
+
+            if (l1.getX() >= r2.getX() || l2.getX() >= r1.getX()) { // Check if one rectangle is on the left side of the other rectangle.
+                return false;
+            } else return !(l1.getY() <= r2.getY() || l2.getY() <= r1.getY()); // Check if one rectangle is above the other rectangle.
+            
+        }
+
+        private class Point {
+            private int x;
+            private int y;
+
+            Point(int x, int y) {
+                this.x = x;
+                this.y = y;
+            }
+
+            int getX() {
+                return x;
+            }
+
+            int getY() {
+                return y;
+            }
         }
     }
 }
