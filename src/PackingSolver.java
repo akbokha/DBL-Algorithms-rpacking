@@ -12,6 +12,7 @@ public class PackingSolver {
      * @param args the command line arguments
      */
     public static void main(String[] args) throws Exception {
+        long curTime = System.currentTimeMillis(); // to check running time
         Input_InputInterface input = null;
         boolean graphical = false;
 
@@ -59,6 +60,9 @@ public class PackingSolver {
             Output_AbstractOutput graphicalOutput = new Output_GraphicalOutput(area);
             graphicalOutput.draw();
         }
+        
+        long endTime = System.currentTimeMillis(); // end time
+        System.err.println((endTime - curTime) + "ms");
     }
     
 }
