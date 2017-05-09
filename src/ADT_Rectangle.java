@@ -4,7 +4,7 @@
  * @date Apr 26, 2017
  * @author Adriaan Knapen <a.d.knapen@student.tue.nl>
  */
-public class ADT_Rectangle implements ADT_ShapeInterface {
+public class ADT_Rectangle implements ADT_ShapeInterface, Comparable<ADT_Rectangle> {
 
     public static final int INF = -1;
     private int width;
@@ -77,5 +77,10 @@ public class ADT_Rectangle implements ADT_ShapeInterface {
     @Override
     public boolean canFlip() {
         return flippable;
+    }
+
+    @Override
+    public int compareTo(ADT_Rectangle o) {
+        return (this.height > o.height) ? this.height : o.height;
     }
 }
