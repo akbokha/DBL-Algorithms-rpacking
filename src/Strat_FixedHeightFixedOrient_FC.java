@@ -56,12 +56,12 @@ public class Strat_FixedHeightFixedOrient_FC extends Strat_AbstractStrat {
     private void placeRectangles() {
         while (rectangleIndex != numberOfRectangles) {
             ADT_Rectangle current_rec = orderedRectangles.get(rectangleIndex);
-            setFirstCeilBooleanAllShelves(false);
-            setFirctCeilBooleanIfNotFloor(current_rec);
+            setRecDoesNotFitBooleanAllShelves(false);
+            setRecDoesNotFitBooleanIfNotFloor(current_rec);
             if (canPlaceItOnACeiling(current_rec)) {
                 Shelf bestFitShelf = getBestFitCeiling();
                 current_rec.setX((bestFitShelf.x + bestFitShelf.ceiling) - current_rec.getWidth());
-                current_rec.setY(fixed_height - current_rec.getHeight());
+                current_rec.setY(bestFitShelf.lastPlacedCeiling.getY() - current_rec.getHeight());
                 rectangleIndex++;
                 bestFitShelf.addRectangle(current_rec);
                 bestFitShelf.setLastCeiling(current_rec);
@@ -80,28 +80,27 @@ public class Strat_FixedHeightFixedOrient_FC extends Strat_AbstractStrat {
                this.shelves.add(newShelf);
                x_tracker += current_rec.getWidth();
                placeFirstRectangleShelf(newShelf, current_rec);
-               break;
             }
         }
     }
 
-    private void setFirstCeilBooleanAllShelves(boolean set) {
+    private void setRecDoesNotFitBooleanAllShelves(boolean set) {
         for (Shelf shelf : shelves) {
-            shelf.firstCeil = set;
+            shelf.recDoesNotFit = set;
         }
     }
 
-    private void setFirctCeilBooleanIfNotFloor(ADT_Rectangle rec) {
+    private void setRecDoesNotFitBooleanIfNotFloor(ADT_Rectangle rec) {
         for (Shelf shelf : shelves) {
-            if (rectangleOverlap(shelf, dummyFloor(shelf, rec, shelf.lastPlacedFloor))) {
-                shelf.firstCeil = true;
-            }
+                if ((rectangleOverlap(shelf, dummyFloor(shelf, rec, shelf.lastPlacedFloor)))  || ((fixed_height - (shelf.lastPlacedFloor.getY() + shelf.lastPlacedFloor.getHeight())) < rec.getHeight())) {
+                    shelf.recDoesNotFit = true;
+                }
         }
     }
 
     private boolean canPlaceItOnACeiling(ADT_Rectangle rec) {
         for (Shelf shelf : shelves) {
-            if (shelf.firstCeil && !rectangleOverlap(shelf, dummyCeil(shelf, rec, shelf.lastPlacedCeiling))) {
+            if ((shelf.recDoesNotFit || shelf.firstCeil) && !rectangleOverlap(shelf, dummyCeil(shelf, rec, shelf.lastPlacedCeiling))) {
                 return true;
             }
         }
@@ -110,7 +109,8 @@ public class Strat_FixedHeightFixedOrient_FC extends Strat_AbstractStrat {
 
     private boolean canPlaceItOnAFloor(ADT_Rectangle rec) {
         for (Shelf shelf : shelves) {
-            if (! rectangleOverlap(shelf, dummyFloor(shelf, rec, shelf.lastPlacedFloor))) {
+            if (! rectangleOverlap(shelf, dummyFloor(shelf, rec, shelf.lastPlacedFloor)) &&
+                    ((fixed_height - (shelf.lastPlacedFloor.getY() + shelf.lastPlacedFloor.getHeight())) >= rec.getHeight())) {
                 return true;
             }
         }
@@ -142,7 +142,7 @@ public class Strat_FixedHeightFixedOrient_FC extends Strat_AbstractStrat {
     }
 
     private boolean rectangleOverlap (Shelf shelf, ADT_Rectangle rec) {
-        for (Iterator<ADT_Rectangle> rectangles = area.getRectangles(); rectangles.hasNext();) {
+        for (Iterator<ADT_Rectangle> rectangles = shelf.getRectangles(); rectangles.hasNext();) {
             ADT_Rectangle cur_rec = rectangles.next();
             if (shelf.checkRectangleOverlap(cur_rec, rec)) {
                 return true;
@@ -180,6 +180,7 @@ public class Strat_FixedHeightFixedOrient_FC extends Strat_AbstractStrat {
         private ADT_Rectangle lastPlacedCeiling;
         Collection<ADT_Rectangle> rectangles;
         private boolean firstCeil;
+        private boolean recDoesNotFit;
         private int floorRecSpace;
         private int ceilRecSpace;
 
@@ -193,6 +194,7 @@ public class Strat_FixedHeightFixedOrient_FC extends Strat_AbstractStrat {
             this.floorRecSpace = ceiling;
             this.ceilRecSpace = ceiling;
             lastPlacedCeiling = new ADT_Rectangle(0, 0, (x + ceiling), fixed_height, false);
+            this.recDoesNotFit = false;
         }
 
         // The first item packed on a ceiling can only be one which cannot be packed on the floor below
