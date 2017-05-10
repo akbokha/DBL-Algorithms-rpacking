@@ -1,8 +1,6 @@
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Iterator;
-
 
 /**
  *
@@ -18,21 +16,28 @@ public class Strat_NFDH extends Strat_AbstractStrat {
     public ADT_Area compute() {
         
         ArrayList<ADT_Rectangle> toBePlaced = new ArrayList<>();
-        area.getRectangles().forEachRemaining(ADT_Rectangle::toggleFlipped);
         area.getRectangles().forEachRemaining(toBePlaced::add);
-        Collections.sort(toBePlaced); //Sort list in non-increasing order
-        ArrayList<ADT_Area> shelf = new ArrayList<>();
-        shelf.add(new ADT_Area(toBePlaced.get(0).getHeight(), Integer.MAX_VALUE, false));
+        Collections.sort(toBePlaced, new ADT_SortRecOnWidth()); //Sort list in non-increasing order on width
+        //shelf {width of the shelf, height of the shelf, x-position of the shelf}
+        Integer[] shelf = new Integer[]{toBePlaced.get(0).getWidth(), toBePlaced.get(0).getHeight(), 0};
+        toBePlaced.get(0).setX(0);
+        toBePlaced.get(0).setY(0);
+        toBePlaced.remove(0);
         
-        for(Iterator<ADT_Rectangle> recs = area.getRectangles(); recs.hasNext();) {
-            ADT_Rectangle currentRec = recs.next();
-            if(currentRec.getWidth() <= area.getHeight() - shelf.get(0).getWidth()) {
-                shelf.get(0).add(currentRec);
+        while(!toBePlaced.isEmpty()) {
+            if(toBePlaced.get(0).getHeight() <= area.getHeight() - shelf[1]) {
+                toBePlaced.get(0).setX(shelf[2]);
+                toBePlaced.get(0).setY(shelf[1]);
+                shelf[1] += toBePlaced.get(0).getHeight();
+                
             } else {//Place the new shelf in front of the array for easy access
-                shelf.add(0, new ADT_Area(toBePlaced.get(0).getHeight(), Integer.MAX_VALUE, false));
+                shelf = new Integer[]{toBePlaced.get(0).getWidth(), toBePlaced.get(0).getHeight(), shelf[2] + shelf[0]};
+                toBePlaced.get(0).setX(shelf[2]);
+                toBePlaced.get(0).setY(0);
+                
             }
+            toBePlaced.remove(0);
         }
         return area;
     }
-    
 }
