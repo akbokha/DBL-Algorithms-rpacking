@@ -41,7 +41,7 @@ public class Output_GraphicalOutput extends Output_AbstractOutput {
     class RectanglesCanvas extends JComponent {
         @Override
         public void paint(Graphics g) {
-            g.drawRect(border, border, (int) (rectWidth * scale), (int) (rectHeight * scale));
+            g.drawRect(border - 1, border - 1, (int) (rectWidth * scale) + 2, (int) (rectHeight * scale) + 2);
 
             g.setColor(Color.red);
 
@@ -52,8 +52,11 @@ public class Output_GraphicalOutput extends Output_AbstractOutput {
                 int h = (int) Math.floor(rect.getHeight() * scale);
                 int x = (int) Math.floor(rect.getX() * scale) + border;
                 int y = (int) Math.floor((rectHeight - rect.getY()) * scale + border - h);
-                //int y = (int) Math.floor((rect.getY()) * scale) + border;
 
+                g.setColor(Color.darkGray);
+                g.fillRect(x,y , w, h);
+
+                g.setColor(Color.red);
                 g.drawRect(x, y, w, h);
             }
         }
