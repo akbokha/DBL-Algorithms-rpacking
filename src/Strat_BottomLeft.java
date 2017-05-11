@@ -28,15 +28,7 @@ public class Strat_BottomLeft extends Strat_AbstractStrat {
         }
 
         //Sort the array in decreasing width order
-        rects.sort(new Comparator<ADT_Rectangle>() {
-            @Override
-            public int compare(ADT_Rectangle o1, ADT_Rectangle o2) {
-                if(o1.getWidth() == o2.getWidth())
-                    return 0;
-
-                return (o1.getWidth() > o2.getWidth()) ? -1 : 1;
-            }
-        });
+        rects.sort(new ADT_SortRecOnWidth());
 
         //Meat of the algorithm: Pick the largest item and place it at the most bottom left position
         while (rects.size() > 0) {
