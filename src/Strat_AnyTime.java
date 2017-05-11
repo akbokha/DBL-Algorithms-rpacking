@@ -17,9 +17,9 @@ public class Strat_AnyTime extends Strat_AbstractStrat {
         try {
             //Used to initialize an average starting width and height
             ADT_Area bestArea = new Strat_BottomLeft((ADT_Area) area.clone()).compute();
-            int dimension[] = bestArea.getMinDimensions();
-            int width = dimension[0];
-            int height = dimension[1];
+            Vector2 dimension = bestArea.getMinDimensions();
+            int width = dimension.x;
+            int height = dimension.y;
             
             while(true) {
                 //Make sure that the area gets smaller and smaller until minimal area is reached
