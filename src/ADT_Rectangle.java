@@ -7,6 +7,7 @@
 public class ADT_Rectangle implements ADT_ShapeInterface {
 
     public static final int INF = -1;
+    public static final int NOTSET = -2;
     private int width;
     private int height;
     private int x;

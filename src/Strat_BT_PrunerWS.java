@@ -8,7 +8,7 @@
  *
  * @author s147889
  */
-public class Strat_BT_PrunerWS {
+public class Strat_BT_PrunerWS implements Strat_BT_PrunerInterface {
     
     ADT_Area area;
     int[] stripsWS;
@@ -16,6 +16,11 @@ public class Strat_BT_PrunerWS {
     
     public Strat_BT_PrunerWS(ADT_Area area) {
         this.area = area;
+    }
+
+    @Override
+    public boolean reject(ADT_Area area) {
+        return false;
     }
     
     
