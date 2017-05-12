@@ -9,7 +9,7 @@ public class Strat_BT_Example extends Strat_BT_Template{
     }
     
     @Override
-    boolean accept(ADT_Area area) {
+    boolean accept(ADT_Area area, ADT_Rectangle last) {
         return true;
     }
 
