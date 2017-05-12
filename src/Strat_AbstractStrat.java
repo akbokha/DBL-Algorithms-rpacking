@@ -26,7 +26,7 @@ public abstract class Strat_AbstractStrat {
     
     /**
      * The actual computation behind the placement of the rectangles
-     * @return an area such that isValid()
+     * @return an area such that isValid(), or null if one wasn't found.
      */
     public abstract ADT_Area compute();
     

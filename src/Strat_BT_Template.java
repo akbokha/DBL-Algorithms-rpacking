@@ -26,49 +26,50 @@ abstract public class Strat_BT_Template extends Strat_AbstractStrat {
 
     @Override
     public ADT_Area compute() {
-        return computeBranch(area);
+        if (computeBranch()) {
+            return area;
+        } else {
+            return null;
+        }
     }
 
     /**
      * Attempts to compute a valid solution.
-     * @param area the problem to be solved
      * @return a valid solution if it exists, else null.
      */
-    ADT_Area computeBranch(ADT_Area area) {
+    private boolean computeBranch() {
         ADT_Rectangle last = last();
 
         // Check if this iteration can be pruned.
-        if (reject(area, last)) {
-            return null;
+        if (reject(last)) {
+            return false;
         }
 
         // Check if this is a valid solution.
-        if (accept(area, last)) {
-            return area;
+        if (accept(last)) {
+            return true;
         }
 
         // Dispatch all other calls.
-        ADT_Area s = first(area); // Select the first branch.
-        while (s != null) {
+        boolean hasNext = first(); // Select the first branch.
+        while (hasNext) {
             // Compute the next result and check if it is valid.
-            ADT_Area result = computeBranch(s);
-            if (result != null) {
-                return result;
+            if (computeBranch()) {
+                return true;
             }
 
-            s = next(area, s); // Get the next branch.
+            hasNext = next(); // Compute the next branch, if there is one.
         }
 
-        return null;
+        return false;
     }
 
     /**
      * Evaluates all pruners to detect if this branch could be rejected.
-     * @param area the problem to be evaluated.
      * @param last the rectangle changed last.
      * @return true if any of the pruners think that this branch should be rejected, else false.
      */
-    private boolean reject(ADT_Area area, ADT_Rectangle last) {
+    private boolean reject(ADT_Rectangle last) {
         for (Strat_BT_PrunerInterface pruner : pruners) {
             if (pruner.reject(area, last)) {
                 return true;
@@ -80,24 +81,20 @@ abstract public class Strat_BT_Template extends Strat_AbstractStrat {
 
     /**
      * Computes if the given problem satisfies all requirements of a valid solution.
-     * @param area the problem to be evaluated.
      * @param last the last rectangle which was changed.
      * @return true if the given problem is solved, else false.
      */
-    abstract boolean accept(ADT_Area area, ADT_Rectangle last);
+    abstract boolean accept(ADT_Rectangle last);
 
     /**
      * Gives the first branch which should be evaluated.
-     * @param area the state of the problem prior to the branch we are generating.
-     * @return the first branch to be evaluated
+     * @return true if a new branch was created, else false.
      */
-    abstract ADT_Area first(ADT_Area area);
+    abstract boolean first();
 
     /**
      * Gives the next branch to be evaluated.
-     * @param area the state of the problem prior to the branch we are currently working on.
-     * @param s    the previous problem which was evaluated.
-     * @return the next branch to be evaluated.
+     * @return true if a new branch was created, else false.
      */
-    abstract ADT_Area next(ADT_Area area, ADT_Area s);
+    abstract boolean next();
 }
