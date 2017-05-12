@@ -6,6 +6,7 @@ import java.util.Collections;
  *
  * @author Bastiaan
  */
+//Next-Fit Decreasing Height
 public class Strat_NFDH extends Strat_AbstractStrat {
     
     public Strat_NFDH(ADT_Area area) {
@@ -22,19 +23,19 @@ public class Strat_NFDH extends Strat_AbstractStrat {
         Integer[] shelf = new Integer[]{toBePlaced.get(0).getWidth(), toBePlaced.get(0).getHeight(), 0};
         toBePlaced.get(0).setX(0);
         toBePlaced.get(0).setY(0);
-        toBePlaced.remove(0);
-        
+        toBePlaced.remove(0);//Place first rectangle and remove it from the queue
+        //Go on until the queue is empty
         while(!toBePlaced.isEmpty()) {
+            //If the rectangle fits on the last shelf
             if(toBePlaced.get(0).getHeight() <= area.getHeight() - shelf[1]) {
                 toBePlaced.get(0).setX(shelf[2]);
                 toBePlaced.get(0).setY(shelf[1]);
                 shelf[1] += toBePlaced.get(0).getHeight();
                 
-            } else {//Place the new shelf in front of the array for easy access
+            } else {//If the rectangle is not placed, create a new shelf and place it there
                 shelf = new Integer[]{toBePlaced.get(0).getWidth(), toBePlaced.get(0).getHeight(), shelf[2] + shelf[0]};
                 toBePlaced.get(0).setX(shelf[2]);
                 toBePlaced.get(0).setY(0);
-                
             }
             toBePlaced.remove(0);
         }
