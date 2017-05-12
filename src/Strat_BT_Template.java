@@ -7,7 +7,7 @@ import java.util.Collection;
  */
 abstract public class Strat_BT_Template extends Strat_AbstractStrat {
 
-    private Collection<Strat_BT_PrunerItf> pruners;
+    private Collection<Strat_BT_PrunerInterface> pruners;
 
     public Strat_BT_Template(ADT_Area area) {
         super(area);
@@ -18,7 +18,7 @@ abstract public class Strat_BT_Template extends Strat_AbstractStrat {
      * Adds a pruner to the list of used pruners during computation.
      * @param pruner the pruner to be added.
      */
-    void addPruner(Strat_BT_PrunerItf pruner) {
+    void addPruner(Strat_BT_PrunerInterface pruner) {
         pruners.add(pruner);
     }
 
@@ -64,7 +64,7 @@ abstract public class Strat_BT_Template extends Strat_AbstractStrat {
      * @return true if any of the pruners think that this branch should be rejected, else false.
      */
     private boolean reject(ADT_Area area) {
-        for (Strat_BT_PrunerItf pruner : pruners) {
+        for (Strat_BT_PrunerInterface pruner : pruners) {
             if (pruner.reject(area)) {
                 return true;
             }

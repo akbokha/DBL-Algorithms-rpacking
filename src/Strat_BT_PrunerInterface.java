@@ -1,4 +1,4 @@
-interface Strat_BT_PrunerItf {
+interface Strat_BT_PrunerInterface {
 
     /**
      * Computes if the given problem can be evolved into a valid solution.
