@@ -48,7 +48,7 @@ public class ADT_Area extends ADT_Rectangle implements Cloneable {
         return shapes.iterator();
     }
 
-    int[] getMinDimensions() {
+    ADT_Vector getMinDimensions() {
         Iterator<ADT_Rectangle> i = getRectangles();
         int maxX = 0;
         int maxY = 0;
@@ -61,7 +61,36 @@ public class ADT_Area extends ADT_Rectangle implements Cloneable {
             }
         }
 
-        return new int[]{maxX, maxY};
+        return new ADT_Vector(maxX, maxY);
+    }
+
+    /*
+     * Return true if none of the already placed rectangles overlap with the paramater rectangle
+     */
+    public boolean isNewRectangleValid(ADT_Rectangle rectangle) {
+        for(Iterator<ADT_Rectangle> recs = getRectangles(); recs.hasNext();) {
+            ADT_Rectangle currentRec = recs.next();
+            if(!checkRectangleOverlap(currentRec, rectangle)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /*
+     * Returns true if the parameter position is in an already placed rectangle
+     */
+    public boolean isOccupied(ADT_Vector position) {
+        for(Iterator<ADT_Rectangle> recs = getRectangles(); recs.hasNext();) {
+            ADT_Rectangle currentRec = recs.next();
+            if((position.x >= currentRec.getX() && position.x < currentRec.getX() + currentRec.getWidth())
+                    && (position.y >= currentRec.getY() && position.y < currentRec.getY() + currentRec.getHeight())) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
