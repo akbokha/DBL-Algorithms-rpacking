@@ -9,12 +9,33 @@
  * @author s147889
  */
 public class Strat_BT_PrunerEmptySpace implements Strat_BT_PrunerInterface {
-
+    
     @Override
     public boolean reject(ADT_Area area, ADT_Rectangle last) {
-        int[] stripsEmptySpace = area.getEmptySpaceStrips(true);
-        int[] stripsRecsTBP = area.getRectanlgeStrips(true);
-        
+        int[] stripsEmptySpace = null; //Array which stores the strips of empty space
+        int[] stripsRecsTBP = null; //Array which stores the strips of rectangles to be placed
+        //true = horizontal strips
+        //stripsEmptySpace = area.getEmptySpaceStrips(true);
+        //stripsRecsTBP = area.getRectanlgeStrips(true);
+        if(testStrips(stripsEmptySpace, stripsRecsTBP)) return true;
+        //false = vertical strips
+        //stripsEmptySpace = area.getEmptySpaceStrips(false);
+        //stripsRecsTBP = area.getRectanlgeStrips(false);
+        return testStrips(stripsEmptySpace, stripsRecsTBP);
+    }
+    /**
+     * Computes if the strips of the to be placed rectangles fit into the strips
+     * of the empty space.
+     * 
+     * @param stripsEmptySpace an array with the index i the width or height of
+     * a strip and <code>stripsEmptySpace[i]</code> the number of strips with
+     * the same width or height. The strips are the strips of empty space.
+     * @param stripsRecsTBP the same as stripsEmptySpace but then for the 
+     * rectangles that still have to be placed.
+     * @return if the strips of the rectangles that still have to be placed
+     * fit in the strips of the empty space
+     */
+    private boolean testStrips(int[] stripsEmptySpace, int[] stripsRecsTBP) {
         //If strips of the rectangles are longer than the empty space
         // there is no valid solution possible
         if(stripsEmptySpace.length < stripsRecsTBP.length) {
