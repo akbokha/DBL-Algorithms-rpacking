@@ -17,7 +17,7 @@ public class Output_GraphicalOutput extends Output_AbstractOutput {
 
     Output_GraphicalOutput(ADT_Area area) {
         super(area);
-        Vector2 dim = area.getMinDimensions();
+        ADT_Vector dim = area.getMinDimensions();
         rectWidth = dim.x;
         rectHeight = dim.y;
     }

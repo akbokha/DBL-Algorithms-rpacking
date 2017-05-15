@@ -48,7 +48,7 @@ public class ADT_Area extends ADT_Rectangle implements Cloneable {
         return shapes.iterator();
     }
 
-    Vector2 getMinDimensions() {
+    ADT_Vector getMinDimensions() {
         Iterator<ADT_Rectangle> i = getRectangles();
         int maxX = 0;
         int maxY = 0;
@@ -61,7 +61,7 @@ public class ADT_Area extends ADT_Rectangle implements Cloneable {
             }
         }
 
-        return new Vector2(maxX, maxY);
+        return new ADT_Vector(maxX, maxY);
     }
 
     /*
@@ -81,7 +81,7 @@ public class ADT_Area extends ADT_Rectangle implements Cloneable {
     /*
      * Returns true if the parameter position is in an already placed rectangle
      */
-    public boolean isOccupied(Vector2 position) {
+    public boolean isOccupied(ADT_Vector position) {
         for(Iterator<ADT_Rectangle> recs = getRectangles(); recs.hasNext();) {
             ADT_Rectangle currentRec = recs.next();
             if((position.x >= currentRec.getX() && position.x < currentRec.getX() + currentRec.getWidth())

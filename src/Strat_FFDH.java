@@ -7,6 +7,7 @@ import java.util.Collections;
  *
  * @author Bastiaan
  */
+//First-Fit Decreasing Height
 public class Strat_FFDH extends Strat_AbstractStrat {
     public Strat_FFDH(ADT_Area area) {
         super(area);
@@ -21,30 +22,29 @@ public class Strat_FFDH extends Strat_AbstractStrat {
         shelfs.add(new Integer[]{toBePlaced.get(0).getWidth(), toBePlaced.get(0).getHeight(), 0});
         toBePlaced.get(0).setX(0);
         toBePlaced.get(0).setY(0);
-        toBePlaced.remove(0);
-        
+        toBePlaced.remove(0);//Place first rectangle and remove it from the queue
+        //Go on until the queue is empty
+        next:
         while(!toBePlaced.isEmpty()) {
-            boolean placed = false;
-            for(Integer[] shelf : shelfs){
+            for(Integer[] shelf : shelfs){//Check for all shelfs
+                //If the current shelf is high enough, place the rectangle there
                 if(toBePlaced.get(0).getHeight() <= area.getHeight() - shelf[1]) {
                     toBePlaced.get(0).setX(shelf[2]);
                     toBePlaced.get(0).setY(shelf[1]);
                     shelf[1] += toBePlaced.get(0).getHeight();
-                    placed = true;
-                    break;
+                    toBePlaced.remove(0);
+                    continue next;//Continue with the next rectangle
                 }
             }
-            
-            if(!placed) {
-                Integer[] lastShelf = shelfs.get(shelfs.size()-1);
-                int shelfWidth = toBePlaced.get(0).getWidth();
-                int shelfHeight = toBePlaced.get(0).getHeight();
-                int shelfX = lastShelf[0] + lastShelf[2];
-            
-                toBePlaced.get(0).setX(shelfX);
-                toBePlaced.get(0).setY(0);
-                shelfs.add(new Integer[]{shelfWidth, shelfHeight, shelfX});
-            }
+            //If the rectangle is not placed, create a new shelf and place it there
+            Integer[] lastShelf = shelfs.get(shelfs.size()-1);
+            int shelfWidth = toBePlaced.get(0).getWidth();
+            int shelfHeight = toBePlaced.get(0).getHeight();
+            int shelfX = lastShelf[0] + lastShelf[2];
+
+            toBePlaced.get(0).setX(shelfX);
+            toBePlaced.get(0).setY(0);
+            shelfs.add(new Integer[]{shelfWidth, shelfHeight, shelfX});
             toBePlaced.remove(0);
         }
         return area;
