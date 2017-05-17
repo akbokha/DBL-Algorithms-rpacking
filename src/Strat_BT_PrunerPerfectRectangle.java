@@ -26,12 +26,15 @@ public class Strat_BT_PrunerPerfectRectangle implements Strat_BT_PrunerInterface
      */
     private boolean perfectRectBelow(ADT_AreaExtended area, ADT_Rectangle last){
         int lowestPoint = Integer.MAX_VALUE; // lowest point of possible perfect rectangle
-        int beginX = last.getX()+1;
+        int beginX = last.getX();
         int endX = last.getX()+last.getWidth();
         
         // Scan horizontally to find bottom of a possibly perfect rectangle
         int y = last.getY();
-        while(y > 0 && lowestPoint == Integer.MAX_VALUE){
+        
+        if(y==0) return false; // There is no dominance below possible
+            
+        while(lowestPoint == Integer.MAX_VALUE){ // We haven't reached the bottom of the rectangle
             y--;
             
             for(int x = beginX; x < endX; ++x){
@@ -61,7 +64,7 @@ public class Strat_BT_PrunerPerfectRectangle implements Strat_BT_PrunerInterface
         
         // Verify if the rectangle is perfect (there is a solid border on the sides)
         for(int i=lowestPoint; i<last.getY(); ++i){
-            if(area.isEmptyAt(last.getX(), i)){
+            if(area.isEmptyAt(last.getX()-1, i)){
                 /*
                 If there is no border on the left side, the rectangle is not perfect
                 */
@@ -91,12 +94,14 @@ public class Strat_BT_PrunerPerfectRectangle implements Strat_BT_PrunerInterface
      */
     private boolean perfectRectLeft(ADT_AreaExtended area, ADT_Rectangle last){
         int leftMostPoint = Integer.MAX_VALUE; // lowest point of possible perfect rectangle
-        int beginY = last.getY()+1;
+        int beginY = last.getY();
         int endY = last.getY()+last.getHeight();
         
         // Scan vertically to find bottom of a possibly perfect rectangle
         int x = last.getX();
-        while(x > 0 && leftMostPoint == Integer.MAX_VALUE){
+        if(x==0) return false;
+        
+        while(leftMostPoint == Integer.MAX_VALUE){
             x--;
             
             for(int y = beginY; y < endY; ++y){
@@ -126,7 +131,7 @@ public class Strat_BT_PrunerPerfectRectangle implements Strat_BT_PrunerInterface
         
         // Verify if the rectangle is perfect (there is a solid border on the sides)
         for(int i=leftMostPoint; i<last.getX(); ++i){
-            if(area.isEmptyAt(i, last.getY())){
+            if(area.isEmptyAt(i, last.getY()-1)){
                 /*
                 If there is no border on the bottom side, the rectangle is not perfect
                 */

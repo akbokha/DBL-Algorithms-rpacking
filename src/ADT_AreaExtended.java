@@ -42,6 +42,7 @@ public class ADT_AreaExtended extends ADT_Area {
      * Returns true if there is no rectangle border at this position
      */
     public boolean isEmptyAt(int x, int y) {
+        if(x<0 || y<0 || y>super.getHeight() || x>super.getWidth()) return false;
         int i = getIndex(x, y);
         return array[i] == -1;
     }
