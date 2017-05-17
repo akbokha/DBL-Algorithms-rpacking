@@ -15,6 +15,7 @@ public class PackingSolver {
         long curTime = System.currentTimeMillis(); // to check running time
         Input_InputInterface input = null;
         boolean graphical = false;
+        boolean printCombinerOutput = false;
 
         // Handle all program arguments.
         int index = 0;
@@ -31,6 +32,9 @@ public class PackingSolver {
                 case "-g":
                     graphical = true;
                     break;
+                case "-c":
+                    printCombinerOutput = true;
+                    break;
                 default:
                     System.err.println("Invalid parameter '" + args[index] + "' given.");
                     return;
@@ -45,6 +49,16 @@ public class PackingSolver {
 
         ADT_Area area;
         area = input.read();
+
+        RectangleTypeCombiner combiner = new RectangleTypeCombiner();
+        RectangleType[] rectangleTypes = combiner.combineRectangleTypes(area);
+
+        if(printCombinerOutput) {
+            for (int i = 0; i < rectangleTypes.length; i++) {
+                RectangleType r = rectangleTypes[i];
+                System.out.println("Rectangle [" + r.getWidth() + "," + r.getHeight() + "] canRotate: " + r.canRotate() + " with " + r.getNumberOfinstances() + " instances");
+            }
+        }
         
         StrategyPicker.area = area;
         Strat_AbstractStrat strategy = StrategyPicker.pickStrategy();
