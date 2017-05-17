@@ -15,7 +15,7 @@ import java.util.List;
  * @author Abdel K.
  * date: 08-05-17
  */
-public class Strat_FixedHeightFixedOrient_FC extends Strat_AbstractStrat {
+public class Strat_ORP_FixedHeightFixedOrient_FC extends Strat_AbstractStrat {
 
     private List<ADT_Rectangle> orderedRectangles; // input rectagngles (decreasing width)
     private final List<Shelf> shelves; // shelf collection
@@ -32,7 +32,7 @@ public class Strat_FixedHeightFixedOrient_FC extends Strat_AbstractStrat {
     private final int numberOfRectangles;
     private int x_tracker = 0; // keeping track of x coordinates for new shelves
 
-     public Strat_FixedHeightFixedOrient_FC (ADT_Area area) {
+     public Strat_ORP_FixedHeightFixedOrient_FC (ADT_Area area) {
         super(area);
         this.shelves = new ArrayList<>();
         this.floorShelves = new ArrayList<>();

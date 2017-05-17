@@ -8,8 +8,8 @@ import java.util.Collections;
  * @author Bastiaan
  */
 //Best-Fit Decreasing Height
-public class Strat_BFDH extends Strat_AbstractStrat{
-    public Strat_BFDH(ADT_Area area) {
+public class Strat_ORP_BFDH extends Strat_AbstractStrat{
+    public Strat_ORP_BFDH(ADT_Area area) {
         super(area);
     }
     

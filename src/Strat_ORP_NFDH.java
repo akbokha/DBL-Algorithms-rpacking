@@ -7,9 +7,9 @@ import java.util.Collections;
  * @author Bastiaan
  */
 //Next-Fit Decreasing Height
-public class Strat_NFDH extends Strat_AbstractStrat {
+public class Strat_ORP_NFDH extends Strat_AbstractStrat {
     
-    public Strat_NFDH(ADT_Area area) {
+    public Strat_ORP_NFDH(ADT_Area area) {
         super(area);
     }
     

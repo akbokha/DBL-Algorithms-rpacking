@@ -6,14 +6,14 @@ import java.util.List;
 /**
  * Created by s157035 on 8-5-2017.
  */
-public class Strat_BottomLeft extends Strat_AbstractStrat {
+public class Strat_ORP_BottomLeft extends Strat_AbstractStrat {
     /**
      * Constructor
      *
      * @param area contains input data such as
      *             Concrete strategies should call super() in constructor
      */
-    public Strat_BottomLeft(ADT_Area area) {
+    public Strat_ORP_BottomLeft(ADT_Area area) {
         super(area);
     }
 

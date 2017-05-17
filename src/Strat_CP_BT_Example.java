@@ -3,8 +3,8 @@
  *
  * @author Bastiaan
  */
-public class Strat_BT_Example extends Strat_BT_Template{
-    public Strat_BT_Example(ADT_Area area) {
+public class Strat_CP_BT_Example extends Strat_BT_Template{
+    public Strat_CP_BT_Example(ADT_Area area) {
         super(area);
     }
 

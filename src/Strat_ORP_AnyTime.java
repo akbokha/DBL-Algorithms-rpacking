@@ -7,8 +7,8 @@ import java.util.logging.Logger;
  *
  * @author Bastiaan
  */
-public class Strat_AnyTime extends Strat_AbstractStrat {
-    public Strat_AnyTime(ADT_Area area) {
+public class Strat_ORP_AnyTime extends Strat_AbstractStrat {
+    public Strat_ORP_AnyTime(ADT_Area area) {
         super(area);
     }
     
@@ -16,7 +16,7 @@ public class Strat_AnyTime extends Strat_AbstractStrat {
     public ADT_Area compute() {
         try {
             //Used to initialize an average starting width and height
-            ADT_Area bestArea = new Strat_BottomLeft((ADT_Area) area.clone()).compute();
+            ADT_Area bestArea = new Strat_ORP_BottomLeft((ADT_Area) area.clone()).compute();
             //Set initial width and height for a container to the dimensions
             // of the botomleft algorithm
             ADT_Vector dimension = bestArea.getMinDimensions();
@@ -32,7 +32,7 @@ public class Strat_AnyTime extends Strat_AbstractStrat {
                     break;
                 }
                 //Get the best solution with this width and height
-                ADT_Area newArea = new Strat_BT_Example(new ADT_Area(width, height, area.canFlip())).compute();
+                ADT_Area newArea = new Strat_CP_BT_Example(new ADT_Area(width, height, area.canFlip())).compute();
                 
                 //If a solution was set, use it as the new best solution
                 if(newArea != null) {
@@ -46,7 +46,7 @@ public class Strat_AnyTime extends Strat_AbstractStrat {
             }
             return bestArea;
         } catch (CloneNotSupportedException ex) {
-            Logger.getLogger(Strat_AnyTime.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Strat_ORP_AnyTime.class.getName()).log(Level.SEVERE, null, ex);
             return null;
         }
     }
