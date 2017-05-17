@@ -17,12 +17,15 @@ public class Strat_AnyTime extends Strat_AbstractStrat {
         try {
             //Used to initialize an average starting width and height
             ADT_Area bestArea = new Strat_BottomLeft((ADT_Area) area.clone()).compute();
+            //Set initial width and height for a container to the dimensions
+            // of the botomleft algorithm
             ADT_Vector dimension = bestArea.getMinDimensions();
             int width = dimension.x;
             int height = dimension.y;
             
             while(true) {
-                //Make sure that the area gets smaller and smaller until minimal area is reached
+                //Make sure that the area gets smaller and smaller until the
+                // minimal area is reached
                 if((width-1) * height > area.getTotalAreaRectangles()) {
                     width -= 1;
                 } else {
