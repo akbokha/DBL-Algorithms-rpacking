@@ -32,7 +32,7 @@ public class Strat_ORP_AnyTime extends Strat_AbstractStrat {
                     break;
                 }
                 //Get the best solution with this width and height
-                ADT_Area newArea = new Strat_CP_BT_Example(new ADT_Area(width, height, area.canFlip())).compute();
+                ADT_Area newArea = new Strat_CP_BT(new ADT_Area(width, height, area.canFlip())).compute();
                 
                 //If a solution was set, use it as the new best solution
                 if(newArea != null) {

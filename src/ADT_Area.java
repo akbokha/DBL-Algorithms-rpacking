@@ -7,6 +7,7 @@ import java.util.Iterator;
  * @date Apr 26, 2017
  * @author Adriaan Knapen <a.d.knapen@student.tue.nl>
  */
+@SuppressWarnings("Duplicates")
 public class ADT_Area extends ADT_Rectangle implements Cloneable {
 
     private Collection<ADT_Rectangle> shapes;
@@ -69,12 +70,16 @@ public class ADT_Area extends ADT_Rectangle implements Cloneable {
     }
 
     /**
-     * Return true if none of the already placed rectangles overlap with the paramater rectangle
+     * Return true if none of the already placed rectangles overlap with the parameter rectangle
      */
     public boolean isNewRectangleValid(ADT_Rectangle rectangle) {
+        assert rectangle != null;
+        assert rectangle.getX() != NOTSET;
+        assert rectangle.getY() != NOTSET;
+
         for(Iterator<ADT_Rectangle> recs = getRectangleIterator(); recs.hasNext();) {
             ADT_Rectangle currentRec = recs.next();
-            if(!checkRectangleOverlap(currentRec, rectangle)) {
+            if(currentRec != rectangle && currentRec.getX() != NOTSET && checkRectangleOverlap(currentRec, rectangle)) {
                 return false;
             }
         }
@@ -164,6 +169,10 @@ public class ADT_Area extends ADT_Rectangle implements Cloneable {
         assert rec2.getWidth() != ADT_Rectangle.INF;
         assert rec1.getHeight() != ADT_Rectangle.INF;
         assert rec2.getWidth() != ADT_Rectangle.INF;
+        assert rec1.getX() != ADT_Rectangle.NOTSET;
+        assert rec2.getX() != ADT_Rectangle.NOTSET;
+        assert rec1.getY() != ADT_Rectangle.NOTSET;
+        assert rec2.getY() != ADT_Rectangle.NOTSET;
 
         Point l1 = new Point(rec1.getX(), rec1.getY() + rec1.getHeight()); // Top left coordinate of first rectangle
         Point r1 = new Point(rec1.getX() + rec1.getWidth(), rec1.getY()); // Bottom right coordinate of first rectangle

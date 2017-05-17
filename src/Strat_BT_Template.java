@@ -65,6 +65,8 @@ abstract public class Strat_BT_Template extends Strat_AbstractStrat {
             hasNext = next(); // Compute the next branch, if there is one.
         }
 
+        revert();
+
         return false;
     }
 
@@ -73,7 +75,7 @@ abstract public class Strat_BT_Template extends Strat_AbstractStrat {
      * @param last the rectangle changed last.
      * @return true if any of the pruners think that this branch should be rejected, else false.
      */
-    private boolean reject(ADT_Rectangle last) {
+    protected boolean reject(ADT_Rectangle last) {
         for (Strat_BT_PrunerInterface pruner : pruners) {
             if (pruner.reject(area, last)) {
                 return true;

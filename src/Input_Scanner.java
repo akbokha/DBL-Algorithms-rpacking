@@ -77,7 +77,7 @@ public abstract class Input_Scanner implements Input_InputInterface {
             int y = scanner.nextInt();
 
             // Add the new rectangle.
-            area.add(new ADT_Rectangle(x, y, -1, -1, flippable));
+            area.add(new ADT_Rectangle(x, y, ADT_Rectangle.NOTSET, ADT_Rectangle.NOTSET, flippable));
         }
 
         return area;

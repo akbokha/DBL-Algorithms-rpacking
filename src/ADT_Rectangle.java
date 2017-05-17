@@ -18,6 +18,8 @@ public class ADT_Rectangle implements ADT_ShapeInterface {
     public ADT_Rectangle(int width, int height, int x, int y, boolean flippable) {
         assert height == INF || height > 0;
         assert width == INF || width > 0;
+        assert x == NOTSET || x >= 0;
+        assert y == NOTSET || y >= 0;
 
         this.width = width;
         this.height = height;
@@ -33,6 +35,8 @@ public class ADT_Rectangle implements ADT_ShapeInterface {
 
     @Override
     public void setX(int x) {
+        assert x == NOTSET || x >= 0;
+
         this.x = x;
     }
 
@@ -43,6 +47,8 @@ public class ADT_Rectangle implements ADT_ShapeInterface {
 
     @Override
     public void setY(int y) {
+        assert y == NOTSET || y >= 0;
+
         this.y = y;
     }
 
