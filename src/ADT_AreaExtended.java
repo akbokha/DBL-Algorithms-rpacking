@@ -92,6 +92,7 @@ public class ADT_AreaExtended extends ADT_Area {
         return shapes.values().iterator();
     }
 
+    @Override
     ADT_Vector getMinDimensions() {
         Iterator<ADT_Rectangle> i = getRectangles();
         int maxX = 0;

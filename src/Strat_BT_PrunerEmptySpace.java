@@ -12,15 +12,16 @@ public class Strat_BT_PrunerEmptySpace implements Strat_BT_PrunerInterface {
     
     @Override
     public boolean reject(ADT_Area area, ADT_Rectangle last) {
-        int[] stripsEmptySpace = null; //Array which stores the strips of empty space
-        int[] stripsRecsTBP = null; //Array which stores the strips of rectangles to be placed
+        int[] stripsEmptySpace; //Array which stores the strips of empty space
+        int[] stripsRecsTBP; //Array which stores the strips of rectangles to be placed
         //true = horizontal strips
-        //stripsEmptySpace = area.getEmptySpaceStrips(true);
-        //stripsRecsTBP = area.getRectanlgeStrips(true);
+        stripsEmptySpace = area.getEmptySpaceStrips(true);
+        stripsRecsTBP = area.getRectangleStrips(true);
         boolean horizontalTest = testStrips(stripsEmptySpace, stripsRecsTBP);
         //false = vertical strips
-        //stripsEmptySpace = area.getEmptySpaceStrips(false);
-        //stripsRecsTBP = area.getRectanlgeStrips(false);
+        stripsEmptySpace = area.getEmptySpaceStrips(false);
+        stripsRecsTBP = area.getRectangleStrips(false);
+        //When both are true, the strips will NOT fit in both ways (horizontal and vertical)
         return testStrips(stripsEmptySpace, stripsRecsTBP) && horizontalTest;
     }
     /**

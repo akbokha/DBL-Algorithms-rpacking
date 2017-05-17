@@ -93,15 +93,23 @@ public class ADT_Area extends ADT_Rectangle implements Cloneable {
         return false;
     }
 
-    /*
+    /** 
      * Returns the strips populated with the number of empty spaces in each strip
+     * 
+     * @param horizontal is true for horizontal strips and false for vertical strips
+     * @return an array of all the strips with the index as width and
+     * <code>a[i]</code> as number of strips
      */
     public int[] getEmptySpaceStrips(boolean horizontal) {
         return null;
     }
 
-    /*
+    /**
      * Returns the strips populated with the total sum of (minimal side) occupied spaces of the to be placed rectangles.
+     * 
+     * @param horizontal is true for horizontal strips and false for vertical strips
+     * @return an array of all the strips with the index as width and
+     * <code>a[i]</code> as number of strips
      */
     public int[] getRectangleStrips(boolean horizontal) {
         return null;
