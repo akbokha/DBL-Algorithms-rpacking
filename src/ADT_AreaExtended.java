@@ -89,13 +89,13 @@ public class ADT_AreaExtended extends ADT_Area {
      * @return iterator over all rectangles it contains.
      */
     @Override
-    public Iterator<ADT_Rectangle> getRectangles() {
+    public Iterator<ADT_Rectangle> getRectangleIterator() {
         return shapes.values().iterator();
     }
 
     @Override
     ADT_Vector getMinDimensions() {
-        Iterator<ADT_Rectangle> i = getRectangles();
+        Iterator<ADT_Rectangle> i = getRectangleIterator();
         int maxX = 0;
         int maxY = 0;
 
@@ -115,7 +115,7 @@ public class ADT_AreaExtended extends ADT_Area {
      */
     @Override
     public boolean isNewRectangleValid(ADT_Rectangle rectangle) {
-        for(Iterator<ADT_Rectangle> recs = getRectangles(); recs.hasNext();) {
+        for(Iterator<ADT_Rectangle> recs = getRectangleIterator(); recs.hasNext();) {
             ADT_Rectangle currentRec = recs.next();
             if(!checkRectangleOverlap(currentRec, rectangle)) {
                 return false;
@@ -130,7 +130,7 @@ public class ADT_AreaExtended extends ADT_Area {
      */
     @Override
     public boolean isOccupied(ADT_Vector position) {
-        for(Iterator<ADT_Rectangle> recs = getRectangles(); recs.hasNext();) {
+        for(Iterator<ADT_Rectangle> recs = getRectangleIterator(); recs.hasNext();) {
             ADT_Rectangle currentRec = recs.next();
             if((position.x >= currentRec.getX() && position.x < currentRec.getX() + currentRec.getWidth())
                     && (position.y >= currentRec.getY() && position.y < currentRec.getY() + currentRec.getHeight())) {
@@ -190,7 +190,7 @@ public class ADT_AreaExtended extends ADT_Area {
     public boolean isValid() {
         ArrayList<ADT_Rectangle> checkedRecs = new ArrayList<>();
 
-        for(Iterator<ADT_Rectangle> recs = getRectangles(); recs.hasNext();) {
+        for(Iterator<ADT_Rectangle> recs = getRectangleIterator(); recs.hasNext();) {
             ADT_Rectangle currentRec = recs.next();
 
             // Check if the newly added rectangle has valid coordinates;
@@ -273,7 +273,7 @@ public class ADT_AreaExtended extends ADT_Area {
     @Override
     public int getTotalAreaRectangles() {
         int totalArea = 0;
-        for(Iterator<ADT_Rectangle> rectangles = getRectangles(); rectangles.hasNext();) {
+        for(Iterator<ADT_Rectangle> rectangles = getRectangleIterator(); rectangles.hasNext();) {
             ADT_Rectangle rec = rectangles.next();
             totalArea += (rec.getWidth() * rec.getHeight());
         }

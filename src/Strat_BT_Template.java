@@ -22,6 +22,10 @@ abstract public class Strat_BT_Template extends Strat_AbstractStrat {
         pruners.add(pruner);
     }
 
+    /**
+     * Returns a reference to the lastly edited rectangle.
+     * @return A reference to the lastly edited rectangle, and null if it is the first rectangle.
+     */
     abstract ADT_Rectangle last();
 
     @Override
@@ -97,4 +101,9 @@ abstract public class Strat_BT_Template extends Strat_AbstractStrat {
      * @return true if a new branch was created, else false.
      */
     abstract boolean next();
+
+    /**
+     * Revert the changes made by first().
+     */
+    abstract void revert();
 }

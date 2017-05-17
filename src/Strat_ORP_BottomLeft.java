@@ -1,5 +1,4 @@
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 
@@ -22,7 +21,7 @@ public class Strat_ORP_BottomLeft extends Strat_AbstractStrat {
         List<ADT_Rectangle> rects = new ArrayList<>();
         List<ADT_Rectangle> newAreaRectangles = new ArrayList<>();
 
-        for (Iterator<ADT_Rectangle> recs = area.getRectangles(); recs.hasNext();) {
+        for (Iterator<ADT_Rectangle> recs = area.getRectangleIterator(); recs.hasNext();) {
             ADT_Rectangle currentRec = recs.next();
             rects.add(currentRec);
         }
@@ -60,7 +59,7 @@ public class Strat_ORP_BottomLeft extends Strat_AbstractStrat {
         int maxHeight = area.getHeight() - rectangle.getHeight();
         //Find a leftmost position in the strip
 
-        //Make sure we start at bottomleft
+        //Make sure we start at bottom-left
         rectangle.setX(0);
         rectangle.setY(0);
         while (true) {

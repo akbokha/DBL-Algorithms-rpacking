@@ -16,9 +16,9 @@ public class Strat_ORP_AnyTime extends Strat_AbstractStrat {
     public ADT_Area compute() {
         try {
             //Used to initialize an average starting width and height
-            ADT_Area bestArea = new Strat_ORP_BottomLeft((ADT_Area) area.clone()).compute();
+            ADT_Area bestArea = new Strat_ORP_BottomLeft(area.clone()).compute();
             //Set initial width and height for a container to the dimensions
-            // of the botomleft algorithm
+            // of the bottom-left algorithm
             ADT_Vector dimension = bestArea.getMinDimensions();
             int width = dimension.x;
             int height = dimension.y;

@@ -44,12 +44,16 @@ public class ADT_Area extends ADT_Rectangle implements Cloneable {
      *
      * @return iterator over all rectangles it contains.
      */
-    public Iterator<ADT_Rectangle> getRectangles() {
+    public Iterator<ADT_Rectangle> getRectangleIterator() {
         return shapes.iterator();
     }
 
+    public ADT_Rectangle[] getRectangles() {
+        return shapes.toArray(new ADT_Rectangle[shapes.size()]);
+    }
+
     ADT_Vector getMinDimensions() {
-        Iterator<ADT_Rectangle> i = getRectangles();
+        Iterator<ADT_Rectangle> i = getRectangleIterator();
         int maxX = 0;
         int maxY = 0;
 
@@ -64,11 +68,11 @@ public class ADT_Area extends ADT_Rectangle implements Cloneable {
         return new ADT_Vector(maxX, maxY);
     }
 
-    /*
+    /**
      * Return true if none of the already placed rectangles overlap with the paramater rectangle
      */
     public boolean isNewRectangleValid(ADT_Rectangle rectangle) {
-        for(Iterator<ADT_Rectangle> recs = getRectangles(); recs.hasNext();) {
+        for(Iterator<ADT_Rectangle> recs = getRectangleIterator(); recs.hasNext();) {
             ADT_Rectangle currentRec = recs.next();
             if(!checkRectangleOverlap(currentRec, rectangle)) {
                 return false;
@@ -78,11 +82,11 @@ public class ADT_Area extends ADT_Rectangle implements Cloneable {
         return true;
     }
 
-    /*
+    /**
      * Returns true if the parameter position is in an already placed rectangle
      */
     public boolean isOccupied(ADT_Vector position) {
-        for(Iterator<ADT_Rectangle> recs = getRectangles(); recs.hasNext();) {
+        for(Iterator<ADT_Rectangle> recs = getRectangleIterator(); recs.hasNext();) {
             ADT_Rectangle currentRec = recs.next();
             if((position.x >= currentRec.getX() && position.x < currentRec.getX() + currentRec.getWidth())
                     && (position.y >= currentRec.getY() && position.y < currentRec.getY() + currentRec.getHeight())) {
@@ -122,7 +126,7 @@ public class ADT_Area extends ADT_Rectangle implements Cloneable {
     public boolean isValid() {
         ArrayList<ADT_Rectangle> checkedRecs = new ArrayList<>();
         
-        for(Iterator<ADT_Rectangle> recs = getRectangles(); recs.hasNext();) {
+        for(Iterator<ADT_Rectangle> recs = getRectangleIterator(); recs.hasNext();) {
             ADT_Rectangle currentRec = recs.next();
 
             // Check if the newly added rectangle has valid coordinates;
@@ -204,7 +208,7 @@ public class ADT_Area extends ADT_Rectangle implements Cloneable {
      */
     public int getTotalAreaRectangles() {
         int totalArea = 0;
-        for(Iterator<ADT_Rectangle> rectangles = getRectangles(); rectangles.hasNext();) {
+        for(Iterator<ADT_Rectangle> rectangles = getRectangleIterator(); rectangles.hasNext();) {
              ADT_Rectangle rec = rectangles.next();
              totalArea += (rec.getWidth() * rec.getHeight());   
          }

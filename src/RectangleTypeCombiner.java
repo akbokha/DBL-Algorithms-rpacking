@@ -12,7 +12,7 @@ public class RectangleTypeCombiner {
         rotationAllowed = area.canFlip();
 
         //Iterate over the input rectangles
-        for (Iterator<ADT_Rectangle> recs = area.getRectangles(); recs.hasNext();) {
+        for (Iterator<ADT_Rectangle> recs = area.getRectangleIterator(); recs.hasNext();) {
             ADT_Rectangle currentRec = recs.next();
 
             //Check if we already have a definition for this rectangle's dimensions

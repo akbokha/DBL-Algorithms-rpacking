@@ -196,7 +196,7 @@ public class Strat_ORP_FixedHeightFixedOrient_FC extends Strat_AbstractStrat {
      */
     private List<ADT_Rectangle> getOrderedRectangles() {
         List<ADT_Rectangle> orderedWidth = new ArrayList<>();
-        for(Iterator<ADT_Rectangle> rectangles = area.getRectangles(); rectangles.hasNext();) {
+        for(Iterator<ADT_Rectangle> rectangles = area.getRectangleIterator(); rectangles.hasNext();) {
              ADT_Rectangle rec = rectangles.next();
              orderedWidth.add(rec);
          }

@@ -20,7 +20,7 @@ public class Strat_DummyImplementation extends Strat_AbstractStrat {
     public ADT_Area compute() {
         // Simple dummy implementation that places all rectangles next to each other in one single strip
         int curX = 0;
-        for (Iterator<ADT_Rectangle> recs = area.getRectangles(); recs.hasNext();) {
+        for (Iterator<ADT_Rectangle> recs = area.getRectangleIterator(); recs.hasNext();) {
             ADT_Rectangle currentRec = recs.next();
 
             // Set the x and y coordinate of the rectangle.

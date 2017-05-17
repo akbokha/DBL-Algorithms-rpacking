@@ -16,7 +16,7 @@ public class Strat_ORP_BFDH extends Strat_AbstractStrat{
     @Override
     public ADT_Area compute() {
         ArrayList<ADT_Rectangle> toBePlaced = new ArrayList<>();
-        area.getRectangles().forEachRemaining(toBePlaced::add);
+        area.getRectangleIterator().forEachRemaining(toBePlaced::add);
         Collections.sort(toBePlaced, new ADT_SortRecOnWidth()); //Sort list in non-increasing order on width
         //shelf {width of the shelf, height of the shelf, x-position of the shelf}
         ArrayList<Integer[]> shelfs = new ArrayList<>();
