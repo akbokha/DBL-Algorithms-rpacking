@@ -92,7 +92,7 @@ public class ADT_AreaExtended extends ADT_Area {
         return shapes.values().iterator();
     }
 
-    Vector2 getMinDimensions() {
+    ADT_Vector getMinDimensions() {
         Iterator<ADT_Rectangle> i = getRectangles();
         int maxX = 0;
         int maxY = 0;
@@ -105,7 +105,7 @@ public class ADT_AreaExtended extends ADT_Area {
             }
         }
 
-        return new Vector2(maxX, maxY);
+        return new ADT_Vector(maxX, maxY);
     }
 
     /*
@@ -127,7 +127,7 @@ public class ADT_AreaExtended extends ADT_Area {
      * Returns true if the parameter position is in an already placed rectangle
      */
     @Override
-    public boolean isOccupied(Vector2 position) {
+    public boolean isOccupied(ADT_Vector position) {
         for(Iterator<ADT_Rectangle> recs = getRectangles(); recs.hasNext();) {
             ADT_Rectangle currentRec = recs.next();
             if((position.x >= currentRec.getX() && position.x < currentRec.getX() + currentRec.getWidth())
