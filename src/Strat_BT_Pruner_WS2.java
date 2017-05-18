@@ -13,11 +13,6 @@ import java.util.ListIterator;
  * @author s158881
  */
 public class Strat_BT_Pruner_WS2 implements Strat_BT_PrunerInterface {
-   
-    private int [] horizontalEmptySpaceStrips;
-    private int [] verticalEmptySpaceStrips;
-    private int [] horizontalRectangleStrips;
-    private int [] verticalRectangleStrips;
     
     private List<Bin> bins;
     private List<ADT_Rectangle> rectanglesToBePlaced;
@@ -33,7 +28,6 @@ public class Strat_BT_Pruner_WS2 implements Strat_BT_PrunerInterface {
     
     private int wastedSpace; 
     private int carryOver;
-    
     
     @Override
     public boolean reject (ADT_Area area, ADT_Rectangle last) {
