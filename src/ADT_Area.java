@@ -13,7 +13,7 @@ public class ADT_Area extends ADT_Rectangle implements Cloneable {
     private Collection<ADT_Rectangle> shapes;
 
     public ADT_Area(int width, int height, boolean flippable) {
-        super(width, height, 0, 0, flippable);
+        super(30, 30, 0, 0, flippable);
         shapes = new HashSet<>();
     }
     
@@ -53,7 +53,7 @@ public class ADT_Area extends ADT_Rectangle implements Cloneable {
         return shapes.toArray(new ADT_Rectangle[shapes.size()]);
     }
 
-    ADT_Vector getMinDimensions() {
+    ADT_Vector getMinimalDimensions() {
         Iterator<ADT_Rectangle> i = getRectangleIterator();
         int maxX = 0;
         int maxY = 0;
@@ -67,6 +67,26 @@ public class ADT_Area extends ADT_Rectangle implements Cloneable {
         }
 
         return new ADT_Vector(maxX, maxY);
+    }
+
+    @Override
+    public ADT_Vector getDimensions() {
+        int maxWidth = getWidth();
+        int maxHeight = getHeight();
+
+        // Check if either the width or the height is infinite, if so replace them with the minimal dimension.
+        if (maxWidth == INF || maxHeight == INF) {
+            ADT_Vector minDimensions = getMinimalDimensions();
+
+            if (maxWidth == INF) {
+                maxWidth = minDimensions.x;
+            }
+            if (maxHeight == INF) {
+                maxHeight = minDimensions.y;
+            }
+        }
+
+        return new ADT_Vector(maxWidth, maxHeight);
     }
 
     /**

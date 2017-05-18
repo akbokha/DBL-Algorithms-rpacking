@@ -61,4 +61,6 @@ public interface ADT_ShapeInterface {
     boolean getFlipped();
 
     boolean canFlip();
+
+    ADT_Vector getDimensions();
 }

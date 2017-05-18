@@ -15,7 +15,7 @@ public class RectangleTypeCombiner {
         for (Iterator<ADT_Rectangle> recs = area.getRectangleIterator(); recs.hasNext();) {
             ADT_Rectangle currentRec = recs.next();
 
-            //Check if we already have a definition for this rectangle's dimensions
+            //Check if we already have a definition for this rectangle's getDimensions
             RectangleType existingType = containsDimensions(currentRec.getWidth(), currentRec.getHeight());
 
             if(existingType != null) {
