@@ -17,12 +17,15 @@ public class Strat_BT_PrunerEmptySpace implements Strat_BT_PrunerInterface {
         //true = horizontal strips
         stripsEmptySpace = area.getEmptySpaceStrips(true);
         stripsRecsTBP = area.getRectangleStrips(true);
-        boolean horizontalTest = testStrips(stripsEmptySpace, stripsRecsTBP);
+        int horizontalWastedSpace = testStrips(stripsEmptySpace, stripsRecsTBP);
         //false = vertical strips
         stripsEmptySpace = area.getEmptySpaceStrips(false);
         stripsRecsTBP = area.getRectangleStrips(false);
         //When both are true, the strips will NOT fit in both ways (horizontal and vertical)
-        return testStrips(stripsEmptySpace, stripsRecsTBP) && horizontalTest;
+        int verticalWastedSpace = testStrips(stripsEmptySpace, stripsRecsTBP);
+        int wastedSpace = (horizontalWastedSpace > verticalWastedSpace) ? horizontalWastedSpace : verticalWastedSpace;
+        //Rejects if totalarea + wasted space is larger than the given area to fit it in
+        return wastedSpace + area.getTotalAreaRectangles() > area.getHeight() * area.getWidth();
     }
     /**
      * Computes if the strips of the to be placed rectangles fit into the strips
@@ -36,38 +39,23 @@ public class Strat_BT_PrunerEmptySpace implements Strat_BT_PrunerInterface {
      * @return if the strips of the rectangles that still have to be placed
      * fit in the strips of the empty space
      */
-    private boolean testStrips(int[] stripsEmptySpace, int[] stripsRecsTBP) {
-        //If strips of the rectangles are longer than the empty space
-        // there is no valid solution possible
-        if(stripsEmptySpace.length < stripsRecsTBP.length) {
-            return true;
-        }
+    private int testStrips(int[] stripsEmptySpace, int[] stripsRecsTBP) {
+        int wastedSpace = 0;
+        int carryOver = 0;
         //Loop through widths of strips to be placed
         for(int i = 0; i < stripsRecsTBP.length && stripsRecsTBP[i] != 0; i++) {
-            nextRec:
-            //Loop through all strips of the same length
-            while(stripsRecsTBP[i] > 0) {
-                //If there is an empty space the same size as the rectangle strip
-                // place it there
-                if(stripsEmptySpace[i] > 0) {
-                    stripsEmptySpace[i] -= 1;
-                    stripsRecsTBP[i]--;
-                } else {
-                    //Otherwise search for the next strip where it fits
-                    for(int j = i; j < stripsEmptySpace.length; j++) {
-                        if(stripsEmptySpace[j] != 0) {
-                            //By placing the strip in a spot with a larger width
-                            // you create a place with j - i width
-                            stripsEmptySpace[j] -= 1;
-                            stripsEmptySpace[j-i] += 1;
-                            stripsRecsTBP[i]--;
-                            continue nextRec; //Place next rectangle
-                        }
-                    }
-                    return true;
-                }
+            //If there is enough empty space for all rectangle strips of the same size
+            // add the rest of the strips to wasted space
+            if(stripsEmptySpace[i] > stripsRecsTBP[i] + carryOver) {
+                wastedSpace += stripsEmptySpace[i] - stripsRecsTBP[i] - carryOver;
+                carryOver = 0;
+            } else if(stripsEmptySpace[i] + carryOver == stripsRecsTBP[i]) {
+                //Otherwise search for the next strip where it fits
+                carryOver = 0;
+            } else if(stripsEmptySpace[i] + carryOver > stripsRecsTBP[i]) {
+                carryOver += stripsEmptySpace[i] + carryOver - stripsRecsTBP[i];
             }
         }
-        return false;
+        return wastedSpace;
     }
 }
