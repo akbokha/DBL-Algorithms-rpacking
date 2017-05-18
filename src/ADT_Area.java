@@ -13,7 +13,7 @@ public class ADT_Area extends ADT_Rectangle implements Cloneable {
     private Collection<ADT_Rectangle> shapes;
 
     public ADT_Area(int width, int height, boolean flippable) {
-        super(30, 30, 0, 0, flippable);
+        super(width, height, 0, 0, flippable);
         shapes = new HashSet<>();
     }
     
