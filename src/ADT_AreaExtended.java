@@ -1,4 +1,5 @@
-import java.util.*;
+import java.util.HashMap;
+import java.util.Iterator;
 
 /**
  * Created by s157035 on 15-5-2017.
@@ -18,7 +19,7 @@ public class ADT_AreaExtended extends ADT_Area {
 
     @Override
     public ADT_Area clone() throws CloneNotSupportedException {
-        return (ADT_Area) super.clone();
+        return super.clone();
     }
 
     private short getNewId() {
@@ -42,7 +43,9 @@ public class ADT_AreaExtended extends ADT_Area {
      * Returns true if there is no rectangle border at this position
      */
     public boolean isEmptyAt(int x, int y) {
-        if(x<0 || y<0 || y>super.getHeight() || x>super.getWidth()) return false;
+        if (x < 0 || y < 0 || y > super.getHeight() || x > super.getWidth()) {
+            return false;
+        }
         int i = getIndex(x, y);
         return array[i] == -1;
     }
@@ -94,54 +97,21 @@ public class ADT_AreaExtended extends ADT_Area {
     }
 
     @Override
-    ADT_Vector getMinDimensions() {
-        Iterator<ADT_Rectangle> i = getRectangleIterator();
-        int maxX = 0;
-        int maxY = 0;
-
-        while (i.hasNext()) {
-            ADT_Rectangle r = i.next();
-            if (r.getWidth() != ADT_Rectangle.INF) {
-                maxX = Math.max(r.getWidth() + r.getX(), maxX);
-                maxY = Math.max(r.getHeight() + r.getY(), maxY);
-            }
-        }
-
-        return new ADT_Vector(maxX, maxY);
+    public ADT_Rectangle[] getRectangles() {
+        return shapes.values().toArray(new ADT_Rectangle[shapes.size()]);
     }
 
-    /*
-     * Return true if none of the already placed rectangles overlap with the paramater rectangle
-     */
     @Override
     public boolean isNewRectangleValid(ADT_Rectangle rectangle) {
-        for(Iterator<ADT_Rectangle> recs = getRectangleIterator(); recs.hasNext();) {
-            ADT_Rectangle currentRec = recs.next();
-            if(!checkRectangleOverlap(currentRec, rectangle)) {
-                return false;
-            }
-        }
-
-        return true;
+        return super.isNewRectangleValid(rectangle); // @todo Implement this using the multidimensional array.
     }
 
-    /*
-     * Returns true if the parameter position is in an already placed rectangle
-     */
     @Override
     public boolean isOccupied(ADT_Vector position) {
-        for(Iterator<ADT_Rectangle> recs = getRectangleIterator(); recs.hasNext();) {
-            ADT_Rectangle currentRec = recs.next();
-            if((position.x >= currentRec.getX() && position.x < currentRec.getX() + currentRec.getWidth())
-                    && (position.y >= currentRec.getY() && position.y < currentRec.getY() + currentRec.getHeight())) {
-                return true;
-            }
-        }
-
-        return false;
+        return super.isOccupied(position); // @todo Implement this using the multidimensional array.
     }
 
-    /*
+    /**
      * Returns the strips populated with the number of empty spaces in each strip
      */
     @Override
@@ -149,7 +119,7 @@ public class ADT_AreaExtended extends ADT_Area {
         return scanStrips(horizontal, true);
     }
 
-    /*
+    /**
      * Returns the strips populated with the total sum of (minimal side) occupied spaces of the to be placed rectangles.
      */
     @Override
@@ -159,7 +129,7 @@ public class ADT_AreaExtended extends ADT_Area {
 
     private int[] scanStrips(boolean horizontal, boolean lookingForEmpty) {
         int[] vals;
-        if(horizontal) {
+        if (horizontal) {
             vals = new int[getHeight()];
             for (int i = 0; i < vals.length; i++) {
                 for (int x = 0; x < getWidth(); x++) {
@@ -168,8 +138,7 @@ public class ADT_AreaExtended extends ADT_Area {
                     }
                 }
             }
-        }
-        else {
+        } else {
             vals = new int[getWidth()];
             for (int i = 0; i < vals.length; i++) {
                 for (int y = 0; y < getHeight(); y++) {
@@ -180,103 +149,5 @@ public class ADT_AreaExtended extends ADT_Area {
             }
         }
         return vals;
-    }
-
-    /**
-     *
-     * @return true if the area has none overlapping rectangles
-     */
-    @Override
-    public boolean isValid() {
-        ArrayList<ADT_Rectangle> checkedRecs = new ArrayList<>();
-
-        for(Iterator<ADT_Rectangle> recs = getRectangleIterator(); recs.hasNext();) {
-            ADT_Rectangle currentRec = recs.next();
-
-            // Check if the newly added rectangle has valid coordinates;
-            if (currentRec.getX() < 0 || currentRec.getY() < 0) {
-                return false;
-            } else if (
-                    (this.getWidth() != ADT_Rectangle.INF && currentRec.getX() + currentRec.getWidth() > this.getWidth()) // !(this.w != inf ==> rec.x + rec.w <= this.w)
-                            || (this.getHeight() != ADT_Rectangle.INF && currentRec.getY() + currentRec.getHeight() > this.getHeight()) // !(this.h != inf ==> rec.y + rec.h <= this.h)
-                    ) {
-                return false;
-            }
-
-            // Check if the newly added rectangle intersects with any previously checked rectangle.
-            for(ADT_Rectangle rec : checkedRecs) {
-                if (checkRectangleOverlap(currentRec, rec)) {
-                    return false;
-                }
-            }
-            checkedRecs.add(currentRec);
-        }
-        return true;
-    }
-
-    /**
-     * Checks if the body of two rectangles overlap, the edges may intersect.
-     *
-     * @param rec1 The first rectangle to be taken into account
-     * @param rec2 The second rectangle to be taken into account
-     * @return False if the body of the rectangles intersect, true otherwise.
-     */
-    private boolean checkRectangleOverlap(ADT_Rectangle rec1, ADT_Rectangle rec2) {
-        assert rec1 != null;
-        assert rec2 != null;
-        assert rec1.getWidth() != ADT_Rectangle.INF;
-        assert rec2.getWidth() != ADT_Rectangle.INF;
-        assert rec1.getHeight() != ADT_Rectangle.INF;
-        assert rec2.getWidth() != ADT_Rectangle.INF;
-
-        Point l1 = new Point(rec1.getX(), rec1.getY() + rec1.getHeight()); // Top left coordinate of first rectangle
-        Point r1 = new Point(rec1.getX() + rec1.getWidth(), rec1.getY()); // Bottom right coordinate of first rectangle
-        Point l2 = new Point(rec2.getX(), rec2.getY() + rec2.getHeight()); // Top left coordinate of second rectangle
-        Point r2 = new Point(rec2.getX() + rec2.getWidth(), rec2.getY()); // Bottom right coordinate of second rectangle
-
-        if (l1.getX() >= r2.getX() || l2.getX() >= r1.getX()) { // Check if one rectangle is on the left side of the other rectangle.
-            return false;
-        } else if (l1.getY() <= r2.getY() || l2.getY() <= r1.getY()) { // Check if one rectangle is above the other rectangle.
-            return false;
-        } else {
-            return true;
-        }
-    }
-
-    private class Point {
-        private int x;
-        private int y;
-
-        Point(int x, int y) {
-            this.x = x;
-            this.y = y;
-        }
-
-        int getX() {
-            return x;
-        }
-
-        int getY() {
-            return y;
-        }
-    }
-
-
-    /**
-     * Query to obtain the total area of all the rectangles in this
-     * The difference between returning int area = getWidth() * getHeight() is
-     * that this returns the total area of the "Enclosing Rectangle" while
-     * getTotalAreaRectangles returns only the summation of the areas of the
-     * rectangles in this. This can be used for e.g. pruning
-     * @return the area of all the rectangles in this
-     */
-    @Override
-    public int getTotalAreaRectangles() {
-        int totalArea = 0;
-        for(Iterator<ADT_Rectangle> rectangles = getRectangleIterator(); rectangles.hasNext();) {
-            ADT_Rectangle rec = rectangles.next();
-            totalArea += (rec.getWidth() * rec.getHeight());
-        }
-        return totalArea;
     }
 }
