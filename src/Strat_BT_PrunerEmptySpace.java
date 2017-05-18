@@ -28,16 +28,15 @@ public class Strat_BT_PrunerEmptySpace implements Strat_BT_PrunerInterface {
         return wastedSpace + area.getTotalAreaRectangles() > area.getHeight() * area.getWidth();
     }
     /**
-     * Computes if the strips of the to be placed rectangles fit into the strips
-     * of the empty space.
+     * Computes the amount of wasted space when trying to fit all the rectangle
+     * strips in the strips of the empty space
      * 
      * @param stripsEmptySpace an array with the index i the width or height of
      * a strip and <code>stripsEmptySpace[i]</code> the number of strips with
      * the same width or height. The strips are the strips of empty space.
      * @param stripsRecsTBP the same as stripsEmptySpace but then for the 
      * rectangles that still have to be placed.
-     * @return if the strips of the rectangles that still have to be placed
-     * fit in the strips of the empty space
+     * @return the amount of wasted space
      */
     private int testStrips(int[] stripsEmptySpace, int[] stripsRecsTBP) {
         int wastedSpace = 0;
