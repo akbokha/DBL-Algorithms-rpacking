@@ -150,4 +150,14 @@ public class ADT_AreaExtended extends ADT_Area {
         }
         return vals;
     }
+
+    @Override
+    public void setWidth(int val) {
+        throw new UnsupportedOperationException("Set width cannot be called on an extended area after construction.");
+    }
+
+    @Override
+    public void setHeight(int val) {
+        throw new UnsupportedOperationException("Set height cannot be called on an extended area after construction.");
+    }
 }
