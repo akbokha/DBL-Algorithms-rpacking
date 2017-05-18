@@ -56,10 +56,20 @@ public class ADT_Rectangle implements ADT_ShapeInterface {
     public int getWidth() {
         return flipped ? height : width;
     }
+    
+    @Override
+    public void setWidth(int val) {
+        width = val;
+    }
 
     @Override
     public int getHeight() {
         return flipped ? width : height;
+    }
+    
+    @Override
+    public void setHeight(int val) {
+        height = val;
     }
 
     @Override

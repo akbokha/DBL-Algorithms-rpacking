@@ -15,10 +15,22 @@ public interface ADT_ShapeInterface {
     int getWidth();
     
     /**
+     * Sets the width of the area for the containment problem
+     * @param val value to set
+     */
+    void setWidth(int val);
+    
+    /**
      * Returns the height of the rectangle.
      * @return int -1 for infinity
      */
     int getHeight();
+    
+    /**
+     * Sets the height of the area for the containment problem
+     * @param val value to set
+     */
+    void setHeight(int val);
 
     int getX();
 

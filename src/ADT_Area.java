@@ -71,6 +71,8 @@ public class ADT_Area extends ADT_Rectangle implements Cloneable {
 
     /**
      * Return true if none of the already placed rectangles overlap with the parameter rectangle
+     * @param rectangle
+     * @return 
      */
     public boolean isNewRectangleValid(ADT_Rectangle rectangle) {
         assert rectangle != null;
@@ -89,6 +91,8 @@ public class ADT_Area extends ADT_Rectangle implements Cloneable {
 
     /**
      * Returns true if the parameter position is in an already placed rectangle
+     * @param position
+     * @return 
      */
     public boolean isOccupied(ADT_Vector position) {
         for(Iterator<ADT_Rectangle> recs = getRectangleIterator(); recs.hasNext();) {
@@ -209,7 +213,7 @@ public class ADT_Area extends ADT_Rectangle implements Cloneable {
     
     /**
      * Query to obtain the total area of all the rectangles in this
-     * The difference between returning int area = getWidth() * getHeight() is 
+     * The difference between returning <code>int area = getWidth() * getHeight()</code> is 
      * that this returns the total area of the "Enclosing Rectangle" while
      * getTotalAreaRectangles returns only the summation of the areas of the 
      * rectangles in this. This can be used for e.g. pruning
