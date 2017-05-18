@@ -43,14 +43,13 @@ public class Strat_BT_PrunerEmptySpace implements Strat_BT_PrunerInterface {
         int wastedSpace = 0;
         int carryOver = 0;
         //Loop through widths of strips to be placed
-        for(int i = 0; i < stripsRecsTBP.length && stripsRecsTBP[i] != 0; i++) {
+        for(int i = 0; i < stripsRecsTBP.length; i++) {
             //If there is enough empty space for all rectangle strips of the same size
             // add the rest of the strips to wasted space
             if(stripsEmptySpace[i] > stripsRecsTBP[i] + carryOver) {
                 wastedSpace += stripsEmptySpace[i] - stripsRecsTBP[i] - carryOver;
                 carryOver = 0;
             } else if(stripsEmptySpace[i] + carryOver == stripsRecsTBP[i]) {
-                //Otherwise search for the next strip where it fits
                 carryOver = 0;
             } else if(stripsEmptySpace[i] + carryOver > stripsRecsTBP[i]) {
                 carryOver += stripsEmptySpace[i] + carryOver - stripsRecsTBP[i];
