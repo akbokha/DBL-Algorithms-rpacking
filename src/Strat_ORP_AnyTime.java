@@ -28,7 +28,7 @@ public class Strat_ORP_AnyTime extends Strat_AbstractStrat {
             while(true) {
                 //Make sure that the area gets smaller and smaller until the
                 // minimal area is reached
-                if((width-1) * height >= area.getTotalAreaRectangles()) {
+                if((width-1) * height >= area.getTotalAreaRectangles() && width > area.getMaximalRectangleWidth()) {
                     width -= 1;
                 } else {
                     break;
