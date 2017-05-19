@@ -80,7 +80,7 @@ public class ADT_Rectangle implements ADT_ShapeInterface {
 
     @Override
     public void setFlipped(boolean flipped) {
-        assert ! canFlip();
+        assert !this.flipped || ! canFlip();
 
         this.flipped = flipped;
     }

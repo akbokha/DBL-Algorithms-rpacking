@@ -5,11 +5,13 @@ class Strat_CP_BT extends Strat_BT_Template {
 
     private ADT_Rectangle[] rectangles;
     private int index = -1;
+    private Output_GraphicalOutput output;
 
     Strat_CP_BT(ADT_Area area) {
         super(area);
 
         rectangles = area.getRectangles();
+        output = new Output_GraphicalOutput(area);
     }
 
     @Override
@@ -40,8 +42,6 @@ class Strat_CP_BT extends Strat_BT_Template {
             return index + 1 >= rectangles.length;
         }
     }
-
-
 
     @Override
     boolean first() {
@@ -84,13 +84,23 @@ class Strat_CP_BT extends Strat_BT_Template {
 
             // Check if the y-coordinate is still a valid starting coordinate
             if (y + rectangle.getHeight() > area.getHeight()) {
-                return false;
+
+                // Rotate if the rectangle can flip.
+                if (rectangle.canFlip() && !rectangle.getFlipped()) {
+                    rectangle.setFlipped(true);
+                    return first();
+                } else {
+                    return false;
+                }
             }
 
             rectangle.setY(y);
             System.out.println(rectangle.getX() + ", " + rectangle.getY());
         }
         rectangle.setX(x);
+
+        output.draw();
+        
         return true;
     }
 
@@ -100,6 +110,8 @@ class Strat_CP_BT extends Strat_BT_Template {
         ADT_Rectangle rectangle = rectangles[index];
         rectangle.setX(ADT_Rectangle.NOTSET);
         rectangle.setY(ADT_Rectangle.NOTSET);
+
+        rectangle.setFlipped(false);
 
         // Move one level higher into the branch.
         index--;
