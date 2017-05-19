@@ -27,6 +27,12 @@ public class ADT_Rectangle implements ADT_ShapeInterface {
         this.y = y;
         this.flippable = flippable;
     }
+    
+    @Override
+    public ADT_Rectangle clone() throws CloneNotSupportedException {
+        ADT_Rectangle newRec = new ADT_Rectangle(this.getWidth(), this.getHeight(), NOTSET, NOTSET, flippable);
+        return newRec;
+    }
 
     @Override
     public int getX() {

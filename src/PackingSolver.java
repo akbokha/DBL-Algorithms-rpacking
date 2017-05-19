@@ -63,15 +63,20 @@ public class PackingSolver {
         StrategyPicker.area = area;
         Strat_AbstractStrat strategy = StrategyPicker.pickStrategy();
 
-        strategy.compute();
+        ADT_Area result = strategy.compute();
+
+        if (result == null) {
+            System.err.println("strategy computation failed");
+            return;
+        }
 
         // Do the plaintext output.
-        Output_AbstractOutput output = new Output_Plaintext(area);
+        Output_AbstractOutput output = new Output_Plaintext(result);
         output.draw();
 
         // Also add the graphical output if it was specified in the program arguments.
         if (graphical) {
-            Output_AbstractOutput graphicalOutput = new Output_GraphicalOutput(area);
+            Output_AbstractOutput graphicalOutput = new Output_GraphicalOutput(result);
             graphicalOutput.draw();
         }
         

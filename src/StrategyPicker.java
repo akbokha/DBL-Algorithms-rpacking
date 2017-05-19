@@ -23,7 +23,7 @@ public class StrategyPicker {
     }
     
     static Strat_AbstractStrat pickStrategy() {
-        return new Strat_ORP_BottomLeft(area);
+        return new Strat_ORP_AnyTime(area);
     }
     
 }
