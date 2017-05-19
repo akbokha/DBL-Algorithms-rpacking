@@ -36,7 +36,7 @@ public class Output_Plaintext extends Output_AbstractOutput {
         // Draw the number of rectangles.
         System.out.println("number of rectangles: " + area.getCount());
 
-        // Iterate through all rectangle to get their dimensions and locations.
+        // Iterate through all rectangle to get their getDimensions and locations.
         Iterator<ADT_Rectangle> i = area.getRectangleIterator();
         StringBuilder rectangleDimensions = new StringBuilder();
         StringBuilder rectangleLocations = new StringBuilder();

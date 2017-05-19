@@ -45,35 +45,52 @@ class Strat_CP_BT extends Strat_BT_Template {
 
     @Override
     boolean first() {
-        // Step one level down into the branch.
-        index++;
-        rectangles[index].setX(-1);
-        rectangles[index].setY(0); // No need to also set the x coordinate since next will take care of this.
+        // Step one level down into the branch and retrieve a pointer to the currently placed rectangle.
+        ADT_Rectangle rectangle = rectangles[++index];
+
+        // Make distinction between the first rectangle and all others.
+        if (index == 0) {
+            // Let the first rectangle start with its center in the center such that it will only evaluate the top right corner.
+            rectangle.setX(Integer.MAX_VALUE - rectangle.getWidth() - 1); // Note: rectangle width has to be subtracted in order to prevent an overflow.
+            rectangle.setY(Math.max(0, (int) Math.ceil((area.getHeight() - rectangle.getHeight()) / 2)));
+        } else {
+            // Start at the bottom left.
+            rectangle.setX(-1);
+            rectangle.setY(0);
+        }
 
         return next();
     }
 
     @Override
     boolean next() {
+        // Retrieve a pointer to the currently placed rectangle.
+        ADT_Rectangle rectangle = rectangles[index];
+
         // Increment x and check if this coordinate is valid.
-        int x = rectangles[index].getX();
+        int x = rectangle.getX();
         x++;
 
         // Check if the x-coordinate is still a valid starting coordinate
-        if (x + rectangles[index].getWidth() > area.getWidth()) {
-            x = 0;
+        if (x + rectangle.getWidth() > area.getWidth()) {
+            // Reset x, make distinction between the first rectangle and all others.
+            if (index == 0) {
+                x = Math.max(0, (int) Math.ceil((area.getWidth() - rectangle.getWidth()) / 2f));
+            } else {
+                x = 0;
+            }
 
-            int y = rectangles[index].getY();
+            int y = rectangle.getY();
             y++;
 
             // Check if the y-coordinate is still a valid starting coordinate
-            if (y + rectangles[index].getHeight() > area.getHeight()) {
+            if (y + rectangle.getHeight() > area.getHeight()) {
                 return false;
             }
 
-            rectangles[index].setY(y);
+            rectangle.setY(y);
         }
-        rectangles[index].setX(x);
+        rectangle.setX(x);
 
         return true;
     }

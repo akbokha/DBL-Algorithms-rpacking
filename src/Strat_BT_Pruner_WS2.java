@@ -13,24 +13,24 @@ import java.util.ListIterator;
  * @author s158881
  */
 public class Strat_BT_Pruner_WS2 implements Strat_BT_PrunerInterface {
-   
-    private int [] horizontalEmptySpaceStrips;
-    private int [] verticalEmptySpaceStrips;
-    private int [] horizontalRectangleStrips;
-    private int [] verticalRectangleStrips;
+    
     private List<Bin> bins;
     private List<ADT_Rectangle> rectanglesToBePlaced;
     private List<EmptyCell> emptyCells;
+    
     private int[] rectangleAreas; // index = area, a[i] = sum of all the areas of the rectangles with area == index
     private int [] capacityBins; // index = capacity, a[i] = sum of capacities of all the bins that have a capacity == index
+    
     private int totalAreaRectangles;
     private static final int NOTSET = -2;
     int maxAreaOfRectangles = 0;
     int maxCapacity = 0;
     
+    private int wastedSpace; 
+    private int carryOver;
+    
     @Override
     public boolean reject (ADT_Area area, ADT_Rectangle last) {
-         boolean reject = false;
          totalAreaRectangles = area.getTotalAreaRectangles(); // store sum areas rectangle
          
          /**
@@ -41,7 +41,7 @@ public class Strat_BT_Pruner_WS2 implements Strat_BT_PrunerInterface {
           */
          rectanglesToBePlaced = new ArrayList<>();
          collectRectanglesToBePlaced(area); // add the rectangles that still neet to be placed to the collection
-         rectangleAreas = new int[maxAreaOfRectangles]; // initialize the desribed array
+         rectangleAreas = new int[maxAreaOfRectangles]; // initialize the described array
          fillRectangleAreaArray(); // fill the rectangle area array
          
          emptyCells = new ArrayList<>();
@@ -51,13 +51,21 @@ public class Strat_BT_Pruner_WS2 implements Strat_BT_PrunerInterface {
          capacityBins = new int[maxCapacity];
          fillCapacityBinsArray(); // fill the bin capacity array
          
-        //this.horizontalEmptySpaceStrips = getEmptySpaceStrips(true);
-        //this.verticalEmptySpaceStrips = getEmptySpaceStrips(false);
-        //this.horizontalRectangleStrips = getRectangleStrips(true);
-        //this.verticalRectangleStrips = getRectangleStrips(false);
+         wastedSpace = 0;
+         carryOver = 0;
+         
+         for (int i = 1; i < rectangleAreas.length; i++) {
+             if (capacityBins[i] > (rectangleAreas[i] + carryOver)) {
+                 wastedSpace += (capacityBins[i] - (rectangleAreas[i] + carryOver));
+                 carryOver = 0;
+             } else if (capacityBins[i] == (rectangleAreas[i] + carryOver)){
+                 carryOver = 0;   
+             } else if (capacityBins[i] < (rectangleAreas[i] + carryOver)) {
+                 carryOver = (rectangleAreas[i] + carryOver) - capacityBins[i];
+             }
+         }
         
-        
-        return reject;
+         return ((wastedSpace + totalAreaRectangles) > (area.getWidth() * area.getHeight()));
     }
     
     private void collectRectanglesToBePlaced (ADT_Area area) {
@@ -81,8 +89,8 @@ public class Strat_BT_Pruner_WS2 implements Strat_BT_PrunerInterface {
     }
     
     private void findAndInitializeEmptyCells(ADT_Area area) {
-        int areaWidth = ((ADT_AreaExtended)area).getWidth();
-        int areaHeight = ((ADT_AreaExtended)area).getHeight();
+        int areaWidth = area.getWidth();
+        int areaHeight = area.getHeight();
         for (int i = 0; i <= areaWidth;  i++) {
             for (int j = 0; j < areaHeight; j++) {
                 ADT_Vector vector = new ADT_Vector (i, j);

@@ -14,15 +14,15 @@ public class Strat_ORP_AnyTime extends Strat_AbstractStrat {
     
     @Override
     public ADT_Area compute() {
-        if(area.getRectangles().length == 10000) {
+        if(area.getRectangles().length >= 10000) {
             return new Strat_ORP_BFDH(area).compute();
         }
         try {
             //Used to initialize an average starting width and height
             ADT_Area bestArea = new Strat_DummyImplementation(area.clone()).compute();
-            //Set initial width and height for a container to the dimensions
+            //Set initial width and height for a container to the getDimensions
             // of the bottom-left algorithm
-            ADT_Vector dimension = bestArea.getMinDimensions();
+            ADT_Vector dimension = bestArea.getMinimalDimensions();
             area.setWidth(dimension.x);
             area.setHeight(dimension.y);
             

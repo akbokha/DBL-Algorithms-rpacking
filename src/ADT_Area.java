@@ -53,7 +53,7 @@ public class ADT_Area extends ADT_Rectangle implements Cloneable {
         return shapes.toArray(new ADT_Rectangle[shapes.size()]);
     }
 
-    ADT_Vector getMinDimensions() {
+    ADT_Vector getMinimalDimensions() {
         Iterator<ADT_Rectangle> i = getRectangleIterator();
         int maxX = 0;
         int maxY = 0;
@@ -67,6 +67,26 @@ public class ADT_Area extends ADT_Rectangle implements Cloneable {
         }
 
         return new ADT_Vector(maxX, maxY);
+    }
+
+    @Override
+    public ADT_Vector getDimensions() {
+        int maxWidth = getWidth();
+        int maxHeight = getHeight();
+
+        // Check if either the width or the height is infinite, if so replace them with the minimal dimension.
+        if (maxWidth == INF || maxHeight == INF) {
+            ADT_Vector minDimensions = getMinimalDimensions();
+
+            if (maxWidth == INF) {
+                maxWidth = minDimensions.x;
+            }
+            if (maxHeight == INF) {
+                maxHeight = minDimensions.y;
+            }
+        }
+
+        return new ADT_Vector(maxWidth, maxHeight);
     }
 
     /**
@@ -166,7 +186,7 @@ public class ADT_Area extends ADT_Rectangle implements Cloneable {
      * @param rec2 The second rectangle to be taken into account
      * @return False if the body of the rectangles intersect, true otherwise.
      */
-    private boolean checkRectangleOverlap(ADT_Rectangle rec1, ADT_Rectangle rec2) {
+    protected boolean checkRectangleOverlap(ADT_Rectangle rec1, ADT_Rectangle rec2) {
         assert rec1 != null;
         assert rec2 != null;
         assert rec1.getWidth() != ADT_Rectangle.INF;
