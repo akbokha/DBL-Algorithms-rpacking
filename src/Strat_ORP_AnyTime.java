@@ -31,8 +31,6 @@ public class Strat_ORP_AnyTime extends Strat_AbstractStrat {
                 if((width-1) * height >= area.getTotalAreaRectangles()) {
                     width -= 1;
                 } else {
-                    System.out.println("optimal");
-                    System.out.println(area.getTotalAreaRectangles());
                     break;
                 }
                 //Get the best solution with this width and height
@@ -40,12 +38,10 @@ public class Strat_ORP_AnyTime extends Strat_AbstractStrat {
                 newArea.setWidth(width);
                 newArea.setHeight(height);
                 newArea = new Strat_CP_BT(newArea).compute();
-                System.out.println(width + ", " + height);
                 //If a solution was set, use it as the new best solution
                 if(newArea != null) {
                     bestArea = newArea;
                 } else if (area.getHeight() != ADT_Area.INF) {//If height is fixed
-                    System.out.println("height");
                     break;
                 } else {//If this area is not possible try a larger height but the same width as bestArea
                     width += 1;

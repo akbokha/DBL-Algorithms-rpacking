@@ -1,5 +1,6 @@
 /**
  * A solver of the containment problem. Requires that the height and width of the area are finite.
+ * @pre All rectangles 
  */
 class Strat_CP_BT extends Strat_BT_Template {
 
@@ -47,7 +48,7 @@ class Strat_CP_BT extends Strat_BT_Template {
     boolean first() {
         // Step one level down into the branch and retrieve a pointer to the currently placed rectangle.
         ADT_Rectangle rectangle = rectangles[++index];
-        System.out.println(index);
+
         // Make distinction between the first rectangle and all others.
         if (index == 0) {
             // Let the first rectangle start with its center in the center such that it will only evaluate the top right corner.
@@ -95,12 +96,11 @@ class Strat_CP_BT extends Strat_BT_Template {
             }
 
             rectangle.setY(y);
-            System.out.println(rectangle.getX() + ", " + rectangle.getY());
         }
         rectangle.setX(x);
 
         output.draw();
-        
+
         return true;
     }
 
