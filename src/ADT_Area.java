@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -19,7 +20,9 @@ public class ADT_Area extends ADT_Rectangle implements Cloneable {
     
     @Override
     public ADT_Area clone() throws CloneNotSupportedException {
-        return (ADT_Area) super.clone();
+        ADT_Area newArea = new ADT_Area(this.getWidth(), this.getHeight(), this.canFlip());
+        newArea.setRectangles(this.shapes);
+        return newArea;
     }
 
     /**
@@ -29,6 +32,14 @@ public class ADT_Area extends ADT_Rectangle implements Cloneable {
      */
     public void add(ADT_Rectangle shape) {
         shapes.add(shape);
+    }
+    
+    /**
+     * Sets the array of shapes to new one.
+     * @param shapes new array of shapes
+     */
+    public void setRectangles(Collection<ADT_Rectangle> shapes) {
+        this.shapes = new HashSet<>(shapes);
     }
 
     /**
