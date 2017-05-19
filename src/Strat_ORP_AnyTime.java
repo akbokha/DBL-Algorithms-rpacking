@@ -23,28 +23,33 @@ public class Strat_ORP_AnyTime extends Strat_AbstractStrat {
             //Set initial width and height for a container to the getDimensions
             // of the bottom-left algorithm
             ADT_Vector dimension = bestArea.getMinimalDimensions();
-            area.setWidth(dimension.x);
-            area.setHeight(dimension.y);
-            
+            int width = dimension.x;
+            int height = dimension.y;
             while(true) {
                 //Make sure that the area gets smaller and smaller until the
                 // minimal area is reached
-                if((area.getWidth()-1) * area.getHeight() > area.getTotalAreaRectangles()) {
-                    area.setWidth(area.getWidth()-1);
+                if((width-1) * height >= area.getTotalAreaRectangles()) {
+                    width -= 1;
                 } else {
+                    System.out.println("optimal");
+                    System.out.println(area.getTotalAreaRectangles());
                     break;
                 }
                 //Get the best solution with this width and height
-                ADT_Area newArea = new Strat_CP_BT(area.clone()).compute();
-                
+                ADT_Area newArea = area.clone();
+                newArea.setWidth(width);
+                newArea.setHeight(height);
+                newArea = new Strat_CP_BT(newArea).compute();
+                System.out.println(width + ", " + height);
                 //If a solution was set, use it as the new best solution
                 if(newArea != null) {
                     bestArea = newArea;
-                } else if (area.getHeight() != ADT_Area.INF) {//If height is fixed but not possible to make the area smaller
+                } else if (area.getHeight() != ADT_Area.INF) {//If height is fixed
+                    System.out.println("height");
                     break;
                 } else {//If this area is not possible try a larger height but the same width as bestArea
-                    area.setWidth(area.getWidth()+1);
-                    area.setHeight(area.getHeight()+1);
+                    width += 1;
+                    height += 1;
                 }
             }
             return bestArea;
