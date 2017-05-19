@@ -143,6 +143,15 @@ public class ADT_Area extends ADT_Rectangle implements Cloneable {
 
         return false;
     }
+    
+    public int getMaximalRectangleWidth() {
+        return this.getRectangles()[0].getWidth();
+    }
+    
+    public int getMinimalRectangleWidth() {
+        ADT_Rectangle[] rectangles = this.getRectangles();
+        return rectangles[rectangles.length].getWidth();
+    }
 
     /** 
      * Returns the strips populated with the number of empty spaces in each strip
