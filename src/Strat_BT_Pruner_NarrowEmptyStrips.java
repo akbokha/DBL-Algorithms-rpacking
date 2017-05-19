@@ -25,10 +25,21 @@ public class Strat_BT_Pruner_NarrowEmptyStrips implements Strat_BT_PrunerInterfa
     boolean[] rectangleHeightDisallowed; // array specifying for each rectangle width, the heights of empty space that are disallowed below the rectangle
     boolean[] rectangleWidthDisallowed; // array specifies for each rectangle height, the widths of empty space that are disallowed to the left of the rectangle
     int[] rectanglesToBePlaced; // array which stores the rectangles to be placed
-    
-    // look at the horizontal rectangle strips
+    boolean rotations; // rotations are allowed
+    rotations = area.canFlip();
+
+    // horizontal rectangle strips
     rectanglesToBePlaced = area.getRectangleStrips(true);
-    
+
+    // create one binary matrix if rotations are allowed
+    if (rotations) {
+        for (int i = 0; i < area.getCount(); i++) {
+            // if rectangle w
+            // boolean[i] rectangleWidthDisallowed = true;
+        }
+    } else {
+        // create two binary matrices
+    }
     // if all future placements fit below or to the left of the candidate rectangle
     // then reject (return true)
     return (narrowStripsBelow((ADT_AreaExtended)area, last) || narrowStripsLeft((ADT_AreaExtended)area, last));
@@ -46,10 +57,6 @@ public class Strat_BT_Pruner_NarrowEmptyStrips implements Strat_BT_PrunerInterfa
      * @return true if there is such a rectangle
      */
     private boolean narrowStripsBelow(ADT_AreaExtended area, ADT_Rectangle last){
-        boolean rotations;
-        
-        rotations = last.canFlip();
-        
         for (int i = 0; i < area.getCount(); i++) {
         }
         return true;
@@ -67,10 +74,6 @@ public class Strat_BT_Pruner_NarrowEmptyStrips implements Strat_BT_PrunerInterfa
      * @return true if there is such a rectangle
      */
     private boolean narrowStripsLeft(ADT_AreaExtended area, ADT_Rectangle last){
-        boolean rotations;
-        
-        rotations = last.canFlip();
-        
         for (int i = 0; i < area.getCount(); i++) {
         }
         return true;
