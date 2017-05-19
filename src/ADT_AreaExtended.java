@@ -5,15 +5,14 @@ import java.util.Iterator;
  * Created by s157035 on 15-5-2017.
  */
 public class ADT_AreaExtended extends ADT_Area {
+    private final int EMPTY_INDEX = 0;
     private HashMap<Short, ADT_Rectangle> shapes;
     private short[] array;
+
 
     public ADT_AreaExtended(int width, int height, boolean flippable) {
         super(width, height, flippable);
         array = new short[width * height];
-        for (int i = 0; i < array.length; i++) {
-            array[i] = -1;
-        }
         shapes = new HashMap<>();
     }
 
@@ -23,7 +22,7 @@ public class ADT_AreaExtended extends ADT_Area {
     }
 
     private short getNewId() {
-        short i = 0;
+        short i = EMPTY_INDEX + 1;
         while (shapes.containsKey(i)) {
             i++;
         }
@@ -47,7 +46,7 @@ public class ADT_AreaExtended extends ADT_Area {
             return false;
         }
         int i = getIndex(x, y);
-        return array[i] == -1;
+        return array[i] == EMPTY_INDEX;
     }
 
     /**
@@ -74,6 +73,22 @@ public class ADT_AreaExtended extends ADT_Area {
             setArrayAt(shape.getX(), y, id);
             setArrayAt(shape.getX() + shape.getWidth(), y, id);
         }
+    }
+
+    private boolean checkRectangleBordersWith(ADT_Rectangle shape) {
+        //Check horizontal borders to this shape's id
+        for (int x = shape.getX(); x <= shape.getX() + shape.getWidth(); x++) {
+            if(!isEmptyAt(x, shape.getY())) return false;
+            if(!isEmptyAt(x, shape.getY() + shape.getHeight())) return false;
+        }
+
+        //Check vertical borders
+        for (int y = shape.getX(); y <= shape.getX() + shape.getHeight(); y++) {
+            if(!isEmptyAt(shape.getX(), y)) return false;
+            if(!isEmptyAt(shape.getX() + shape.getWidth(), y)) return false;
+        }
+
+        return true;
     }
 
     /**
@@ -103,12 +118,12 @@ public class ADT_AreaExtended extends ADT_Area {
 
     @Override
     public boolean isNewRectangleValid(ADT_Rectangle rectangle) {
-        return super.isNewRectangleValid(rectangle); // @todo Implement this using the multidimensional array.
+        return checkRectangleBordersWith(rectangle);
     }
 
     @Override
     public boolean isOccupied(ADT_Vector position) {
-        return super.isOccupied(position); // @todo Implement this using the multidimensional array.
+        return !isEmptyAt(position.x, position.y);
     }
 
     /**
