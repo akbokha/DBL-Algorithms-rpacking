@@ -1,15 +1,18 @@
 /**
  * A solver of the containment problem. Requires that the height and width of the area are finite.
+ * @pre All rectangles 
  */
 class Strat_CP_BT extends Strat_BT_Template {
 
     private ADT_Rectangle[] rectangles;
     private int index = -1;
+    private Output_GraphicalOutput output;
 
     Strat_CP_BT(ADT_Area area) {
         super(area);
 
         rectangles = area.getRectangles();
+        output = new Output_GraphicalOutput(area);
     }
 
     @Override
@@ -41,13 +44,11 @@ class Strat_CP_BT extends Strat_BT_Template {
         }
     }
 
-
-
     @Override
     boolean first() {
         // Step one level down into the branch and retrieve a pointer to the currently placed rectangle.
         ADT_Rectangle rectangle = rectangles[++index];
-        System.out.println(index);
+
         // Make distinction between the first rectangle and all others.
         if (index == 0) {
             // Let the first rectangle start with its center in the center such that it will only evaluate the top right corner.
@@ -84,13 +85,22 @@ class Strat_CP_BT extends Strat_BT_Template {
 
             // Check if the y-coordinate is still a valid starting coordinate
             if (y + rectangle.getHeight() > area.getHeight()) {
-                return false;
+
+                // Rotate if the rectangle can flip.
+                if (rectangle.canFlip() && !rectangle.getFlipped()) {
+                    rectangle.setFlipped(true);
+                    return first();
+                } else {
+                    return false;
+                }
             }
 
             rectangle.setY(y);
-            System.out.println(rectangle.getX() + ", " + rectangle.getY());
         }
         rectangle.setX(x);
+
+        output.draw();
+
         return true;
     }
 
@@ -100,6 +110,8 @@ class Strat_CP_BT extends Strat_BT_Template {
         ADT_Rectangle rectangle = rectangles[index];
         rectangle.setX(ADT_Rectangle.NOTSET);
         rectangle.setY(ADT_Rectangle.NOTSET);
+
+        rectangle.setFlipped(false);
 
         // Move one level higher into the branch.
         index--;

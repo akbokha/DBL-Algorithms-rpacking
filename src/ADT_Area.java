@@ -1,8 +1,4 @@
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Iterator;
+import java.util.*;
 
 /**
  * @date Apr 26, 2017
@@ -11,11 +7,11 @@ import java.util.Iterator;
 @SuppressWarnings("Duplicates")
 public class ADT_Area extends ADT_Rectangle implements Cloneable {
 
-    private Collection<ADT_Rectangle> shapes;
+    private TreeSet<ADT_Rectangle> shapes;
 
     public ADT_Area(int width, int height, boolean flippable) {
         super(width, height, 0, 0, flippable);
-        shapes = new HashSet<>();
+        shapes = new TreeSet<>();
     }
     
     @Override
@@ -41,7 +37,7 @@ public class ADT_Area extends ADT_Rectangle implements Cloneable {
      * @param shapes new array of shapes
      */
     public void setRectangles(ADT_Rectangle[] shapes) {
-        this.shapes = new HashSet<>();
+        this.shapes = new TreeSet<>();
         for(ADT_Rectangle rec : shapes) {
             rec.setX(NOTSET);
             rec.setY(NOTSET);
@@ -256,7 +252,6 @@ public class ADT_Area extends ADT_Rectangle implements Cloneable {
             return y;
         }
     }
-    
     
     /**
      * Query to obtain the total area of all the rectangles in this

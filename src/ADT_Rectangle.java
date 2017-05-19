@@ -4,7 +4,7 @@
  * @date Apr 26, 2017
  * @author Adriaan Knapen <a.d.knapen@student.tue.nl>
  */
-public class ADT_Rectangle implements ADT_ShapeInterface {
+public class ADT_Rectangle implements ADT_ShapeInterface, Comparable<ADT_Rectangle> {
 
     static final int INF = -1;
     static final int NOTSET = -2;
@@ -80,7 +80,7 @@ public class ADT_Rectangle implements ADT_ShapeInterface {
 
     @Override
     public void setFlipped(boolean flipped) {
-        assert ! canFlip();
+        assert !this.flipped || ! canFlip();
 
         this.flipped = flipped;
     }
@@ -105,5 +105,16 @@ public class ADT_Rectangle implements ADT_ShapeInterface {
     @Override
     public ADT_Vector getDimensions() {
         return new ADT_Vector(this.getWidth(), getHeight());
+    }
+
+    @Override
+    public int compareTo(ADT_Rectangle o) {
+        if(this.getWidth() == o.getWidth()){
+            return 0;
+        } else if(this.getWidth() > o.getWidth()) {
+            return -1;
+        }else {
+            return 1;
+        }
     }
 }
