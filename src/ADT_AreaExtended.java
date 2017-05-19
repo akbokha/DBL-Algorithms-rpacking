@@ -5,14 +5,15 @@ import java.util.Iterator;
  * Created by s157035 on 15-5-2017.
  */
 public class ADT_AreaExtended extends ADT_Area {
-    private final int EMPTY_INDEX = 0;
+    private final short EMPTY_INDEX = 0;
     private HashMap<Short, ADT_Rectangle> shapes;
     private short[] array;
-
+    private short lastIssuedIndex;
 
     public ADT_AreaExtended(int width, int height, boolean flippable) {
         super(width, height, flippable);
         array = new short[width * height];
+        lastIssuedIndex = 0;
         shapes = new HashMap<>();
     }
 
@@ -22,10 +23,11 @@ public class ADT_AreaExtended extends ADT_Area {
     }
 
     private short getNewId() {
-        short i = EMPTY_INDEX + 1;
+        short i = (short)(lastIssuedIndex + 1);
         while (shapes.containsKey(i)) {
             i++;
         }
+        lastIssuedIndex = i;
         return i;
     }
 
@@ -76,16 +78,20 @@ public class ADT_AreaExtended extends ADT_Area {
     }
 
     private boolean checkRectangleBordersWith(ADT_Rectangle shape) {
+        return checkRectangleBordersFrom(shape.getX(), shape.getY(), shape.getWidth(), shape.getHeight());
+    }
+
+    private boolean checkRectangleBordersFrom(int posX, int posY, int width, int height) {
         //Check horizontal borders to this shape's id
-        for (int x = shape.getX(); x <= shape.getX() + shape.getWidth(); x++) {
-            if(!isEmptyAt(x, shape.getY())) return false;
-            if(!isEmptyAt(x, shape.getY() + shape.getHeight())) return false;
+        for (int x = posX; x <= posX + width; x++) {
+            if(!isEmptyAt(x, posY)) return false;
+            if(!isEmptyAt(x, posY + height)) return false;
         }
 
         //Check vertical borders
-        for (int y = shape.getX(); y <= shape.getX() + shape.getHeight(); y++) {
-            if(!isEmptyAt(shape.getX(), y)) return false;
-            if(!isEmptyAt(shape.getX() + shape.getWidth(), y)) return false;
+        for (int y = posY; y <= posY + height; y++) {
+            if(!isEmptyAt(posX, y)) return false;
+            if(!isEmptyAt(posX + width, y)) return false;
         }
 
         return true;
@@ -144,6 +150,24 @@ public class ADT_AreaExtended extends ADT_Area {
 
     public RectangleType[] getRectangleTypesToBePlaced() {
         return null;
+    }
+
+    public boolean moveRectangle(ADT_Rectangle rectangle, int newX, int newY) {
+        if(checkRectangleBordersFrom(newX, newY, rectangle.getWidth(), rectangle.getHeight())) {
+            return false;
+        }
+
+        //Remember the original rectangle id by getting the id on it's position
+        short id = (short)getIndex(rectangle.getX(), rectangle.getY());
+        //Remove the original rectangle information
+        fillRectangleBordersWith(rectangle, EMPTY_INDEX);
+
+        rectangle.setX(newX);
+        rectangle.setY(newY);
+
+        fillRectangleBordersWith(rectangle, id);
+
+        return true;
     }
 
     private int[] scanStrips(boolean horizontal, boolean lookingForEmpty) {
