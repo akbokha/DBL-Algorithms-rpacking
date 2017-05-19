@@ -142,6 +142,10 @@ public class ADT_AreaExtended extends ADT_Area {
         return scanStrips(horizontal, false);
     }
 
+    public RectangleType[] getRectangleTypesToBePlaced() {
+        return null;
+    }
+
     private int[] scanStrips(boolean horizontal, boolean lookingForEmpty) {
         int[] vals;
         if (horizontal) {
