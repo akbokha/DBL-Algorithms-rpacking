@@ -37,11 +37,15 @@ public class Strat_BT_PrunerPerfectRectangle implements Strat_BT_PrunerInterface
         while(lowestPoint == Integer.MAX_VALUE){ // We haven't reached the bottom of the rectangle
             y--;
             
+            // First check right and left border
+            if(!(area.isEmptyAt(beginX-1, y) && area.isEmptyAt(beginX+endX, y))){
+                // This must be the lowest level, otherwise it is not valid  (missing side border)
+                lowestPoint = y;
+            }
+            
             for(int x = beginX; x < endX; ++x){
                 if(!area.isEmptyAt(x, y) && x == beginX){
-                    /* 
-                    This possibly the beginning of a line of borders
-                    */
+                    // This possibly the beginning of a line of borders
                     lowestPoint = y;
                 }else if(!area.isEmptyAt(x, y) && lowestPoint == Integer.MAX_VALUE){
                     /*
@@ -61,27 +65,8 @@ public class Strat_BT_PrunerPerfectRectangle implements Strat_BT_PrunerInterface
             // The bottom of the bounding rectangle is a good bottom
             if(y-1 == 0) lowestPoint = y;
         }
-        
-        // Verify if the rectangle is perfect (there is a solid border on the sides)
-        for(int i=lowestPoint; i<last.getY(); ++i){
-            if(area.isEmptyAt(last.getX()-1, i)){
-                /*
-                If there is no border on the left side, the rectangle is not perfect
-                */
-                return false;
-            }
-            
-            if(area.isEmptyAt(last.getX()+last.getWidth(), i)){
-                /*
-                Check the same on the right side
-                */
-                return false;
-            }
-        }        
-        
-        /*
-        All checks passed, so we found a perfect rectangle
-        */
+
+        // All checks passed, so we found a perfect rectangle
         return true;
     }
     
@@ -104,11 +89,15 @@ public class Strat_BT_PrunerPerfectRectangle implements Strat_BT_PrunerInterface
         while(leftMostPoint == Integer.MAX_VALUE){
             x--;
             
+            // First check upper and lower border
+            if(!(area.isEmptyAt(x, beginY-1) && area.isEmptyAt(x, beginY+endY))){
+                // This must be the lowest level, otherwise it is not valid (missing side border)
+                leftMostPoint = x;
+            }
+            
             for(int y = beginY; y < endY; ++y){
                 if(!area.isEmptyAt(x, y) && y == beginY){
-                    /* 
-                    This possibly the beginning of a row of borders
-                    */
+                    // This possibly the beginning of a row of borders
                     leftMostPoint = x;
                 }else if(!area.isEmptyAt(x, y) && leftMostPoint == Integer.MAX_VALUE){
                     /*
@@ -129,26 +118,7 @@ public class Strat_BT_PrunerPerfectRectangle implements Strat_BT_PrunerInterface
             if(x-1 == 0) leftMostPoint = x;
         }
         
-        // Verify if the rectangle is perfect (there is a solid border on the sides)
-        for(int i=leftMostPoint; i<last.getX(); ++i){
-            if(area.isEmptyAt(i, last.getY()-1)){
-                /*
-                If there is no border on the bottom side, the rectangle is not perfect
-                */
-                return false;
-            }
-            
-            if(area.isEmptyAt(i, last.getY()+last.getHeight())){
-                /*
-                Check the same on the top side
-                */
-                return false;
-            }
-        }        
-        
-        /*
-        All checks passed, so we found a perfect rectangle
-        */
+        // All checks passed, so we found a perfect rectangle
         return true;
     }
     
