@@ -37,11 +37,6 @@ public class Strat_BT_PrunerEmptySpace implements Strat_BT_PrunerInterface {
      * fit in the strips of the empty space
      */
     private boolean testStrips(int[] stripsEmptySpace, int[] stripsRecsTBP) {
-        //If strips of the rectangles are longer than the empty space
-        // there is no valid solution possible
-        if(stripsEmptySpace.length < stripsRecsTBP.length) {
-            return true;
-        }
         //Loop through widths of strips to be placed
         for(int i = 0; i < stripsRecsTBP.length && stripsRecsTBP[i] != 0; i++) {
             nextRec:

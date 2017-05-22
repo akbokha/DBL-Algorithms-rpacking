@@ -57,7 +57,7 @@ public class Output_GraphicalOutput extends Output_AbstractOutput {
                 int y = (int) Math.floor((rectHeight - rect.getY()) * scale + border - h);
 
                 g.setColor(Color.darkGray);
-                g.fillRect(x,y , w, h);
+                g.fillRect(x, y, w, h);
 
                 g.setColor(Color.red);
                 g.drawRect(x, y, w, h);
