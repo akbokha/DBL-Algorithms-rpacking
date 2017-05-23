@@ -60,8 +60,7 @@ public abstract class Input_Scanner implements Input_InputInterface {
             throw new IllegalArgumentException("invalid amount of rectangles specified");
         }
 
-        // Read all rectangles and add them to the area.
-        ADT_Area area = new ADT_Area(ADT_Rectangle.INF, height, flippable);
+        ADT_Rectangle[] rectangles = new ADT_Rectangle[amount];
 
         for (int i = 0; i < amount; i++) {
             if (! scanner.hasNextInt()) {
@@ -77,9 +76,10 @@ public abstract class Input_Scanner implements Input_InputInterface {
             int y = scanner.nextInt();
 
             // Add the new rectangle.
-            area.add(new ADT_Rectangle(x, y, ADT_Rectangle.NOTSET, ADT_Rectangle.NOTSET, flippable));
+            rectangles[i] = new ADT_Rectangle(x, y, ADT_Rectangle.NOTSET, ADT_Rectangle.NOTSET, flippable);
         }
 
-        return area;
+        // Read all rectangles and add them to the area.
+        return new ADT_Area(ADT_Rectangle.INF, height, flippable, rectangles);
     }
 }

@@ -11,7 +11,7 @@ public class Strat_ORP_AnyTime extends Strat_AbstractStrat {
     public Strat_ORP_AnyTime(ADT_Area area) {
         super(area);
     }
-    
+
     @Override
     public ADT_Area compute() {
         if(area.getRectangles().length >= 10000) {
@@ -37,7 +37,7 @@ public class Strat_ORP_AnyTime extends Strat_AbstractStrat {
                 ADT_Area newArea = area.clone();
                 newArea.setWidth(width);
                 newArea.setHeight(height);
-                newArea = new Strat_CP_BT(newArea).compute();
+                newArea = (new Strat_CP_BT(newArea)).compute();
                 //If a solution was set, use it as the new best solution
                 if(newArea != null) {
                     bestArea = newArea;

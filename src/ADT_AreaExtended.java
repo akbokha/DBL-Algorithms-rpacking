@@ -11,7 +11,7 @@ public class ADT_AreaExtended extends ADT_Area {
     private short lastIssuedIndex;
 
     public ADT_AreaExtended(int width, int height, boolean flippable) {
-        super(width, height, flippable);
+        super(width, height, flippable, null);
         array = new short[width * height];
         lastIssuedIndex = 0;
         shapes = new HashMap<>();
@@ -56,7 +56,6 @@ public class ADT_AreaExtended extends ADT_Area {
      *
      * @param shape
      */
-    @Override
     public void add(ADT_Rectangle shape) {
         short id = getNewId();
         shapes.put(id, shape);

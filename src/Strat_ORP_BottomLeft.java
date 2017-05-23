@@ -47,12 +47,7 @@ public class Strat_ORP_BottomLeft extends Strat_AbstractStrat {
         }
 
         //Create the final area
-        ADT_Area newArea = new ADT_Area(10, area.getHeight(), area.canFlip());
-        for (ADT_Rectangle rectangle : newAreaRectangles) {
-            newArea.add(rectangle);
-        }
-
-        return newArea;
+        return new ADT_Area(10, area.getHeight(), area.canFlip(), (ADT_Rectangle[]) newAreaRectangles.toArray());
     }
 
     private void ProcessNextRectangle(ADT_Rectangle rectangle, List<ADT_Rectangle> newAreaRectangles) {

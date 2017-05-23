@@ -13,7 +13,7 @@ public class PackingSolver {
      */
     public static void main(String[] args) throws Exception {
         long curTime = System.currentTimeMillis(); // to check running time
-        
+
         Input_InputInterface input = null;
         boolean graphical = false;
         boolean printCombinerOutput = false;
