@@ -2,7 +2,6 @@
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.ListIterator;
 
 /*
  * Empty Space pruning as described in R. E. Korf - Optimal Rectangle Packing
@@ -15,16 +14,16 @@ import java.util.ListIterator;
 public class Strat_BT_Pruner_WS2 implements Strat_BT_PrunerInterface {
     
     private List<Bin> bins;
-    private List<ADT_Rectangle> rectanglesToBePlaced;
-    private List<EmptyCell> emptyCells;
+    private List<ADT_Rectangle> rectanglesToBePlaced; // the rectangles that still need to be placed
+    private List<EmptyCell> emptyCells; // the emptycells at in the partial solution
     
     private int[] rectangleAreas; // index = area, a[i] = sum of all the areas of the rectangles with area == index
     private int [] capacityBins; // index = capacity, a[i] = sum of capacities of all the bins that have a capacity == index
     
-    private int totalAreaRectangles;
+    private int totalAreaRectangles; // the total area of all the input rectangles
     private static final int NOTSET = -2;
     int maxAreaOfRectangles = 0;
-    int maxCapacity = 0;
+    int maxCapacity = 1;
     
     private int wastedSpace; 
     private int carryOver;
@@ -45,9 +44,9 @@ public class Strat_BT_Pruner_WS2 implements Strat_BT_PrunerInterface {
          fillRectangleAreaArray(); // fill the rectangle area array
          
          emptyCells = new ArrayList<>();
-         findAndInitializeEmptyCells(area);
+         findAndInitializeEmptyCells(area); // fill the collection with all the empty cells and 
          bins = new ArrayList<>();
-         makeBins();
+         makeBins(); // fills the collection that will hold the bins
          capacityBins = new int[maxCapacity];
          fillCapacityBinsArray(); // fill the bin capacity array
          
@@ -68,19 +67,32 @@ public class Strat_BT_Pruner_WS2 implements Strat_BT_PrunerInterface {
          return ((wastedSpace + totalAreaRectangles) > (area.getWidth() * area.getHeight()));
     }
     
+    /**
+     * Collects the rectangles that still need to be placed
+     * And sets {@code MaxAreaOfRectangles} to the right value 
+     */
     private void collectRectanglesToBePlaced (ADT_Area area) {
         for (Iterator<ADT_Rectangle> rectangles = area.getRectangleIterator(); rectangles.hasNext();) {
-            ADT_Rectangle current_rec = rectangles.next(); // next rectamgle
-            if (current_rec.getX() == NOTSET && current_rec.getY() == NOTSET) {
-                rectanglesToBePlaced.add(current_rec);
+            ADT_Rectangle current_rec = rectangles.next(); // next rectangle
+            if (current_rec.getX() == NOTSET && current_rec.getY() == NOTSET) { // rectangle not placed yet
+                rectanglesToBePlaced.add(current_rec); // add to collection
+                /**
+                 * need to keep track of the largest area we encounter among the rectangles that still
+                 * need to be placed. This will be used in the initialization of {@code rectangleAreas}
+                 */
                 int areaRectangle = current_rec.getWidth() * current_rec.getHeight();
-                if (areaRectangle > maxAreaOfRectangles) {
+                if (areaRectangle > maxAreaOfRectangles) { 
                     maxAreaOfRectangles = areaRectangle;
                 }
             }  
         }
     }
     
+    /**
+     * Fill the rectangleAreaArray such that
+     * the value at index i (where i represents an area between 1 and maxAreaOfRectanlges)
+     * should be the summation of the areas of all the rectangles with this area 
+     */
     private void fillRectangleAreaArray () {
         for (ADT_Rectangle rectangle : rectanglesToBePlaced) {
             int areaOfRectangle = rectangle.getWidth() * rectangle.getHeight();
@@ -88,22 +100,24 @@ public class Strat_BT_Pruner_WS2 implements Strat_BT_PrunerInterface {
         }
     }
     
+    // findAndInitializeEmptyCells makes a EmptyCell instance for each empty cell that it finds
     private void findAndInitializeEmptyCells(ADT_Area area) {
         int areaWidth = area.getWidth();
         int areaHeight = area.getHeight();
         for (int i = 0; i <= areaWidth;  i++) {
             for (int j = 0; j < areaHeight; j++) {
                 ADT_Vector vector = new ADT_Vector (i, j);
-                if (! area.isOccupied(vector)) {
+                if (! area.isOccupied(vector)) { // empty cell
                     int horizontalSpace = emptyHorizontalSpace(i, j, areaWidth, area);
                     int verticalSpace = emptyVerticalSpace(i, j, areaHeight, area);
                     EmptyCell emptyCell = new EmptyCell(i, j, horizontalSpace, verticalSpace);
-                    emptyCells.add(emptyCell);
+                    emptyCells.add(emptyCell); // add to collection of emptyCells
                 }   
             }
         }
     }
     
+    // calculate the length of the empty horizontal space to which the emptyCell (x,y) belongs
     private int emptyHorizontalSpace (int x, int y, int maxWidth, ADT_Area area) {
         int emptyHorizontalSpace = 1; // the emptycell itself has a width of 1
         // go to the right
@@ -117,6 +131,7 @@ public class Strat_BT_Pruner_WS2 implements Strat_BT_PrunerInterface {
         return emptyHorizontalSpace;
     }
     
+    // calculate the length of the empty vertical space to which the emptyCell (x,y) belongs
     private int emptyVerticalSpace (int x, int y, int maxHeight, ADT_Area area) {
         int emptyVerticalSpace = 1; // the emptycell itself has a height of 1
         // go up
@@ -130,6 +145,11 @@ public class Strat_BT_Pruner_WS2 implements Strat_BT_PrunerInterface {
         return emptyVerticalSpace;
     }
     
+    /**
+     * MakeBins makes bins (hèhè) such that each bin can be seen as a collection
+     * of EmptyCells that have the same horizontalSpace and verticalSpace length
+     * In addition it tracks the highest BinCapacity it encounters for the initialization of the capacityBins array
+     */
     private void makeBins() {
         for (EmptyCell emptycell : emptyCells) {
             boolean found_bin = false;
@@ -142,24 +162,29 @@ public class Strat_BT_Pruner_WS2 implements Strat_BT_PrunerInterface {
                     }
                 }
             }
-            if (! found_bin) {
+            if (! found_bin) { // there is not already a bin with the same lengths (horizontal & vertical)
                 Bin new_bin = new Bin (emptycell.horizontal_space, emptycell.vertical_space);
                 bins.add(new_bin);
             }
         }
     }
     
+    // fill the capacityBins array
     private void fillCapacityBinsArray() {
         for (Bin bin : bins) {
             capacityBins[bin.capacity] = capacityBins[bin.capacity] + bin.capacity;
         }
     }
     
+    /**
+     * the EmptyCell class can be seen as a record type in which we store the location (x, y), 
+     * the horizontal empty space to which the empty cell belongs, and the vertical empty space.
+     */
     private class EmptyCell {
         private int x;
         private int y;
-        private int horizontal_space; // empty horizontal space to which EmptyCell belongs
-        private int vertical_space; // empty vertical space to which EmptyCell belongs
+        private int horizontal_space; // length of empty horizontal space to which EmptyCell belongs
+        private int vertical_space; // length of empty vertical space to which EmptyCell belongs
         
         public EmptyCell (int x, int y, int horizontal_space, int vertical_space) {
             this.x = x;
@@ -170,10 +195,14 @@ public class Strat_BT_Pruner_WS2 implements Strat_BT_PrunerInterface {
         
     }
     
+    /**
+     * Bin class can be seen as a record type that stores the number of cells (capacity)
+     * that have the same length of horizontal and vertical space as a particular instance
+     */
     private class Bin {
         private int capacity; // number of emptycells it contains
-        private int horizontalSpace; 
-        private int verticalSpace;
+        private int horizontalSpace; // length of horizontal space
+        private int verticalSpace; // length of vertical space
         
         public Bin (int horizontalSpace, int verticalSpace) {
             this.verticalSpace = verticalSpace;
