@@ -33,11 +33,17 @@ public class Strat_ORP_AnyTime extends Strat_AbstractStrat {
                 } else {
                     break;
                 }
+
+                System.err.print("W:" + width + "\tH:" + height + "\t");
+
                 //Get the best solution with this width and height
                 ADT_Area newArea = area.clone();
                 newArea.setWidth(width);
                 newArea.setHeight(height);
                 newArea = (new Strat_CP_BT(newArea)).compute();
+
+                System.err.println(newArea);
+
                 //If a solution was set, use it as the new best solution
                 if(newArea != null) {
                     bestArea = newArea;

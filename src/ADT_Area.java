@@ -12,6 +12,7 @@ public class ADT_Area extends ADT_Rectangle implements Cloneable {
     public ADT_Area(int width, int height, boolean flippable, ADT_Rectangle[] rectangles) {
         super(width, height, 0, 0, flippable);
         shapes = rectangles;
+        Arrays.sort(shapes);
     }
     
     @Override
@@ -79,6 +80,7 @@ public class ADT_Area extends ADT_Rectangle implements Cloneable {
 
     /**
      * Return true if none of the already placed rectangles overlap with the parameter rectangle
+     * @pre Rectangle coordinates are non-negative.
      * @param rectangle
      * @return boolean
      */
@@ -86,7 +88,18 @@ public class ADT_Area extends ADT_Rectangle implements Cloneable {
         assert rectangle != null;
         assert rectangle.getX() != NOTSET;
         assert rectangle.getY() != NOTSET;
+        assert rectangle.getX() >= 0;
+        assert rectangle.getY() >= 0;
 
+        // Check if it doesn't exceed the area boundaries
+        if (
+                rectangle.getX() + rectangle.getWidth() > this.getWidth()
+                || rectangle.getY() + rectangle.getHeight() > this.getHeight()
+        ) {
+            return false;
+        }
+
+        // Check if it overlaps
         for(Iterator<ADT_Rectangle> recs = getRectangleIterator(); recs.hasNext();) {
             ADT_Rectangle currentRec = recs.next();
             if(currentRec != rectangle && currentRec.getX() != NOTSET && checkRectangleOverlap(currentRec, rectangle)) {
