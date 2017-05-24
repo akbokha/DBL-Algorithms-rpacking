@@ -7,42 +7,17 @@ import java.util.*;
 @SuppressWarnings("Duplicates")
 public class ADT_Area extends ADT_Rectangle implements Cloneable {
 
-    private TreeSet<ADT_Rectangle> shapes;
+    private ADT_Rectangle[] shapes;
 
-    public ADT_Area(int width, int height, boolean flippable) {
+    public ADT_Area(int width, int height, boolean flippable, ADT_Rectangle[] rectangles) {
         super(width, height, 0, 0, flippable);
-        shapes = new TreeSet<>();
+        shapes = rectangles;
+        Arrays.sort(shapes);
     }
     
     @Override
     public ADT_Area clone() throws CloneNotSupportedException {
-        ADT_Area newArea = new ADT_Area(this.getWidth(), this.getHeight(), this.canFlip());
-        for(ADT_Rectangle rec : this.getRectangles()) {
-            newArea.add(rec.clone());
-        }
-        return newArea;
-    }
-
-    /**
-     * Adds an rectangle to this area.
-     *
-     * @param shape
-     */
-    public void add(ADT_Rectangle shape) {
-        shapes.add(shape);
-    }
-    
-    /**
-     * Sets the array of shapes to new one.
-     * @param shapes new array of shapes
-     */
-    public void setRectangles(ADT_Rectangle[] shapes) {
-        this.shapes = new TreeSet<>();
-        for(ADT_Rectangle rec : shapes) {
-            rec.setX(NOTSET);
-            rec.setY(NOTSET);
-            this.add(rec);
-        }
+        return new ADT_Area(this.getWidth(), this.getHeight(), this.canFlip(), shapes);
     }
 
     /**
@@ -51,7 +26,7 @@ public class ADT_Area extends ADT_Rectangle implements Cloneable {
      * @return the amount of rectangles this area contains.
      */
     public int getCount() {
-        return shapes.size();
+        return shapes.length;
     }
 
     /**
@@ -60,11 +35,11 @@ public class ADT_Area extends ADT_Rectangle implements Cloneable {
      * @return iterator over all rectangles it contains.
      */
     public Iterator<ADT_Rectangle> getRectangleIterator() {
-        return shapes.iterator();
+        return Arrays.asList(shapes).iterator();
     }
 
     public ADT_Rectangle[] getRectangles() {
-        return shapes.toArray(new ADT_Rectangle[shapes.size()]);
+        return shapes;
     }
 
     ADT_Vector getMinimalDimensions() {
@@ -105,14 +80,26 @@ public class ADT_Area extends ADT_Rectangle implements Cloneable {
 
     /**
      * Return true if none of the already placed rectangles overlap with the parameter rectangle
+     * @pre Rectangle coordinates are non-negative.
      * @param rectangle
-     * @return 
+     * @return boolean
      */
     public boolean isNewRectangleValid(ADT_Rectangle rectangle) {
         assert rectangle != null;
         assert rectangle.getX() != NOTSET;
         assert rectangle.getY() != NOTSET;
+        assert rectangle.getX() >= 0;
+        assert rectangle.getY() >= 0;
 
+        // Check if it doesn't exceed the area boundaries
+        if (
+                rectangle.getX() + rectangle.getWidth() > this.getWidth()
+                || rectangle.getY() + rectangle.getHeight() > this.getHeight()
+        ) {
+            return false;
+        }
+
+        // Check if it overlaps
         for(Iterator<ADT_Rectangle> recs = getRectangleIterator(); recs.hasNext();) {
             ADT_Rectangle currentRec = recs.next();
             if(currentRec != rectangle && currentRec.getX() != NOTSET && checkRectangleOverlap(currentRec, rectangle)) {
@@ -140,11 +127,11 @@ public class ADT_Area extends ADT_Rectangle implements Cloneable {
         return false;
     }
     
-    public int getMaximalRectangleWidth() {
+    int getMaximalRectangleWidth() {
         return this.getRectangles()[0].getWidth();
     }
     
-    public int getMinimalRectangleWidth() {
+    int getMinimalRectangleWidth() {
         ADT_Rectangle[] rectangles = this.getRectangles();
         return rectangles[rectangles.length].getWidth();
     }
@@ -156,7 +143,7 @@ public class ADT_Area extends ADT_Rectangle implements Cloneable {
      * @return an array of all the strips with the index as width and
      * <code>a[i]</code> as number of strips
      */
-    public int[] getEmptySpaceStrips(boolean horizontal) {
+    int[] getEmptySpaceStrips(boolean horizontal) {
         return null;
     }
 
@@ -167,7 +154,7 @@ public class ADT_Area extends ADT_Rectangle implements Cloneable {
      * @return an array of all the strips with the index as width and
      * <code>a[i]</code> as number of strips
      */
-    public int[] getRectangleStrips(boolean horizontal) {
+    int[] getRectangleStrips(boolean horizontal) {
         return null;
     }
 
@@ -175,7 +162,7 @@ public class ADT_Area extends ADT_Rectangle implements Cloneable {
      * 
      * @return true if the area has none overlapping rectangles
      */
-    public boolean isValid() {
+    boolean isValid() {
         ArrayList<ADT_Rectangle> checkedRecs = new ArrayList<>();
         
         for(Iterator<ADT_Rectangle> recs = getRectangleIterator(); recs.hasNext();) {
@@ -209,7 +196,7 @@ public class ADT_Area extends ADT_Rectangle implements Cloneable {
      * @param rec2 The second rectangle to be taken into account
      * @return False if the body of the rectangles intersect, true otherwise.
      */
-    protected boolean checkRectangleOverlap(ADT_Rectangle rec1, ADT_Rectangle rec2) {
+    private boolean checkRectangleOverlap(ADT_Rectangle rec1, ADT_Rectangle rec2) {
         assert rec1 != null;
         assert rec2 != null;
         assert rec1.getWidth() != ADT_Rectangle.INF;
@@ -261,7 +248,7 @@ public class ADT_Area extends ADT_Rectangle implements Cloneable {
      * rectangles in this. This can be used for e.g. pruning
      * @return the area of all the rectangles in this
      */
-    public int getTotalAreaRectangles() {
+    protected int getTotalAreaRectangles() {
         int totalArea = 0;
         for(Iterator<ADT_Rectangle> rectangles = getRectangleIterator(); rectangles.hasNext();) {
              ADT_Rectangle rec = rectangles.next();

@@ -12,7 +12,14 @@ class Strat_CP_BT extends Strat_BT_Template {
         super(area);
 
         rectangles = area.getRectangles();
-        output = new Output_GraphicalOutput(area);
+
+        // Reset the position of the rectangles (should be moved to the anytime algorithm for efficiency reasons).
+        for (int i = 0; i < rectangles.length; i++) {
+            rectangles[i].setX(ADT_Rectangle.NOTSET);
+            rectangles[i].setY(ADT_Rectangle.NOTSET);
+        }
+
+        //output = new Output_GraphicalOutput(area);
     }
 
     @Override
@@ -89,7 +96,11 @@ class Strat_CP_BT extends Strat_BT_Template {
                 // Rotate if the rectangle can flip.
                 if (rectangle.canFlip() && !rectangle.getFlipped()) {
                     rectangle.setFlipped(true);
-                    return first();
+
+                    // Check if the resulting area is valid, if so compute this branch. Else leave it.
+                    if (area.isNewRectangleValid(rectangle)) { // @todo replace with is within bounds check instead.
+                        return first();
+                    }
                 } else {
                     return false;
                 }
@@ -99,7 +110,7 @@ class Strat_CP_BT extends Strat_BT_Template {
         }
         rectangle.setX(x);
 
-        output.draw();
+        //output.draw();
 
         return true;
     }
