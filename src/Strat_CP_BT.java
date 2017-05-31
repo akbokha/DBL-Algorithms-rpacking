@@ -97,8 +97,8 @@ class Strat_CP_BT extends Strat_BT_Template {
                 if (rectangle.canFlip() && !rectangle.getFlipped()) {
                     rectangle.setFlipped(true);
 
-                    // Check if the resulting area is valid, if so compute this branch. Else leave it.
-                    if (area.isNewRectangleValid(rectangle)) { // @todo replace with is within bounds check instead.
+                    // Check if the resulting area is valid, if so compute this branch. Else leave it. (1)
+                    if (area.isNewRectangleValid(rectangle)) {
                         return first();
                     }
                 } else {
@@ -129,3 +129,7 @@ class Strat_CP_BT extends Strat_BT_Template {
     }
 
 }
+
+/*
+ * 1) Could be replaced with call to compute, but causes 10-20% more computational overhead.
+ */
