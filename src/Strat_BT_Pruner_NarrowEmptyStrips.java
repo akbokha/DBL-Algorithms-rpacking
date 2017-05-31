@@ -15,8 +15,8 @@ public class Strat_BT_Pruner_NarrowEmptyStrips implements Strat_BT_PrunerInterfa
     @Override
     public boolean reject(ADT_Area area, ADT_Rectangle last) {
         this.area = (ADT_AreaExtended) area;
-        emptySpaceHeight = calculateEmptySpaceHeight(last); // height of the empty strip on the left of the rectangle
-        emptySpaceWidth = calculateEmptySpaceWidth(last); // width of the empty strip below the rectangle
+        emptySpaceHeight = calculateEmptySpaceHeight((ADT_AreaExtended) area, last); // height of the empty strip on the left of the rectangle
+        emptySpaceWidth = calculateEmptySpaceWidth((ADT_AreaExtended) area, last); // width of the empty strip below the rectangle
         RectangleType[] rectanglesToBePlaced = this.area.getRectangleTypesToBePlaced(); // rectangles to be placed
         boolean rotations = area.canFlip(); // rotations are allowed
 
@@ -43,9 +43,9 @@ public class Strat_BT_Pruner_NarrowEmptyStrips implements Strat_BT_PrunerInterfa
                 if (rectanglesToBePlaced[i].getHeight() <= emptySpaceHeight || rectanglesToBePlaced[i].getWidth() <= emptySpaceHeight) {
                     rectangleFitsBottom.add(rectanglesToBePlaced[i]); // width or height <= width means a rectangle fits
                 }
-            }
-            if (rectanglesToBePlaced[i].getWidth() <= emptySpaceWidth || rectanglesToBePlaced[i].getHeight() <= emptySpaceWidth) {
-                rectangleFitsLeft.add(rectanglesToBePlaced[i]);
+                if (rectanglesToBePlaced[i].getWidth() <= emptySpaceWidth || rectanglesToBePlaced[i].getHeight() <= emptySpaceWidth) {
+                    rectangleFitsLeft.add(rectanglesToBePlaced[i]);
+                }
             }
         }
         // if all future placements fit below or to the left of the candidate rectangle
@@ -67,7 +67,7 @@ public class Strat_BT_Pruner_NarrowEmptyStrips implements Strat_BT_PrunerInterfa
 
         // Scan vertically to find the bottom of the empty strip
         int x = last.getX();
-        if(x == 0) return false; // There is no dominance below possible
+        if(x == 0) return 0; // There is no dominance below possible
 
         while(lowestPoint == Integer.MAX_VALUE){ // We haven't reached the bottom of the empty strip
             x--;
@@ -105,7 +105,7 @@ public class Strat_BT_Pruner_NarrowEmptyStrips implements Strat_BT_PrunerInterfa
         // Scan horizontally to find bottom of a possibly perfect rectangle
         int y = last.getY();
 
-        if(y == 0) return false; // There is no dominance below possible
+        if(y == 0) return 0; // There is no dominance below possible
 
         while (leftMostPoint == Integer.MAX_VALUE) { // We haven't reached the bottom of the rectangle
             y--;
