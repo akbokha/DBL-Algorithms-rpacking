@@ -12,7 +12,7 @@ public class ADT_Area extends ADT_Rectangle implements Cloneable {
     public ADT_Area(int width, int height, boolean flippable, ADT_Rectangle[] rectangles) {
         super(width, height, 0, 0, flippable);
         shapes = rectangles;
-        Arrays.sort(shapes);
+        //Arrays.sort(shapes);
     }
     
     @Override
@@ -38,45 +38,7 @@ public class ADT_Area extends ADT_Rectangle implements Cloneable {
         return Arrays.asList(shapes).iterator();
     }
 
-    public ADT_Rectangle[] getRectangles() {
-        return shapes;
-    }
 
-    ADT_Vector getMinimalDimensions() {
-        Iterator<ADT_Rectangle> i = getRectangleIterator();
-        int maxX = 0;
-        int maxY = 0;
-
-        while (i.hasNext()) {
-            ADT_Rectangle r = i.next();
-            if (r.getWidth() != ADT_Rectangle.INF) {
-                maxX = Math.max(r.getWidth() + r.getX(), maxX);
-                maxY = Math.max(r.getHeight() + r.getY(), maxY);
-            }
-        }
-
-        return new ADT_Vector(maxX, maxY);
-    }
-
-    @Override
-    public ADT_Vector getDimensions() {
-        int maxWidth = getWidth();
-        int maxHeight = getHeight();
-
-        // Check if either the width or the height is infinite, if so replace them with the minimal dimension.
-        if (maxWidth == INF || maxHeight == INF) {
-            ADT_Vector minDimensions = getMinimalDimensions();
-
-            if (maxWidth == INF) {
-                maxWidth = minDimensions.x;
-            }
-            if (maxHeight == INF) {
-                maxHeight = minDimensions.y;
-            }
-        }
-
-        return new ADT_Vector(maxWidth, maxHeight);
-    }
 
     /**
      * Return true if none of the already placed rectangles overlap with the parameter rectangle
@@ -125,15 +87,6 @@ public class ADT_Area extends ADT_Rectangle implements Cloneable {
         }
 
         return false;
-    }
-    
-    int getMaximalRectangleWidth() {
-        return this.getRectangles()[0].getWidth();
-    }
-    
-    int getMinimalRectangleWidth() {
-        ADT_Rectangle[] rectangles = this.getRectangles();
-        return rectangles[rectangles.length].getWidth();
     }
 
     /** 
@@ -244,7 +197,7 @@ public class ADT_Area extends ADT_Rectangle implements Cloneable {
      * Query to obtain the total area of all the rectangles in this
      * The difference between returning <code>int area = getWidth() * getHeight()</code> is 
      * that this returns the total area of the "Enclosing Rectangle" while
-     * getTotalAreaRectangles returns only the summation of the areas of the 
+     * getTotalAreaRectanglesToBePlaced returns only the summation of the areas of the
      * rectangles in this. This can be used for e.g. pruning
      * @return the area of all the rectangles in this
      */

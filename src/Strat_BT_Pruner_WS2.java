@@ -29,8 +29,8 @@ public class Strat_BT_Pruner_WS2 implements Strat_BT_PrunerInterface {
     private int carryOver;
     
     @Override
-    public boolean reject (ADT_Area area, ADT_Rectangle last) {
-         totalAreaRectangles = area.getTotalAreaRectangles(); // store sum areas rectangle
+    public boolean reject (ADT_AreaExtended area, ADT_Rectangle last) {
+         totalAreaRectangles = area.getTotalAreaRectanglesToBePlaced(); // store sum areas rectangle
          
          /**
           * Operations that are needed to initialize and fill the array
@@ -71,7 +71,7 @@ public class Strat_BT_Pruner_WS2 implements Strat_BT_PrunerInterface {
      * Collects the rectangles that still need to be placed
      * And sets {@code MaxAreaOfRectangles} to the right value 
      */
-    private void collectRectanglesToBePlaced (ADT_Area area) {
+    private void collectRectanglesToBePlaced (ADT_AreaExtended area) {
         for (Iterator<ADT_Rectangle> rectangles = area.getRectangleIterator(); rectangles.hasNext();) {
             ADT_Rectangle current_rec = rectangles.next(); // next rectangle
             if (current_rec.getX() == NOTSET && current_rec.getY() == NOTSET) { // rectangle not placed yet
@@ -101,7 +101,7 @@ public class Strat_BT_Pruner_WS2 implements Strat_BT_PrunerInterface {
     }
     
     // findAndInitializeEmptyCells makes a EmptyCell instance for each empty cell that it finds
-    private void findAndInitializeEmptyCells(ADT_Area area) {
+    private void findAndInitializeEmptyCells(ADT_AreaExtended area) {
         int areaWidth = area.getWidth();
         int areaHeight = area.getHeight();
         for (int i = 0; i <= areaWidth;  i++) {
@@ -118,7 +118,7 @@ public class Strat_BT_Pruner_WS2 implements Strat_BT_PrunerInterface {
     }
     
     // calculate the length of the empty horizontal space to which the emptyCell (x,y) belongs
-    private int emptyHorizontalSpace (int x, int y, int maxWidth, ADT_Area area) {
+    private int emptyHorizontalSpace (int x, int y, int maxWidth, ADT_AreaExtended area) {
         int emptyHorizontalSpace = 1; // the emptycell itself has a width of 1
         // go to the right
         for (int i = x; i <= maxWidth && ! area.isOccupied(new ADT_Vector(i, y)); i++) {
@@ -132,7 +132,7 @@ public class Strat_BT_Pruner_WS2 implements Strat_BT_PrunerInterface {
     }
     
     // calculate the length of the empty vertical space to which the emptyCell (x,y) belongs
-    private int emptyVerticalSpace (int x, int y, int maxHeight, ADT_Area area) {
+    private int emptyVerticalSpace (int x, int y, int maxHeight, ADT_AreaExtended area) {
         int emptyVerticalSpace = 1; // the emptycell itself has a height of 1
         // go up
         for (int i = y; i <= maxHeight && ! area.isOccupied(new ADT_Vector(x, i)); i++) {

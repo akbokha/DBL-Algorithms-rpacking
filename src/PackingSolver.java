@@ -48,15 +48,16 @@ public class PackingSolver {
             input = new Input_SystemIn();
         }
 
-        ADT_Area area;
-        area = input.read();
+        ADT_AreaExtended area;
 
         RectangleTypeCombiner combiner = new RectangleTypeCombiner();
-        RectangleType[] rectangleTypes = combiner.combineRectangleTypes(area);
+        area = input.read(combiner);
+
 
         if(printCombinerOutput) {
-            for (int i = 0; i < rectangleTypes.length; i++) {
-                RectangleType r = rectangleTypes[i];
+            RectangleType[] rectangleTypes = area.getRectangleTypesToBePlaced();
+
+            for (RectangleType r : rectangleTypes) {
                 System.out.println("Rectangle [" + r.getWidth() + "," + r.getHeight() + "] canRotate: " + r.canRotate() + " with " + r.getNumberOfinstances() + " instances");
             }
         }
@@ -64,7 +65,7 @@ public class PackingSolver {
         StrategyPicker.area = area;
         Strat_AbstractStrat strategy = StrategyPicker.pickStrategy();
 
-        ADT_Area result = strategy.compute();
+        ADT_AreaExtended result = strategy.compute();
 
         if (result == null) {
             System.err.println("strategy computation failed");

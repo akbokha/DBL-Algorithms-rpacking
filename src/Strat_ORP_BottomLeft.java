@@ -1,5 +1,4 @@
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -12,30 +11,41 @@ public class Strat_ORP_BottomLeft extends Strat_AbstractStrat {
      * @param area contains input data such as
      *             Concrete strategies should call super() in constructor
      */
-    public Strat_ORP_BottomLeft(ADT_Area area) {
+    public Strat_ORP_BottomLeft(ADT_AreaExtended area) {
         super(area);
     }
 
     @Override
-    public ADT_Area compute() {
-        List<ADT_Rectangle> rects = new ArrayList<>();
+    public ADT_AreaExtended compute() {
+        List<RectangleType> rects = new ArrayList<>();
         List<ADT_Rectangle> newAreaRectangles = new ArrayList<>();
 
-        for (Iterator<ADT_Rectangle> recs = area.getRectangleIterator(); recs.hasNext();) {
-            ADT_Rectangle currentRec = recs.next();
-            rects.add(currentRec);
+        //Add all types to a list such that we can sort the list
+        for (RectangleType type : area.getRectangleTypesToBePlaced()) {
+            rects.add(type);
         }
 
         //Sort the array in decreasing width order
-        rects.sort(new ADT_SortRecOnWidth());
+        rects.sort((o1, o2) -> {
+            if(o1.getWidth() == o2.getWidth()){
+                return 0;
+            } else if(o1.getWidth() > o2.getWidth()) {
+                return -1;
+            }else {
+                return 1;
+            }
+        });
 
         //Meat of the algorithm: Pick the largest item and place it at the most bottom left position
-        while (rects.size() > 0) {
-            //Pick the first items in the list (eg. the largest, we may want a more efficient data structure here)
-            ADT_Rectangle rectangle = rects.remove(0);
+        for (RectangleType type : rects) {
+            while (type.canInstantiate()) {
+                //Pick the first items in the list (eg. the largest, we may want a more efficient data structure here)
+                ADT_Rectangle rectangle = type.createInstance();
 
-            //System.out.println("Processing rectangle " + rectangle.getWidth() + "," + rectangle.getHeight());
-            ProcessNextRectangle(rectangle, newAreaRectangles);
+
+                //System.out.println("Processing rectangle " + rectangle.getWidth() + "," + rectangle.getHeight());
+                ProcessNextRectangle(rectangle, newAreaRectangles);
+            }
         }
 
         //Find the final area width
@@ -47,7 +57,7 @@ public class Strat_ORP_BottomLeft extends Strat_AbstractStrat {
         }
 
         //Create the final area
-        return new ADT_Area(10, area.getHeight(), area.canFlip(), (ADT_Rectangle[]) newAreaRectangles.toArray());
+        return area;
     }
 
     private void ProcessNextRectangle(ADT_Rectangle rectangle, List<ADT_Rectangle> newAreaRectangles) {

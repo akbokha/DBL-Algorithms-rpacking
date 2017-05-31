@@ -13,14 +13,14 @@ public abstract class Strat_AbstractStrat {
     /**
      * Contains input data
      */
-    protected ADT_Area area;
+    protected ADT_AreaExtended area;
     
     /**
      * Constructor
      * @param area contains input data such as 
      * Concrete strategies should call super() in constructor
      */
-    public Strat_AbstractStrat(ADT_Area area) {
+    public Strat_AbstractStrat(ADT_AreaExtended area) {
         this.area = area;
     }
     
@@ -28,6 +28,6 @@ public abstract class Strat_AbstractStrat {
      * The actual computation behind the placement of the rectangles
      * @return an area such that isValid(), or null if one wasn't found.
      */
-    public abstract ADT_Area compute();
+    public abstract ADT_AreaExtended compute();
     
 }

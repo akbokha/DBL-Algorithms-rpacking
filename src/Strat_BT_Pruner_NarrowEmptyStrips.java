@@ -13,38 +13,38 @@ public class Strat_BT_Pruner_NarrowEmptyStrips implements Strat_BT_PrunerInterfa
     private int emptySpaceWidth;
 
     @Override
-    public boolean reject(ADT_Area area, ADT_Rectangle last) {
-        this.area = (ADT_AreaExtended) area;
-        emptySpaceHeight = calculateEmptySpaceHeight((ADT_AreaExtended) area, last); // height of the empty strip on the left of the rectangle
-        emptySpaceWidth = calculateEmptySpaceWidth((ADT_AreaExtended) area, last); // width of the empty strip below the rectangle
+    public boolean reject(ADT_AreaExtended area, ADT_Rectangle last) {
+        this.area = area;
+        emptySpaceHeight = calculateEmptySpaceHeight(area, last); // height of the empty strip on the left of the rectangle
+        emptySpaceWidth = calculateEmptySpaceWidth(area, last); // width of the empty strip below the rectangle
         RectangleType[] rectanglesToBePlaced = this.area.getRectangleTypesToBePlaced(); // rectangles to be placed
         boolean rotations = area.canFlip(); // rotations are allowed
 
         if (!rotations) {
             ArrayList<RectangleType> rectangleFitsHeight = new ArrayList<>(); // array list which stores the rectangles with height <= height empty strip
 
-            for (int i = 0; i < rectanglesToBePlaced.length; ++i) { // add all rectangles <= height of the empty strip
-                if (rectanglesToBePlaced[i].getHeight() <= emptySpaceHeight) {
-                    rectangleFitsHeight.add(rectanglesToBePlaced[i]);
+            for (RectangleType type : rectanglesToBePlaced) { // add all rectangles <= height of the empty strip
+                if (type.getHeight() <= emptySpaceHeight) {
+                    rectangleFitsHeight.add(type);
                 }
             }
             ArrayList<RectangleType> rectangleFitsWidth = new ArrayList<>(); // array list which stores the rectangles with width <= width empty strip
 
-            for (int i = 0; i < rectanglesToBePlaced.length; i++) { // adds all rectangles <= width to the empty strip
-                if (rectanglesToBePlaced[i].getWidth() <= emptySpaceWidth) {
-                    rectangleFitsWidth.add(rectanglesToBePlaced[i]);
+            for (RectangleType type : rectanglesToBePlaced) { // adds all rectangles <= width to the empty strip
+                if (type.getWidth() <= emptySpaceWidth) {
+                    rectangleFitsWidth.add(type);
                 }
             }
         } else {
             ArrayList<RectangleType> rectangleFitsBottom = new ArrayList<>(); // stores rectangles that fit into the bottom empty strip
             ArrayList<RectangleType> rectangleFitsLeft = new ArrayList<>(); // stores rectangles that fit into the left empty strip
 
-            for (int i = 0; i < rectanglesToBePlaced.length; i++) {
-                if (rectanglesToBePlaced[i].getHeight() <= emptySpaceHeight || rectanglesToBePlaced[i].getWidth() <= emptySpaceHeight) {
-                    rectangleFitsBottom.add(rectanglesToBePlaced[i]); // width or height <= width means a rectangle fits
+            for (RectangleType type : rectanglesToBePlaced) {
+                if (type.getHeight() <= emptySpaceHeight || type.getWidth() <= emptySpaceHeight) {
+                    rectangleFitsBottom.add(type); // width or height <= width means a rectangle fits
                 }
-                if (rectanglesToBePlaced[i].getWidth() <= emptySpaceWidth || rectanglesToBePlaced[i].getHeight() <= emptySpaceWidth) {
-                    rectangleFitsLeft.add(rectanglesToBePlaced[i]);
+                if (type.getWidth() <= emptySpaceWidth || type.getHeight() <= emptySpaceWidth) {
+                    rectangleFitsLeft.add(type);
                 }
             }
         }

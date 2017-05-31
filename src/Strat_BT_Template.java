@@ -9,7 +9,7 @@ abstract public class Strat_BT_Template extends Strat_AbstractStrat {
 
     private Collection<Strat_BT_PrunerInterface> pruners;
 
-    public Strat_BT_Template(ADT_Area area) {
+    public Strat_BT_Template(ADT_AreaExtended area) {
         super(area);
         pruners = new ArrayList<>(5);
     }
@@ -29,7 +29,7 @@ abstract public class Strat_BT_Template extends Strat_AbstractStrat {
     abstract ADT_Rectangle last();
 
     @Override
-    public ADT_Area compute() {
+    public ADT_AreaExtended compute() {
         if (computeBranch()) {
             return area;
         } else {

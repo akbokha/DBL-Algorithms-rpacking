@@ -14,7 +14,7 @@ public abstract class Input_Scanner implements Input_InputInterface {
     }
 
     @Override
-    public ADT_Area read() throws IllegalArgumentException, IllegalStateException {
+    public ADT_AreaExtended read(RectangleTypeCombiner combiner) throws IllegalArgumentException, IllegalStateException {
         if (this.scanner==null) {
             throw new IllegalStateException("Input_Scanner.read: scanner should be not null");
         }
@@ -79,7 +79,9 @@ public abstract class Input_Scanner implements Input_InputInterface {
             rectangles[i] = new ADT_Rectangle(x, y, ADT_Rectangle.NOTSET, ADT_Rectangle.NOTSET, flippable);
         }
 
+        RectangleType[] types = combiner.combineRectangleTypes(rectangles, flippable);
+
         // Read all rectangles and add them to the area.
-        return new ADT_Area(ADT_Rectangle.INF, height, flippable, rectangles);
+        return new ADT_AreaExtended(ADT_Rectangle.INF, height, flippable, types);
     }
 }

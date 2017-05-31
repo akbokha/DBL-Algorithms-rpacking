@@ -9,12 +9,12 @@ import java.util.Collections;
  */
 //Best-Fit Decreasing Height
 public class Strat_ORP_BFDH extends Strat_AbstractStrat{
-    public Strat_ORP_BFDH(ADT_Area area) {
+    public Strat_ORP_BFDH(ADT_AreaExtended area) {
         super(area);
     }
     
     @Override
-    public ADT_Area compute() {
+    public ADT_AreaExtended compute() {
         ArrayList<ADT_Rectangle> toBePlaced = new ArrayList<>();
         area.getRectangleIterator().forEachRemaining(toBePlaced::add);
         Collections.sort(toBePlaced, new ADT_SortRecOnWidth()); //Sort list in non-increasing order on width

@@ -16,7 +16,7 @@ public class Output_GraphicalOutput extends Output_AbstractOutput {
     private float scale;
     private JFrame window;
 
-    Output_GraphicalOutput(ADT_Area area) {
+    Output_GraphicalOutput(ADT_AreaExtended area) {
         super(area);
         ADT_Vector dim = area.getDimensions();
         rectWidth = dim.x;

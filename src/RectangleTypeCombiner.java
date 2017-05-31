@@ -1,5 +1,4 @@
 import java.util.ArrayList;
-import java.util.Iterator;
 
 /**
  * Created by s157035 on 12-5-2017.
@@ -8,13 +7,10 @@ public class RectangleTypeCombiner {
     ArrayList<RectangleType> types = new ArrayList<>();
     private boolean rotationAllowed;
 
-    public RectangleType[] combineRectangleTypes(ADT_Area area) {
-        rotationAllowed = area.canFlip();
+    public RectangleType[] combineRectangleTypes(ADT_Rectangle[] rectangles, boolean rotationAllowed) {
 
         //Iterate over the input rectangles
-        for (Iterator<ADT_Rectangle> recs = area.getRectangleIterator(); recs.hasNext();) {
-            ADT_Rectangle currentRec = recs.next();
-
+        for (ADT_Rectangle currentRec : rectangles) {
             //Check if we already have a definition for this rectangle's getDimensions
             RectangleType existingType = containsDimensions(currentRec.getWidth(), currentRec.getHeight());
 
@@ -24,7 +20,7 @@ public class RectangleTypeCombiner {
             }
             else {
                 //If we do not have a definition for this yet, create one and add it to the list
-                RectangleType newType = new RectangleType(currentRec.getWidth(), currentRec.getHeight(), area.canFlip());
+                RectangleType newType = new RectangleType(currentRec.getWidth(), currentRec.getHeight(), rotationAllowed);
                 types.add(newType);
             }
         }
