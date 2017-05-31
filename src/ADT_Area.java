@@ -12,7 +12,7 @@ public class ADT_Area extends ADT_Rectangle implements Cloneable {
     public ADT_Area(int width, int height, boolean flippable, ADT_Rectangle[] rectangles) {
         super(width, height, 0, 0, flippable);
         shapes = rectangles;
-        //Arrays.sort(shapes);
+        Arrays.sort(shapes);
     }
     
     @Override
