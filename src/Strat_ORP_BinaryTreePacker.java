@@ -35,8 +35,9 @@ public class Strat_ORP_BinaryTreePacker extends Strat_AbstractStrat {
     }
     
     public Node getBestPlacement(ADT_Rectangle rec) {
-        Node bestNode;
-        int leastArea;
+        Node bestNode = new Node(); // Best node to place rec
+        int leastArea = Integer.MAX_VALUE; // Size of bounding box when rec is at bestNode
+        int greatestPaste = 0; // Number of sides of rec at bestNode where other rectangles are pasted
         
         Map<Integer, HashSet> points = binaryTree.getPoints();
         for(Integer i : points.keySet()){
@@ -45,7 +46,7 @@ public class Strat_ORP_BinaryTreePacker extends Strat_AbstractStrat {
                 // to do: check why cast is necessary
                 Node node = (Node) iter.next();
                 // check if rectangle is rotatable
-                if (true) { // rotatable
+                if (area.canFlip()) { // rotatable
                     // rotate rectangle
                     // check if placement of rectangle @ node results in overlap
                     if (false) {
@@ -54,23 +55,37 @@ public class Strat_ORP_BinaryTreePacker extends Strat_AbstractStrat {
                             bestNode = node;
                             // leastArea = new resulting 'better' area
                         }
+                        // if area == leastArea
+                        if(true){
+                            // if paste > greatestPast
+                            if(true){
+                                bestNode = node;
+                                // leastArea = new resulting 'better' area
+                            }
+                        }
                     }
                 }
                 // check if placement of rectangle @ node results in overlap
-                    if (false) {
-                        // check if area < leastArea
-                        if (true) {
+                if (false) {
+                    // check if area < leastArea
+                    if (true) {
+                        bestNode = node;
+                        // leastArea = new resulting 'better' area
+                    }
+                    // if area == leastArea
+                    if(true){
+                        // if paste > greatestPast
+                        if(true){
                             bestNode = node;
                             // leastArea = new resulting 'better' area
                         }
-                    }  
+                    }
+                }  
             }
         }
-        
-        
-        return node;
+        return bestNode;
     }
-    
+        
     private class Node {
         ADT_Rectangle rec = null;
         ADT_Vector point = null;
@@ -84,6 +99,10 @@ public class Strat_ORP_BinaryTreePacker extends Strat_AbstractStrat {
          */
         public Node (int x, int y) {
             point = new ADT_Vector(x, y);
+        }
+        
+        public Node(){
+            // create terminating node
         }
         
         public void placeRectangle(ADT_Rectangle rec) {
