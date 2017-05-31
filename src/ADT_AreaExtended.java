@@ -158,6 +158,8 @@ public class ADT_AreaExtended {
 
         for (ADT_Rectangle r : i) {
             if (r.getWidth() != ADT_Rectangle.INF) {
+                assert r.getHeight() != ADT_Rectangle.INF;
+
                 maxX = Math.max(r.getWidth() + r.getX(), maxX);
                 maxY = Math.max(r.getHeight() + r.getY(), maxY);
             }
