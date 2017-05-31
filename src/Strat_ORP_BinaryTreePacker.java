@@ -5,19 +5,22 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 /**
- *
- * @author s158881
+ * This greedy algorithm places a new rectangle next to another top-left or
+ * bottom-right corner of a previously placed rectangle. The corner is chosen by
+ * the least amount of extra space of the bounding box. If the space is equal,
+ * the location with the highest paste number is chosen.
+ * 
+ * @author Abdel and Jorrit
+ * @date May 31st, 2017
  */
 public class Strat_ORP_BinaryTreePacker extends Strat_AbstractStrat {
     
     BinaryTree binaryTree;
+    
+    Node bestNode = new Node(); // Best node to place rec
+    int leastArea = Integer.MAX_VALUE; // Size of bounding box when rec is at bestNode
+    int greatestPaste = 0; // Number of sides of rec at bestNode where other rectangles are pasted
     
     public Strat_ORP_BinaryTreePacker (ADT_AreaExtended area) {
         super(area);
@@ -35,55 +38,52 @@ public class Strat_ORP_BinaryTreePacker extends Strat_AbstractStrat {
     }
     
     public Node getBestPlacement(ADT_Rectangle rec) {
-        Node bestNode = new Node(); // Best node to place rec
-        int leastArea = Integer.MAX_VALUE; // Size of bounding box when rec is at bestNode
-        int greatestPaste = 0; // Number of sides of rec at bestNode where other rectangles are pasted
-        
         Map<Integer, HashSet> points = binaryTree.getPoints();
         for(Integer i : points.keySet()){
             HashSet set = points.get(i);
-            for (Iterator iter = set.iterator(); iter.hasNext();) {
-                // to do: check why cast is necessary
-                Node node = (Node) iter.next();
+            for (Iterator iter = set.iterator(); iter.hasNext();) { 
+                // iterate over all points
+                Node node = (Node) iter.next(); // to do: check why cast is necessary
+                area.moveRectangle(rec, node.point.x, node.point.y); // todo Should be a version without setting array
+                
                 // check if rectangle is rotatable
                 if (area.canFlip()) { // rotatable
-                    // rotate rectangle
-                    // check if placement of rectangle @ node results in overlap
-                    if (false) {
-                        // check if area < leastArea
-                        if (true) {
-                            bestNode = node;
-                            // leastArea = new resulting 'better' area
-                        }
-                        // if area == leastArea
-                        if(true){
-                            // if paste > greatestPast
-                            if(true){
-                                bestNode = node;
-                                // leastArea = new resulting 'better' area
-                            }
-                        }
-                    }
-                }
-                // check if placement of rectangle @ node results in overlap
-                if (false) {
-                    // check if area < leastArea
-                    if (true) {
+                    rec.setFlipped(true);
+                    if(isLocationBetter(node, rec)){
                         bestNode = node;
                         // leastArea = new resulting 'better' area
+                        // greatestPaste = new number of paste
                     }
-                    // if area == leastArea
-                    if(true){
-                        // if paste > greatestPast
-                        if(true){
-                            bestNode = node;
-                            // leastArea = new resulting 'better' area
-                        }
-                    }
+                }
+                
+                rec.setFlipped(false);
+                if (isLocationBetter(node, rec)){
+                    bestNode = node;
+                    // leastArea = new resulting 'better' area
+                    // greatestPaste = new number of paste
                 }  
             }
         }
         return bestNode;
+    }
+    
+    private boolean isLocationBetter(Node node, ADT_Rectangle rec){
+        // check if placement of rectangle @ node results in overlap
+        if (area.isNewRectangleValid(rec)) {
+            // check if area < leastArea
+            if (true) {
+                bestNode = node;
+                // leastArea = new resulting 'better' area
+            }
+            // if area == leastArea
+            if(true){
+                // if paste > greatestPaste
+                if(true){
+                    return true;
+                }
+            }
+        }
+        return false;
     }
         
     private class Node {
