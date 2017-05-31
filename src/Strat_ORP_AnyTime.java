@@ -6,20 +6,19 @@ import java.util.logging.Logger;
  * @author Bastiaan
  */
 public class Strat_ORP_AnyTime extends Strat_AbstractStrat {
-    public Strat_ORP_AnyTime(ADT_Area area) {
+    public Strat_ORP_AnyTime(ADT_AreaExtended area) {
         super(area);
     }
 
     @Override
-    public ADT_Area compute() {
+    public ADT_AreaExtended compute() {
         if(area.getRectangles().length >= 10000) {
             return new Strat_ORP_BFDH(area).compute();
         }
         try {
             new Output_Plaintext(area).draw();
             //Used to initialize an average starting width and height
-            ADT_Area bestArea = new Strat_DummyImplementation(area.clone()).compute();
-            new Output_Plaintext(bestArea).draw();
+            ADT_AreaExtended bestArea = new Strat_DummyImplementation(area.clone()).compute();
             //Set initial width and height for a container to the getDimensions
             // of the bottom-left algorithm
             ADT_Vector dimension = bestArea.getDimensions();
@@ -28,7 +27,7 @@ public class Strat_ORP_AnyTime extends Strat_AbstractStrat {
             while(true) {
                 //Make sure that the area gets smaller and smaller until the
                 // minimal area is reached
-                if((width-1) * height >= area.getTotalAreaRectangles() && width > area.getMaximalRectangleWidth()) {
+                if((width-1) * height >= area.getTotalAreaRectanglesToBePlaced() && width > area.getRectangleTypesToBePlaced()[0].getWidth()) {
                     width -= 1;
                 } else {
                     break;
@@ -37,9 +36,8 @@ public class Strat_ORP_AnyTime extends Strat_AbstractStrat {
                 System.err.print("W:" + width + "\tH:" + height + "\t");
 
                 //Get the best solution with this width and height
-                ADT_Area newArea = area.clone();
-                newArea.setWidth(width);
-                newArea.setHeight(height);
+                ADT_AreaExtended newArea = area.clone();
+                newArea.setDimensions(width, height);
                 newArea = (new Strat_CP_BT(newArea)).compute();
 
                 System.err.println(newArea);

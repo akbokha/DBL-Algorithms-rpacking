@@ -8,7 +8,7 @@ class Strat_CP_BT extends Strat_BT_Template {
     private int index = -1;
     private Output_GraphicalOutput output;
 
-    Strat_CP_BT(ADT_Area area) {
+    Strat_CP_BT(ADT_AreaExtended area) {
         super(area);
 
         rectangles = area.getRectangles();

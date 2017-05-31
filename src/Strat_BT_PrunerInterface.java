@@ -7,6 +7,6 @@ interface Strat_BT_PrunerInterface {
      * @param last the rectangle added last.
      * @return true if this problem cannot evolve further into a valid solution.
      */
-    boolean reject(ADT_Area area, ADT_Rectangle last);
+    boolean reject(ADT_AreaExtended area, ADT_Rectangle last);
 
 }

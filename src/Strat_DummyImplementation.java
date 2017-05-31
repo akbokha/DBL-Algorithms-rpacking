@@ -12,12 +12,12 @@ import java.util.Iterator;
  */
 public class Strat_DummyImplementation extends Strat_AbstractStrat {
     
-    public Strat_DummyImplementation(ADT_Area area) {
+    public Strat_DummyImplementation(ADT_AreaExtended area) {
         super(area);
     }
     
     @Override
-    public ADT_Area compute() {
+    public ADT_AreaExtended compute() {
         // Simple dummy implementation that places all rectangles next to each other in one single strip
         int curX = 0;
         for (Iterator<ADT_Rectangle> recs = area.getRectangleIterator(); recs.hasNext();) {

@@ -32,7 +32,7 @@ public class Strat_ORP_FixedHeightFixedOrient_FC extends Strat_AbstractStrat {
     private final int numberOfRectangles;
     private int x_tracker = 0; // keeping track of x coordinates for new shelves
 
-     public Strat_ORP_FixedHeightFixedOrient_FC (ADT_Area area) {
+     public Strat_ORP_FixedHeightFixedOrient_FC (ADT_AreaExtended area) {
         super(area);
         this.shelves = new ArrayList<>();
         this.floorShelves = new ArrayList<>();
@@ -42,7 +42,7 @@ public class Strat_ORP_FixedHeightFixedOrient_FC extends Strat_AbstractStrat {
     }
 
     @Override
-    public ADT_Area compute() {
+    public ADT_AreaExtended compute() {
         orderedRectangles = getOrderedRectangles();
         ADT_Rectangle first_rec = orderedRectangles.get(rectangleIndex);
         Shelf first_shelf = new Shelf(0, first_rec.getWidth());

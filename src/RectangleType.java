@@ -25,6 +25,8 @@ public class RectangleType {
         instances--;
     }
 
+    public boolean canInstantiate() { return instances > 0; }
+
     public boolean canRotate() {
         return width == height;
     }

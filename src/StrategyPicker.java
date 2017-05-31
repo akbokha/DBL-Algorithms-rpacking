@@ -12,13 +12,13 @@ public class StrategyPicker {
     /**
      * Contains input data
      */
-    static ADT_Area area;
+    static ADT_AreaExtended area;
     
     /**
      * Constructor
      * @param area contains input data which will be used to pick the strategy.
      */
-    public StrategyPicker (ADT_Area area) {
+    public StrategyPicker (ADT_AreaExtended area) {
         StrategyPicker.area = area;
     }
     
