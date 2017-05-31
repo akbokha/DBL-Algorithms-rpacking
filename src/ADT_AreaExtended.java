@@ -149,8 +149,6 @@ public class ADT_AreaExtended {
         return shapes.size();
     }
 
-
-
     ADT_Vector getMinimalDimensions() {
         Iterable<ADT_Rectangle> i = getPlacedRectangles();
         int maxX = 0;
