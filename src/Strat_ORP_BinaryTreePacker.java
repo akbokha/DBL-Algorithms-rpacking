@@ -19,13 +19,13 @@ public class Strat_ORP_BinaryTreePacker extends Strat_AbstractStrat {
     
     BinaryTree binaryTree;
     
-    public Strat_ORP_BinaryTreePacker (ADT_Area area) {
+    public Strat_ORP_BinaryTreePacker (ADT_AreaExtended area) {
         super(area);
         this.binaryTree = new BinaryTree();
     }
     
     @Override
-    public ADT_Area compute() {
+    public ADT_AreaExtended compute() {
         ADT_Rectangle [] rectangles = area.getRectangles();
         for (int i = 0; i <= rectangles.length; i++) {
             ADT_Rectangle rec = rectangles[i];
