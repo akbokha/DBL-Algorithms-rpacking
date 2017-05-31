@@ -46,7 +46,7 @@ public class Strat_ORP_AnyTime extends Strat_AbstractStrat {
 
                 //If a solution was set, use it as the new best solution
                 if(newArea != null) {
-                    bestArea = newArea;
+                    bestArea = newArea.clone();
                 } else if (area.getHeight() != ADT_Area.INF) {//If height is fixed
                     break;
                 } else {//If this area is not possible try a larger height but the same width as bestArea
