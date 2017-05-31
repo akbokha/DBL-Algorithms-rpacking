@@ -16,11 +16,13 @@ public class Strat_ORP_AnyTime extends Strat_AbstractStrat {
             return new Strat_ORP_BFDH(area).compute();
         }
         try {
+            new Output_Plaintext(area).draw();
             //Used to initialize an average starting width and height
             ADT_Area bestArea = new Strat_DummyImplementation(area.clone()).compute();
+            new Output_Plaintext(bestArea).draw();
             //Set initial width and height for a container to the getDimensions
             // of the bottom-left algorithm
-            ADT_Vector dimension = bestArea.getMinimalDimensions();
+            ADT_Vector dimension = bestArea.getDimensions();
             int width = dimension.x;
             int height = dimension.y;
             while(true) {
