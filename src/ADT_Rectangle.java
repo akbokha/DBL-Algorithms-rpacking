@@ -109,11 +109,20 @@ public class ADT_Rectangle implements ADT_ShapeInterface, Comparable<ADT_Rectang
 
     @Override
     public int compareTo(ADT_Rectangle o) {
-        if(this.getWidth() == o.getWidth()){
-            return 0;
-        } else if(this.getWidth() > o.getWidth()) {
+        int maxThis = this.getWidth();
+        int maxOther = o.getWidth();
+
+        if (this.canFlip() && o.canFlip()) {
+            // Sort on maximum dimension if both can flip.
+            maxThis = Math.max(maxThis, this.getHeight());
+            maxOther = Math.max(maxOther, o.getHeight());
+        }
+
+        if(maxThis > maxOther){
             return -1;
-        }else {
+        } else if(maxThis == maxOther) {
+            return 0;
+        } else {
             return 1;
         }
     }

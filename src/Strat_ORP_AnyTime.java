@@ -1,7 +1,5 @@
-
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
 
 /**
  *
@@ -18,11 +16,12 @@ public class Strat_ORP_AnyTime extends Strat_AbstractStrat {
             return new Strat_ORP_BFDH(area).compute();
         }
         try {
+            new Output_Plaintext(area).draw();
             //Used to initialize an average starting width and height
             ADT_AreaExtended bestArea = new Strat_DummyImplementation(area.clone()).compute();
             //Set initial width and height for a container to the getDimensions
             // of the bottom-left algorithm
-            ADT_Vector dimension = bestArea.getMinimalDimensions();
+            ADT_Vector dimension = bestArea.getDimensions();
             int width = dimension.x;
             int height = dimension.y;
             while(true) {
@@ -45,7 +44,7 @@ public class Strat_ORP_AnyTime extends Strat_AbstractStrat {
 
                 //If a solution was set, use it as the new best solution
                 if(newArea != null) {
-                    bestArea = newArea;
+                    bestArea = newArea.clone();
                 } else if (area.getHeight() != ADT_Area.INF) {//If height is fixed
                     break;
                 } else {//If this area is not possible try a larger height but the same width as bestArea
