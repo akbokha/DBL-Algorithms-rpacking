@@ -6,7 +6,7 @@ import java.util.List;
 /**
  * Created by s157035 on 15-5-2017.
  */
-public class ADT_AreaExtended {
+public class ADT_AreaExtended implements Cloneable {
     private final short EMPTY_INDEX = 0;
     private final int INF = ADT_Area.INF;
     private HashMap<Short, ADT_Rectangle> shapes;
@@ -41,7 +41,13 @@ public class ADT_AreaExtended {
 
     @Override
     public ADT_AreaExtended clone() throws CloneNotSupportedException {
-        ADT_AreaExtended newArea = new ADT_AreaExtended(getWidth(), getHeight(), canFlip(), getRectangleTypesToBePlaced());
+        RectangleType[] recs = getRectangleTypesToBePlaced();
+        RectangleType[] newRecs = new RectangleType[recs.length];
+        for(int i = 0; i < recs.length; i++) {
+            newRecs[i] = recs[i].clone();
+        }
+        
+        ADT_AreaExtended newArea = new ADT_AreaExtended(getWidth(), getHeight(), canFlip(), newRecs);
         
         for(ADT_Rectangle r : this.getPlacedRectangles()) {
             newArea.add(r.clone());
@@ -86,7 +92,7 @@ public class ADT_AreaExtended {
     public void add(ADT_Rectangle shape) {
         short id = getNewId();
         shapes.put(id, shape);
-        fillRectangleBordersWith(shape, id);
+//        fillRectangleBordersWith(shape, id);
     }
 
     private void fillRectangleBordersWith(ADT_Rectangle shape, short id) {

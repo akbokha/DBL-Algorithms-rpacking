@@ -34,7 +34,6 @@ public class Strat_DummyImplementation extends Strat_AbstractStrat {
 //            }
             }
         }
-        System.out.println(Arrays.asList(area.getPlacedRectangles()).toArray().length);
         return area;
     }
     
