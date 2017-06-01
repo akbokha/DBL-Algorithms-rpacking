@@ -14,8 +14,8 @@ public class ADT_AreaExtended implements Cloneable {
     private short lastIssuedIndex;
     private int width;
     private int height;
-    private boolean flippable;
-    private int version; // 3, 5, 10, 25 or 10000
+    private final boolean flippable;
+    private final int version; // 3, 5, 10, 25 or 10000
 
     private RectangleType[] toBePlacedRects;
 
