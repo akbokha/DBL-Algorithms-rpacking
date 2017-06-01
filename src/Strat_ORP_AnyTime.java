@@ -15,9 +15,6 @@ public class Strat_ORP_AnyTime extends Strat_AbstractStrat {
 
     @Override
     public ADT_AreaExtended compute() {
-        if(area.getRectangles().length == 10000) {
-            return new Strat_ORP_FixedHeightFixedOrient_FC(area).compute();
-        }
         try {
             new Output_Plaintext(area).draw();
             //Used to initialize an average starting width and height
