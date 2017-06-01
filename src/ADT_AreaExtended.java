@@ -300,6 +300,15 @@ public class ADT_AreaExtended implements Cloneable {
         }
         return total;
     }
+    
+    public int getTotalAreaRectangles(){
+        int total = 0;
+        for(short key : shapes.keySet()){
+            total += shapes.get(key).getHeight() * shapes.get(key).getHeight();
+        }
+        total += getTotalAreaRectanglesToBePlaced();
+        return total;
+    }
 
     public boolean isValid() {
         ArrayList<ADT_Rectangle> checkedRecs = new ArrayList<>();

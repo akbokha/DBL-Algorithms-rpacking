@@ -1,5 +1,6 @@
 import javax.swing.*;
 import java.awt.*;
+import java.text.DecimalFormat;
 import java.util.Iterator;
 
 /**
@@ -34,6 +35,13 @@ public class Output_GraphicalOutput extends Output_AbstractOutput {
         window.getContentPane().add(new RectanglesCanvas());
         window.setTitle("Width: " + rectWidth + " Height: " + rectHeight + " Area: " + rectWidth * rectHeight);
         window.setVisible(true);
+        
+        // Print fillrate such that it can only be printed out of Momotor (-g)
+        double surface = area.getDimensions().x*area.getDimensions().y;
+        double fillRate = ((double) area.getTotalAreaRectangles() / surface) * 100;
+        DecimalFormat df = new DecimalFormat("#0.0000");
+        System.err.println("The bounding box has a fillrate of " + 
+                df.format(fillRate) + "%");
     }
 
     @Override
