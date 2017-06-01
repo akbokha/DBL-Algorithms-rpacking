@@ -39,7 +39,13 @@ public class Strat_ORP_BinaryTreePacker extends Strat_AbstractStrat {
         return area;
     }
     
-    private Node getBestPlacement(ADT_Rectangle rec) {
+    /**
+     * getBestPlacement iterates over all the nodes and makes sure that 
+     * bestNode will be assigned the node that is the best possible 
+     * placement for rec
+     * @param rec the rectangle that is considered
+     */
+    private void getBestPlacement(ADT_Rectangle rec) {
         Map<Integer, HashSet> points = binaryTree.getPoints();
         for(Integer i : points.keySet()){
             HashSet set = points.get(i);
@@ -60,9 +66,16 @@ public class Strat_ORP_BinaryTreePacker extends Strat_AbstractStrat {
                 isLocationBetter(node, dummyRec);
             }
         }
-        return bestNode;
     }
     
+    /**
+     * dummyRectangle returns a new ADT_Rectangle that can be used to check
+     * overlap / exceeding the fixedHeight 
+     * @param rec the rec that the dummyRec copies
+     * @param node is passed for the x and y coordinates
+     * @return a rectangle that is placed at node.point.x and node.point.y with
+     * the same dimensions as {@code rec}
+     */
     private ADT_Rectangle dummyRectangle (ADT_Rectangle rec, Node node) {
         int x = node.point.x;
         int y = node.point.y;
@@ -113,6 +126,12 @@ public class Strat_ORP_BinaryTreePacker extends Strat_AbstractStrat {
         return false;
     }
     
+    /**
+     * Check if this rectangle can be placed at the given position by
+     * node.point.x and node.point.y 
+     * @param node is needed for the x and y coordinates
+     * @param rec that is considered (dummyRectangle)
+     */
     private boolean isValidPlacement (Node node, ADT_Rectangle rec){
         if (area.getHeight() != (-1)) {
             // no fixed heigth
@@ -124,6 +143,7 @@ public class Strat_ORP_BinaryTreePacker extends Strat_AbstractStrat {
         }
     }
     
+    // compute number of sides that are occupied by a rectangle
     private int computePaste (Node node, ADT_Rectangle rec) {
         int paste = 0;
         int x = node.point.x;
