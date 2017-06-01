@@ -43,15 +43,19 @@ public class Strat_ORP_BinaryTreePacker extends Strat_AbstractStrat {
         Map<Integer, HashSet> points = binaryTree.getPoints();
         for(Integer i : points.keySet()){
             HashSet set = points.get(i);
-            for (Iterator iter = set.iterator(); iter.hasNext();) { 
-                // iterate over all points
+            for (Iterator iter = set.iterator(); iter.hasNext();) { // iterate over nodes
                 Node node = (Node) iter.next(); // to do: check why cast is necessary
-                // check if rectangle is rotatable
                 ADT_Rectangle dummyRec = dummyRectangle(rec, node);
-                if (area.canFlip()) { // rotatable
-                    // rotate dummyRec
+                if (area.canFlip()) { // if rotatable
+                    // rotate rectangle
+                    dummyRec.setFlipped(true);
+                    dummyRec.setHeight(dummyRec.getWidth());
+                    dummyRec.setWidth(dummyRec.getHeight());
                     isLocationBetter(node, dummyRec);
                     // undo rotation dummyRec
+                    dummyRec.setHeight(dummyRec.getWidth());
+                    dummyRec.setWidth(dummyRec.getHeight());
+                    dummyRec.setFlipped(false);
                 }
                 isLocationBetter(node, dummyRec);
             }
@@ -78,53 +82,105 @@ public class Strat_ORP_BinaryTreePacker extends Strat_AbstractStrat {
      */
     private boolean isLocationBetter(Node node, ADT_Rectangle rec){
         // check if placement of rectangle @ node results in overlap
-        if (area.getHeight() != (-1)) { 
-            if (area.isNewRectangleValid(rec)) {
+        if (isValidPlacement(node, rec)) {
             // if greatest paste == 4
-            if(greatestPaste == 4){
+            if (greatestPaste == 4){
                 return false;
             }
-            int paste = 0;
-            // compute paste
-            // if this paste == 4
-            if(true){
+            int paste = computePaste(node, rec);
+            if (paste == 4){
                 greatestPaste = 4;
                 bestNode = node;
                 // area remains the same
                 return true;
             }
-            int resulting_area = 0;
-            // compute resulting_area 
-            // check if resutling_area < leastArea
-            if (resulting_area < leastArea) {
+            int resulting_area = computeResultingArea(node, rec);
+            if (resulting_area < leastArea) { // better resulting area than current best node
                 greatestPaste = paste;
                 leastArea = resulting_area;
                 bestNode = node;
                 return true;
             }
-            
-            if(resulting_area == leastArea){
-                if(paste > greatestPaste){
+          
+            if(resulting_area == leastArea){ // same resulting area as current best node
+                if (paste > greatestPaste){ // if the placement is better
                     greatestPaste = paste;
                     bestNode = node;
                     return true;
                 }
-            }
-            }
-        } else {
-            
-            
+            }   
         }
         return false;
     }
     
     private boolean isValidPlacement (Node node, ADT_Rectangle rec){
         if (area.getHeight() != (-1)) {
+            // no fixed heigth
             return area.isNewRectangleValid(rec);
         } else {
+            // Check if fixed height is exceeded
             boolean exceedsBound = node.point.y + rec.getHeight() > area.getHeight();
             return area.isNewRectangleValid(rec) && !exceedsBound;
         }
+    }
+    
+    private int computePaste (Node node, ADT_Rectangle rec) {
+        int paste = 0;
+        int x = node.point.x;
+        int y = node.point.y;
+        int x_rec_bottomRight = node.point.x + rec.getWidth();
+        int y_rec_topLeft = node.point.y + rec.getHeight();
+        // check left side of possible placement rectangle
+        for (int i = y; i <= y_rec_topLeft; i++) {
+            if (! area.isEmptyAt(x, i)) {
+                paste++;
+                break;
+            } 
+        }
+        // check bottom side of possible placement rectangle
+        for (int i = x; i <= x_rec_bottomRight; i++) {
+            if (! area.isEmptyAt(i, y)) {
+                paste++;
+                break;
+            } 
+        }
+        // check right side of possible placement rectangle
+        if (! area.isEmptyAt(x_rec_bottomRight, y)) {
+            paste++;
+        }
+        // check top side of possible placement rectangle
+        if (! area.isEmptyAt(x, y_rec_topLeft)) {
+            paste++;
+        }
+        return paste;
+    }
+    
+    /**
+     * 
+     * @param node the node that is considered as placement option
+     * @param rec the rectangle that is considered
+     * @return the resulting area when you place rectangle at
+     * (node.point.x, node.point.y)
+     */
+    private int computeResultingArea (Node node, ADT_Rectangle rec) {
+        int currentWidthBoundingBox = area.getWidth();
+        int currentHeightBoundingBox = area.getHeight();
+        int newWidthBoundingBox;
+        int newHeightBoundingBox;
+        
+        if (node.point.x + rec.getWidth() > currentWidthBoundingBox) {
+            // resultingArea is larger than area of currentBoundingBox
+            newWidthBoundingBox = node.point.x + rec.getWidth();
+        } else {
+            newWidthBoundingBox = currentWidthBoundingBox;
+        }
+        if (node.point.y + rec.getHeight() > currentHeightBoundingBox) {
+            // resultingArea is larger than area of currentBoundingBox
+            newHeightBoundingBox = node.point.y + rec.getHeight();
+        } else {
+            newHeightBoundingBox = currentHeightBoundingBox;
+        }
+        return (newWidthBoundingBox * newHeightBoundingBox);
     }
         
     private class Node {
