@@ -61,25 +61,57 @@ public class Strat_ORP_BinaryTreePacker extends Strat_AbstractStrat {
                     bestNode = node;
                     // leastArea = new resulting 'better' area
                     // greatestPaste = new number of paste
-                }  
+                }
+                bestNode = new Node();
+                leastArea = Integer.MAX_VALUE;
+                greatestPaste = 0;
             }
         }
         return bestNode;
     }
     
+    /**
+     * Determines if node is a better location for rec. 
+     * A node with paste 4 is always the best (if multiple are available, choose
+     * the bottom-leftmost). Otherwise, select the node sorted lexicographically
+     * by leastArea, paste, location.
+     * @param node
+     * @param rec
+     * @return if node is a better choice for rec than bestNode
+     */
     private boolean isLocationBetter(Node node, ADT_Rectangle rec){
         // check if placement of rectangle @ node results in overlap
         if (area.isNewRectangleValid(rec)) {
+            // if greatest paste == 4
+            if(greatestPaste == 4){
+                // this paste == 4
+                if(true){
+                    // pick lowest-left node
+                }else{
+                    return false;
+                }
+            }
+            
+            // if this paste == 4
+            if(true){
+                return true;
+            }
+            
             // check if area < leastArea
             if (true) {
                 bestNode = node;
                 // leastArea = new resulting 'better' area
             }
+            
             // if area == leastArea
             if(true){
                 // if paste > greatestPaste
                 if(true){
                     return true;
+                }
+                // if paste == greatestPaste
+                if(true){
+                    // pick lowest-left node
                 }
             }
         }
