@@ -29,27 +29,17 @@ public class Strat_ORP_BinaryTreePacker extends Strat_AbstractStrat {
     @Override
     public ADT_AreaExtended compute() {
         ADT_Rectangle [] rectangles = area.getRectangles();
-        if (area.getHeight() != (-1)) {
-            for (int i = 0; i <= rectangles.length; i++) {
+        for (int i = 0; i <= rectangles.length; i++) {
                 greatestPaste = 0;
                 ADT_Rectangle rec = rectangles[i];
-                getBestPlacementFixedHeight(rec);
+                getBestPlacement(rec);
                 area.moveRectangle(rec, bestNode.point.x, bestNode.point.y);
                 bestNode.placeRectangle(rec);
             }
-        } else {
-            for (int i = 0; i <= rectangles.length; i++) {
-                greatestPaste = 0;
-                ADT_Rectangle rec = rectangles[i];
-                getBestPlacementFixedHeight(rec);
-                area.moveRectangle(rec, bestNode.point.x, bestNode.point.y);
-                bestNode.placeRectangle(rec);
-            }
-        }
         return area;
     }
     
-    public Node getBestPlacement(ADT_Rectangle rec) {
+    private Node getBestPlacement(ADT_Rectangle rec) {
         Map<Integer, HashSet> points = binaryTree.getPoints();
         for(Integer i : points.keySet()){
             HashSet set = points.get(i);
@@ -57,8 +47,7 @@ public class Strat_ORP_BinaryTreePacker extends Strat_AbstractStrat {
                 // iterate over all points
                 Node node = (Node) iter.next(); // to do: check why cast is necessary
                 // check if rectangle is rotatable
-                ADT_Rectangle dummyRec;
-                // make dummyRec
+                ADT_Rectangle dummyRec = dummyRectangle(rec, node);
                 if (area.canFlip()) { // rotatable
                     // rotate dummyRec
                     isLocationBetter(node, dummyRec);
@@ -68,6 +57,14 @@ public class Strat_ORP_BinaryTreePacker extends Strat_AbstractStrat {
             }
         }
         return bestNode;
+    }
+    
+    private ADT_Rectangle dummyRectangle (ADT_Rectangle rec, Node node) {
+        int x = node.point.x;
+        int y = node.point.y;
+        int width = rec.getWidth();
+        int height = rec.getHeight();
+        return new ADT_Rectangle(width, height, x, y, rec.canFlip());
     }
     
     /**
