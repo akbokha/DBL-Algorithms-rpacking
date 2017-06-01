@@ -60,4 +60,14 @@ public class RectangleType {
         ADT_Rectangle rectangle = new ADT_Rectangle(width, height, 0, 0, canRotate());
         return rectangle;
     }
+    
+    public ADT_Rectangle createInstance(int x, int y) {
+        if(instances <= 0) {
+            throw new IllegalStateException("Tried to create an instance of a rectangle type while there were ");
+        }
+
+        decreaseInstances();
+        ADT_Rectangle rectangle = new ADT_Rectangle(width, height, x, y, canRotate());
+        return rectangle;
+    }
 }

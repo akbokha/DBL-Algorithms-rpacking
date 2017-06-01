@@ -4,6 +4,7 @@
  * and open the template in the editor.
  */
 
+import java.util.Arrays;
 import java.util.Iterator;
 
 /**
@@ -20,21 +21,22 @@ public class Strat_DummyImplementation extends Strat_AbstractStrat {
     public ADT_AreaExtended compute() {
         // Simple dummy implementation that places all rectangles next to each other in one single strip
         int curX = 0;
-        for (Iterator<ADT_Rectangle> recs = area.getRectangleIterator(); recs.hasNext();) {
-            ADT_Rectangle currentRec = recs.next();
-
+        int widthCurrentRentangle = 0;
+        RectangleType[] recs = area.getRectangleTypesToBePlaced();
+        area.setDimensions(area.getHeight(), area.getWidth());
+        for (RectangleType currentRec : recs) {
+            while(currentRec.canInstantiate()) {
             // Set the x and y coordinate of the rectangle.
-            currentRec.setY(0);
-            currentRec.setX(curX);
+            area.add(currentRec.createInstance(curX, 0));
+            curX += currentRec.getWidth();
 
             // If the rectangle is flippable, rotate it such that the longest side is horizontally.
-            if (currentRec.canFlip() && (currentRec.getWidth() < currentRec.getHeight())) {
-                currentRec.toggleFlipped();
+//            if (currentRec.canRotate() && (currentRec.getWidth() < currentRec.getHeight())) {
+//                currentRec.
+//            }
             }
-
-            curX += currentRec.getWidth();
         }
-
+        System.out.println(Arrays.asList(area.getPlacedRectangles()).toArray().length);
         return area;
     }
     
