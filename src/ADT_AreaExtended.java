@@ -3,8 +3,11 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
-/**
- * Created by s157035 on 15-5-2017.
+/*
+ * @todo requires rotate rectangle function
+ * @todo requires function to remove rectangles from the set of placed rectangles.
+ * @notice currently it is possible that the position of the rectangle in the array is different
+ *      than what it defined in its own coordinate variables. Has potential for unreliable behaviour.
  */
 public class ADT_AreaExtended implements Cloneable {
     private final short EMPTY_INDEX = 0;
@@ -168,7 +171,7 @@ public class ADT_AreaExtended implements Cloneable {
      *
      * @return the amount of rectangles this area contains.
      */
-    public int getCount() {
+    int getCount() {
         return shapes.size();
     }
 
@@ -245,7 +248,7 @@ public class ADT_AreaExtended implements Cloneable {
     }
 
     public boolean moveRectangle(ADT_Rectangle rectangle, int newX, int newY) {
-        if(checkRectangleBordersFrom(newX, newY, rectangle.getWidth(), rectangle.getHeight())) {
+        if(checkRectangleBordersFrom(newX, newY, rectangle.getWidth(), rectangle.getHeight())) { //@todo not gonna work since it can be moved inside its previous area, thus causing invalid rejection.
             return false;
         }
 

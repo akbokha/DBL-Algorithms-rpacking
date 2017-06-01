@@ -11,12 +11,21 @@ class Strat_CP_BT extends Strat_BT_Template {
     Strat_CP_BT(ADT_AreaExtended area) {
         super(area);
 
-        rectangles = area.getRectangles();
+        RectangleType[] rectangleTypes = area.getRectangleTypesToBePlaced();
 
-        // Reset the position of the rectangles (should be moved to the anytime algorithm for efficiency reasons).
-        for (int i = 0; i < rectangles.length; i++) {
-            rectangles[i].setX(ADT_Rectangle.NOTSET);
-            rectangles[i].setY(ADT_Rectangle.NOTSET);
+        // Sum the amount of rectangles to be placed.
+        int count = 0;
+        for (RectangleType rectangleType : rectangleTypes) {
+            count += rectangleType.getNumberOfinstances();
+        }
+
+        rectangles = new ADT_Rectangle[count];
+        int index = 0;
+        for (RectangleType rectangleType : rectangleTypes) {
+            while (rectangleType.canInstantiate()) {
+                ADT_Rectangle rectangle = rectangleType.createInstance();
+                rectangles[index++] = rectangle;
+            }
         }
 
         //output = new Output_GraphicalOutput(area);
@@ -59,12 +68,14 @@ class Strat_CP_BT extends Strat_BT_Template {
         // Make distinction between the first rectangle and all others.
         if (index == 0) {
             // Let the first rectangle start with its center in the center such that it will only evaluate the top right corner.
-            rectangle.setX(Integer.MAX_VALUE - rectangle.getWidth() - 1); // Note: rectangle width has to be subtracted in order to prevent an overflow.
-            rectangle.setY(Math.max(0, (int) Math.ceil((area.getHeight() - rectangle.getHeight()) / 2)));
+            area.moveRectangle(
+                    rectangle,
+                    Integer.MAX_VALUE - rectangle.getWidth(), // Note: rectangle width has to be subtracted in order to prevent an overflow.
+                    Math.max(0, (int) Math.ceil((area.getHeight() - rectangle.getHeight()) / 2))
+            );
         } else {
             // Start at the bottom left.
-            rectangle.setX(-1);
-            rectangle.setY(0);
+            area.moveRectangle(rectangle, 0, 0);
         }
         return next();
     }
@@ -73,42 +84,43 @@ class Strat_CP_BT extends Strat_BT_Template {
     boolean next() {
         // Retrieve a pointer to the currently placed rectangle.
         ADT_Rectangle rectangle = rectangles[index];
-
-        // Increment x and check if this coordinate is valid.
         int x = rectangle.getX();
-        x++;
+        int y = rectangle.getY();
 
-        // Check if the x-coordinate is still a valid starting coordinate
-        if (x + rectangle.getWidth() > area.getWidth()) {
-            // Reset x, make distinction between the first rectangle and all others.
-            if (index == 0) {
-                x = Math.max(0, (int) Math.ceil((area.getWidth() - rectangle.getWidth()) / 2f));
-            } else {
-                x = 0;
-            }
+        do {
+            // Increment x and check if this coordinate is valid.
+            x++;
 
-            int y = rectangle.getY();
-            y++;
-
-            // Check if the y-coordinate is still a valid starting coordinate
-            if (y + rectangle.getHeight() > area.getHeight()) {
-
-                // Rotate if the rectangle can flip.
-                if (rectangle.canFlip() && !rectangle.getFlipped()) {
-                    rectangle.setFlipped(true);
-
-                    // Check if the resulting area is valid, if so compute this branch. Else leave it. (1)
-                    if (area.isNewRectangleValid(rectangle)) {
-                        return first();
-                    }
+            // Check if the x-coordinate is still a valid starting coordinate
+            if (x + rectangle.getWidth() > area.getWidth()) {
+                // Reset x, make distinction between the first rectangle and all others.
+                if (index == 0) {
+                    x = Math.max(0, (int) Math.ceil((area.getWidth() - rectangle.getWidth()) / 2f));
                 } else {
-                    return false;
+                    x = 0;
+                }
+
+                y++;
+
+                // Check if the y-coordinate is still a valid starting coordinate
+                if (y + rectangle.getHeight() > area.getHeight()) {
+
+                    // Rotate if the rectangle can flip.
+                    if (rectangle.canFlip() && !rectangle.getFlipped()) {
+                        throw new UnsupportedOperationException("Rotations currently do not work.");
+
+                        /*rectangle.setFlipped(true);
+
+                        // Check if the resulting area is valid, if so compute this branch. Else leave it. (1)
+                        if (area.isNewRectangleValid(rectangle)) {
+                            return first();
+                        }*/
+                    } else {
+                        return false;
+                    }
                 }
             }
-
-            rectangle.setY(y);
-        }
-        rectangle.setX(x);
+        } while (!area.moveRectangle(rectangle, x, y));
 
         //output.draw();
 
@@ -121,6 +133,8 @@ class Strat_CP_BT extends Strat_BT_Template {
         ADT_Rectangle rectangle = rectangles[index];
         rectangle.setX(ADT_Rectangle.NOTSET);
         rectangle.setY(ADT_Rectangle.NOTSET);
+
+        // @todo remove rectangle from the placed rectangles in area.
 
         rectangle.setFlipped(false);
 
