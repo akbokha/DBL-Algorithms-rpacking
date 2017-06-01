@@ -39,8 +39,14 @@ public class ADT_AreaExtended {
         return height;
     }
 
+    @Override
     public ADT_AreaExtended clone() throws CloneNotSupportedException {
-        return new ADT_AreaExtended(getWidth(), getHeight(), canFlip(), getRectangleTypesToBePlaced());
+        ADT_AreaExtended newArea = new ADT_AreaExtended(getWidth(), getHeight(), canFlip(), getRectangleTypesToBePlaced());
+        
+        for(ADT_Rectangle r : this.getPlacedRectangles()) {
+            newArea.add(r.clone());
+        }
+        return newArea;
     }
 
     private short getNewId() {
