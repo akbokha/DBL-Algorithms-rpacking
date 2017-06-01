@@ -1,8 +1,5 @@
 import java.util.ArrayList;
 
-/**
- * Created by s157035 on 12-5-2017.
- */
 public class RectangleTypeCombiner {
     ArrayList<RectangleType> types = new ArrayList<>();
     private boolean rotationAllowed;

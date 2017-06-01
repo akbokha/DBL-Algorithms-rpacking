@@ -1,13 +1,3 @@
-/*
- * Abstract Strategy
- * Will be extended by Concrete strategy implementations
- */
-
-
-/**
- * @author Abdel
- * 01-05-2017 
- */
 public abstract class Strat_AbstractStrat {
     
     /**

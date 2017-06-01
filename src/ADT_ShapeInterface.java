@@ -2,9 +2,6 @@
 
 /**
  * Interface for the ADT of the rectangle.
- * 
- * @date Apr 26, 2017
- * @author Adriaan Knapen <a.d.knapen@student.tue.nl>
  */
 public interface ADT_ShapeInterface {
     

@@ -1,15 +1,9 @@
-
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-/*
- * Empty Space pruning as described in R. E. Korf - Optimal Rectangle Packing
- */
-
 /**
- * date: 12-05-2017
- * @author s158881
+ * Empty Space pruning as described in R. E. Korf - Optimal Rectangle Packing
  */
 public class Strat_BT_Pruner_WS2 implements Strat_BT_PrunerInterface {
     

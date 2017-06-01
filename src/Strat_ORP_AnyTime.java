@@ -1,10 +1,6 @@
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-/**
- *
- * @author Bastiaan
- */
 public class Strat_ORP_AnyTime extends Strat_AbstractStrat {
     
     int STEPSIZE = 5;

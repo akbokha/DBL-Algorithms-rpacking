@@ -1,13 +1,9 @@
-
 import java.util.ArrayList;
 import java.util.Collections;
 
-
 /**
- *
- * @author Bastiaan
+ * First-Fit Decreasing Height algorithm implementation to solve rectangle packing.
  */
-//First-Fit Decreasing Height
 public class Strat_ORP_FFDH extends Strat_AbstractStrat {
     public Strat_ORP_FFDH(ADT_AreaExtended area) {
         super(area);

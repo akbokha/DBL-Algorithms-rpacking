@@ -1,6 +1,3 @@
-/**
- * Created by s157035 on 12-5-2017.
- */
 public class RectangleType implements Cloneable {
     private final int width;
     private final int height;

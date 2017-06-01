@@ -4,8 +4,6 @@ import java.util.ArrayList;
  * Prunes by dominance, i.e. prunes rectangle placements if they leave
  * narrow empty horizontal strips that are not bounded on both sides,
  * or narrow empty vertical strips that are not bounded above and below.
- *
- * @author Phung
  */
 public class Strat_BT_Pruner_NarrowEmptyStrips implements Strat_BT_PrunerInterface {
     private ADT_AreaExtended area;

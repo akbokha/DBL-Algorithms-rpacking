@@ -3,8 +3,6 @@
  * or below newly placed rectangles.
  * This method is discussed in section 4.3.1 of "Optimal rectangle packing"
  * by Korf et al.
- * 
- * @author Jorrit Olthuis
  */
 public class Strat_BT_PrunerPerfectRectangle implements Strat_BT_PrunerInterface {
 

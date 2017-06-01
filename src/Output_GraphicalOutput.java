@@ -3,10 +3,6 @@ import java.awt.*;
 import java.text.DecimalFormat;
 import java.util.Iterator;
 
-/**
- * @date 01-05-2017
- * @author Adriaan Knapen <a.d.knapen@student.tue.nl>
- */
 public class Output_GraphicalOutput extends Output_AbstractOutput {
 
     private int rectWidth;

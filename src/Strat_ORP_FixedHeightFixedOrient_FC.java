@@ -11,9 +11,6 @@ import java.util.List;
  * minimize the number of bins of this width/the height.
  * In our context we use this implementation when we have a fixed height and
  * when rotations of rectangles is not allowed (try to minimize the width).
- *
- * @author Abdel K.
- * date: 08-05-17
  */
 public class Strat_ORP_FixedHeightFixedOrient_FC extends Strat_AbstractStrat {
 
