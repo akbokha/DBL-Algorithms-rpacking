@@ -1,5 +1,4 @@
 
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -30,9 +29,16 @@ public class Strat_ORP_BinaryTreePacker extends Strat_AbstractStrat {
     @Override
     public ADT_AreaExtended compute() {
         ADT_Rectangle [] rectangles = area.getRectangles();
-        for (int i = 0; i <= rectangles.length; i++) {
-            ADT_Rectangle rec = rectangles[i];
-            getBestPlacement(rec).placeRectangle(rec);
+        if (area.getHeight() != (-1)) {
+            for (int i = 0; i <= rectangles.length; i++) {
+                ADT_Rectangle rec = rectangles[i];
+                getBestPlacement(rec).placeRectangle(rec);
+            }
+        } else {
+            for (int i = 0; i <= rectangles.length; i++) {
+                ADT_Rectangle rec = rectangles[i];
+                getBestPlacementFixedHeight(rec).placeRectangle(rec);
+            }
         }
         return area;
     }
@@ -62,9 +68,47 @@ public class Strat_ORP_BinaryTreePacker extends Strat_AbstractStrat {
                     // leastArea = new resulting 'better' area
                     // greatestPaste = new number of paste
                 }
-                bestNode = new Node();
-                leastArea = Integer.MAX_VALUE;
-                greatestPaste = 0;
+                /**
+                 * bestNode = new Node();
+                 * leastArea = Integer.MAX_VALUE;
+                 * greatestPaste = 0;
+                 */
+            }
+        }
+        return bestNode;
+    }
+    
+    public Node getBestPlacementFixedHeight(ADT_Rectangle rec) {
+        Map<Integer, HashSet> points = binaryTree.getPoints();
+        for(Integer i : points.keySet()){
+            HashSet set = points.get(i);
+            for (Iterator iter = set.iterator(); iter.hasNext();) { 
+                // iterate over all points
+                Node node = (Node) iter.next(); // to do: check why cast is necessary
+                area.moveRectangle(rec, node.point.x, node.point.y); // todo Should be a version without setting array
+                
+                // check if rectangle is rotatable
+                if (area.canFlip()) { // rotatable
+                    rec.setFlipped(true);
+                    if(isLocationBetter(node, rec)){
+                        bestNode = node;
+                        // leastArea = new resulting 'better' area
+                        // greatestPaste = new number of paste
+                    }
+                }
+                
+                rec.setFlipped(false);
+                if (isLocationBetter(node, rec)){
+                    bestNode = node;
+                    // leastArea = new resulting 'better' area
+                    // greatestPaste = new number of paste
+                }
+                /**
+                 * bestNode = new Node();
+                 * leastArea = Integer.MAX_VALUE;
+                 * greatestPaste = 0;
+                 */
+                
             }
         }
         return bestNode;
