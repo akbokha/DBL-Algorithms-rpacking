@@ -31,13 +31,19 @@ public class Strat_ORP_BinaryTreePacker extends Strat_AbstractStrat {
         ADT_Rectangle [] rectangles = area.getRectangles();
         if (area.getHeight() != (-1)) {
             for (int i = 0; i <= rectangles.length; i++) {
+                greatestPaste = 0;
                 ADT_Rectangle rec = rectangles[i];
-                getBestPlacement(rec).placeRectangle(rec);
+                getBestPlacementFixedHeight(rec);
+                area.moveRectangle(rec, bestNode.point.x, bestNode.point.y);
+                bestNode.placeRectangle(rec);
             }
         } else {
             for (int i = 0; i <= rectangles.length; i++) {
+                greatestPaste = 0;
                 ADT_Rectangle rec = rectangles[i];
-                getBestPlacementFixedHeight(rec).placeRectangle(rec);
+                getBestPlacementFixedHeight(rec);
+                area.moveRectangle(rec, bestNode.point.x, bestNode.point.y);
+                bestNode.placeRectangle(rec);
             }
         }
         return area;
@@ -50,65 +56,15 @@ public class Strat_ORP_BinaryTreePacker extends Strat_AbstractStrat {
             for (Iterator iter = set.iterator(); iter.hasNext();) { 
                 // iterate over all points
                 Node node = (Node) iter.next(); // to do: check why cast is necessary
-                area.moveRectangle(rec, node.point.x, node.point.y); // todo Should be a version without setting array
-                
                 // check if rectangle is rotatable
+                ADT_Rectangle dummyRec;
+                // make dummyRec
                 if (area.canFlip()) { // rotatable
-                    rec.setFlipped(true);
-                    if(isLocationBetter(node, rec)){
-                        bestNode = node;
-                        // leastArea = new resulting 'better' area
-                        // greatestPaste = new number of paste
-                    }
+                    // rotate dummyRec
+                    isLocationBetter(node, dummyRec);
+                    // undo rotation dummyRec
                 }
-                
-                rec.setFlipped(false);
-                if (isLocationBetter(node, rec)){
-                    bestNode = node;
-                    // leastArea = new resulting 'better' area
-                    // greatestPaste = new number of paste
-                }
-                /**
-                 * bestNode = new Node();
-                 * leastArea = Integer.MAX_VALUE;
-                 * greatestPaste = 0;
-                 */
-            }
-        }
-        return bestNode;
-    }
-    
-    public Node getBestPlacementFixedHeight(ADT_Rectangle rec) {
-        Map<Integer, HashSet> points = binaryTree.getPoints();
-        for(Integer i : points.keySet()){
-            HashSet set = points.get(i);
-            for (Iterator iter = set.iterator(); iter.hasNext();) { 
-                // iterate over all points
-                Node node = (Node) iter.next(); // to do: check why cast is necessary
-                area.moveRectangle(rec, node.point.x, node.point.y); // todo Should be a version without setting array
-                
-                // check if rectangle is rotatable
-                if (area.canFlip()) { // rotatable
-                    rec.setFlipped(true);
-                    if(isLocationBetter(node, rec)){
-                        bestNode = node;
-                        // leastArea = new resulting 'better' area
-                        // greatestPaste = new number of paste
-                    }
-                }
-                
-                rec.setFlipped(false);
-                if (isLocationBetter(node, rec)){
-                    bestNode = node;
-                    // leastArea = new resulting 'better' area
-                    // greatestPaste = new number of paste
-                }
-                /**
-                 * bestNode = new Node();
-                 * leastArea = Integer.MAX_VALUE;
-                 * greatestPaste = 0;
-                 */
-                
+                isLocationBetter(node, dummyRec);
             }
         }
         return bestNode;
@@ -118,48 +74,60 @@ public class Strat_ORP_BinaryTreePacker extends Strat_AbstractStrat {
      * Determines if node is a better location for rec. 
      * A node with paste 4 is always the best (if multiple are available, choose
      * the bottom-leftmost). Otherwise, select the node sorted lexicographically
-     * by leastArea, paste, location.
+     * by leastArea, paste
      * @param node
      * @param rec
      * @return if node is a better choice for rec than bestNode
      */
     private boolean isLocationBetter(Node node, ADT_Rectangle rec){
         // check if placement of rectangle @ node results in overlap
-        if (area.isNewRectangleValid(rec)) {
+        if (area.getHeight() != (-1)) { 
+            if (area.isNewRectangleValid(rec)) {
             // if greatest paste == 4
             if(greatestPaste == 4){
-                // this paste == 4
-                if(true){
-                    // pick lowest-left node
-                }else{
-                    return false;
-                }
+                return false;
             }
-            
+            int paste = 0;
+            // compute paste
             // if this paste == 4
             if(true){
+                greatestPaste = 4;
+                bestNode = node;
+                // area remains the same
+                return true;
+            }
+            int resulting_area = 0;
+            // compute resulting_area 
+            // check if resutling_area < leastArea
+            if (resulting_area < leastArea) {
+                greatestPaste = paste;
+                leastArea = resulting_area;
+                bestNode = node;
                 return true;
             }
             
-            // check if area < leastArea
-            if (true) {
-                bestNode = node;
-                // leastArea = new resulting 'better' area
-            }
-            
-            // if area == leastArea
-            if(true){
-                // if paste > greatestPaste
-                if(true){
+            if(resulting_area == leastArea){
+                if(paste > greatestPaste){
+                    greatestPaste = paste;
+                    bestNode = node;
                     return true;
                 }
-                // if paste == greatestPaste
-                if(true){
-                    // pick lowest-left node
-                }
             }
+            }
+        } else {
+            
+            
         }
         return false;
+    }
+    
+    private boolean isValidPlacement (Node node, ADT_Rectangle rec){
+        if (area.getHeight() != (-1)) {
+            return area.isNewRectangleValid(rec);
+        } else {
+            boolean exceedsBound = node.point.y + rec.getHeight() > area.getHeight();
+            return area.isNewRectangleValid(rec) && !exceedsBound;
+        }
     }
         
     private class Node {
