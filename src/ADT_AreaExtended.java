@@ -15,6 +15,7 @@ public class ADT_AreaExtended {
     private int width;
     private int height;
     private boolean flippable;
+    private int version; // 3, 5, 10, 25 or 10000
 
     private RectangleType[] toBePlacedRects;
 
@@ -25,6 +26,7 @@ public class ADT_AreaExtended {
         lastIssuedIndex = 0;
         shapes = new HashMap<>();
         toBePlacedRects = rectangleTypes;
+        this.version = this.toBePlacedRects.length;
     }
 
     public boolean canFlip() {
@@ -37,6 +39,15 @@ public class ADT_AreaExtended {
 
     public int getHeight() {
         return height;
+    }
+    
+    /**
+     * Get the version w.r.t. how many rectangles have to be placed
+     * 
+     * @return 3, 5, 10, 25 or 10000
+     */
+    public int getVersion(){
+        return this.version;
     }
 
     public ADT_AreaExtended clone() throws CloneNotSupportedException {
