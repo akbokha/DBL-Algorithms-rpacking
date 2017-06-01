@@ -6,14 +6,17 @@ import java.util.logging.Logger;
  * @author Bastiaan
  */
 public class Strat_ORP_AnyTime extends Strat_AbstractStrat {
+    
+    int STEPSIZE = 5;
+    
     public Strat_ORP_AnyTime(ADT_AreaExtended area) {
         super(area);
     }
 
     @Override
     public ADT_AreaExtended compute() {
-        if(area.getRectangles().length >= 10000) {
-            return new Strat_ORP_BFDH(area).compute();
+        if(area.getRectangles().length == 10000) {
+            return new Strat_ORP_FixedHeightFixedOrient_FC(area).compute();
         }
         try {
             new Output_Plaintext(area).draw();
@@ -27,29 +30,32 @@ public class Strat_ORP_AnyTime extends Strat_AbstractStrat {
             while(true) {
                 //Make sure that the area gets smaller and smaller until the
                 // minimal area is reached
-                if((width-1) * height >= area.getTotalAreaRectanglesToBePlaced() && width > area.getRectangleTypesToBePlaced()[0].getWidth()) {
-                    width -= 1;
+                if((width-STEPSIZE) * height >= area.getTotalAreaRectanglesToBePlaced() && width-STEPSIZE >= area.getRectangleTypesToBePlaced()[0].getWidth()) {
+                    width -= STEPSIZE;
+                    System.err.print("W:" + width + "\tH:" + height + "\t");
+
+                    //Get a solution with this width and height
+                    ADT_AreaExtended newArea = createNewSolution(width, height);
+
+                    System.err.println(newArea);
+
+                    //If a solution was set, use it as the new best solution
+                    if(newArea != null) {
+                        bestArea = newArea.clone();
+                    } else if (STEPSIZE == 1) {//If stepsize == 1 and no solution is found, increase height
+                        if(area.getHeight() != ADT_Area.INF) {// but if the height was fixed, no better solution can be found
+                            break;
+                        }
+                        width += STEPSIZE;
+                        height += 1;
+                    } else {//If this area is not possible try a larger height but the same width as bestArea
+                        width += STEPSIZE;
+                        STEPSIZE = 1;
+                    }
+                } else if(STEPSIZE == 1) {//If stepsize is 1 and cant be made smaller
+                    break;
                 } else {
-                    break;
-                }
-
-                System.err.print("W:" + width + "\tH:" + height + "\t");
-
-                //Get the best solution with this width and height
-                ADT_AreaExtended newArea = area.clone();
-                newArea.setDimensions(width, height);
-                newArea = (new Strat_CP_BT(newArea)).compute();
-
-                System.err.println(newArea);
-
-                //If a solution was set, use it as the new best solution
-                if(newArea != null) {
-                    bestArea = newArea.clone();
-                } else if (area.getHeight() != ADT_Area.INF) {//If height is fixed
-                    break;
-                } else {//If this area is not possible try a larger height but the same width as bestArea
-                    width += 1;
-                    height += 1;
+                    STEPSIZE--;
                 }
             }
             return bestArea;
@@ -57,6 +63,18 @@ public class Strat_ORP_AnyTime extends Strat_AbstractStrat {
             Logger.getLogger(Strat_ORP_AnyTime.class.getName()).log(Level.SEVERE, null, ex);
             return null;
         }
+    }
+    
+    ADT_AreaExtended createNewSolution(int width, int height) {
+        try {
+            ADT_AreaExtended newArea = area.clone();
+            newArea.setDimensions(width, height);
+            newArea = (new Strat_CP_BT(newArea)).compute();
+            return newArea;
+        } catch (CloneNotSupportedException ex) {
+            Logger.getLogger(Strat_ORP_AnyTime.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
     }
     
 }

@@ -1,7 +1,7 @@
 /**
  * Created by s157035 on 12-5-2017.
  */
-public class RectangleType {
+public class RectangleType implements Cloneable {
     private final int width;
     private final int height;
     private final boolean canRotate;
@@ -15,6 +15,13 @@ public class RectangleType {
         this.canRotate = canRotate && width != height;
 
         instances = 1;
+    }
+    
+    @Override
+    public RectangleType clone() throws CloneNotSupportedException {
+        RectangleType rec = new RectangleType(width, height, canRotate);
+        rec.instances = this.instances;
+        return rec;
     }
 
     public void increaseInstances() {
