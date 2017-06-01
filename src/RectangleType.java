@@ -53,7 +53,7 @@ public class RectangleType {
 
     public ADT_Rectangle createInstance() {
         if(instances <= 0) {
-            throw new IllegalStateException("Tried to create an instance of a rectangle type while there were ");
+            throw new IllegalStateException("Tried to create an instance of a rectangle type while there were no instances left to add.");
         }
 
         decreaseInstances();
@@ -63,7 +63,7 @@ public class RectangleType {
     
     public ADT_Rectangle createInstance(int x, int y) {
         if(instances <= 0) {
-            throw new IllegalStateException("Tried to create an instance of a rectangle type while there were ");
+            throw new IllegalStateException("Tried to create an instance of a rectangle type while there were no instances left to add.");
         }
 
         decreaseInstances();

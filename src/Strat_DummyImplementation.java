@@ -5,7 +5,6 @@
  */
 
 import java.util.Arrays;
-import java.util.Iterator;
 
 /**
  * @author Abdel 
@@ -23,7 +22,6 @@ public class Strat_DummyImplementation extends Strat_AbstractStrat {
         int curX = 0;
         int widthCurrentRentangle = 0;
         RectangleType[] recs = area.getRectangleTypesToBePlaced();
-        area.setDimensions(area.getHeight(), area.getWidth());
         for (RectangleType currentRec : recs) {
             while(currentRec.canInstantiate()) {
             // Set the x and y coordinate of the rectangle.
