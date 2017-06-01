@@ -29,7 +29,7 @@ public class Strat_ORP_BinaryTreePacker extends Strat_AbstractStrat {
     @Override
     public ADT_AreaExtended compute() {
         ADT_Rectangle [] rectangles = area.getRectangles();
-        for (int i = 0; i <= rectangles.length; i++) {
+        for (int i = 0; i < rectangles.length; i++) {
                 greatestPaste = 0;
                 ADT_Rectangle rec = rectangles[i];
                 getBestPlacement(rec);
