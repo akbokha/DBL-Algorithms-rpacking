@@ -107,9 +107,9 @@ class Strat_CP_BT extends Strat_BT_Template {
                     }
                 }
             }
-        } while (!areaEx.checkRectangleBordersFrom(x, y, rectangle.getWidth(), rectangle.getHeight()));
+        } while (!areaEx.checkRectangleBordersWith(rectangle));
 
-        areaEx.add(rectangle);
+        areaEx.add(index);
         areaEx.moveRectangle(rectangle, x, y);
 
         //output.draw();
@@ -122,7 +122,7 @@ class Strat_CP_BT extends Strat_BT_Template {
         // Revert the rectangle back to the initial place.
         ADT_Rectangle rectangle = rectangles[index];
 
-        areaEx.removeRectangle(rectangle);
+        areaEx.removeRectangle(index);
 
         // Move one level higher into the branch.
         index--;
