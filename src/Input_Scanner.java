@@ -1,7 +1,7 @@
 import java.util.Scanner;
 import java.util.regex.Pattern;
 
-public abstract class Input_Scanner implements Input_InputInterface {
+public abstract class Input_Scanner {
 
     private Scanner scanner = null;
 
@@ -9,7 +9,6 @@ public abstract class Input_Scanner implements Input_InputInterface {
         this.scanner = scanner;
     }
 
-    @Override
     public ADT_AreaExtended read(RectangleTypeCombiner combiner) throws IllegalArgumentException, IllegalStateException {
         if (this.scanner==null) {
             throw new IllegalStateException("Input_Scanner.read: scanner should be not null");

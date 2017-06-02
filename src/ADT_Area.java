@@ -106,6 +106,28 @@ public class ADT_Area extends ADT_Rectangle implements Cloneable {
     int[] getRectangleStrips(boolean horizontal) {
         return null;
     }
+    
+    /**
+     * Check if there is already a rectangle placed at (x,y)
+     * @param x coordinate to be checked
+     * @param y coordinate to be checked
+     * @param index of the rectangle in the array
+     * @return true iff there is a rectangle at (x,y) or if x < 0 or y <0
+     */
+    public boolean isRectangleAt (int x, int y, int index) {
+        if (x < 0 ||  y < 0) {
+            return true;
+        }
+        for (int i = 0; i <= index; i++) {
+            ADT_Rectangle rec = shapes[i];
+            boolean x_dim = (x >= rec.getX()) && (x < (rec.getX() + rec.getWidth()));
+            boolean y_dim = (y >= rec.getY()) && (y < rec.getY() + rec.getHeight());
+            if (x_dim && y_dim) {
+                return true;
+            }
+        } 
+        return false;
+    }
 
     /**
      * 
