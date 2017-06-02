@@ -37,6 +37,10 @@ public class ADT_AreaExtended extends ADT_Area implements Cloneable {
     public int getVersion(){
         return this.version;
     }
+    
+    public ADT_Area toArea() {
+        return new ADT_Area(width, height, flippable, shapes.values().toArray(new ADT_Rectangle[shapes.size()]));
+    }
 
     @Override
     public ADT_AreaExtended clone() throws CloneNotSupportedException {
@@ -105,7 +109,6 @@ public class ADT_AreaExtended extends ADT_Area implements Cloneable {
     
     /**
      *
-     * @param shape
      */
     public void removeLastRectangle() {
         removeRectangleBorders(shapes.remove(lastIssuedIndex));
@@ -207,6 +210,7 @@ public class ADT_AreaExtended extends ADT_Area implements Cloneable {
         return new ADT_Vector(maxWidth, maxHeight);
     }
 
+    @Override
     public ADT_Rectangle[] getRectangles() {
         return shapes.values().toArray(new ADT_Rectangle[shapes.size()]);
     }

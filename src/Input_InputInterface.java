@@ -1,3 +1,3 @@
 public interface Input_InputInterface {
-    ADT_AreaExtended read() throws Exception;
+    ADT_Area read() throws Exception;
 }

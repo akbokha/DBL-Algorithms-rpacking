@@ -41,7 +41,7 @@ public class PackingSolver {
             input = new Input_SystemIn();
         }
 
-        ADT_AreaExtended area;
+        ADT_Area area;
         
         area = input.read();
         
