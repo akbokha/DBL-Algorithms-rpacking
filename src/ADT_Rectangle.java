@@ -120,4 +120,8 @@ public class ADT_Rectangle implements ADT_ShapeInterface, Comparable<ADT_Rectang
             return 1;
         }
     }
+
+    public boolean hasValidPlacement() {
+        return x >= 0 && y >= 0;
+    }
 }

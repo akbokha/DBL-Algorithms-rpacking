@@ -108,6 +108,10 @@ public class ADT_AreaExtended implements Cloneable {
      * @param shape
      */
     public void add(ADT_Rectangle shape) {
+        if(!shape.hasValidPlacement()) {
+            System.err.println("Tried to place a rectangle that had no valid placement");
+        }
+
         short id = getNewId();
         shapes.put(id, shape);
         fillRectangleBordersWith(shape, id);
@@ -135,7 +139,7 @@ public class ADT_AreaExtended implements Cloneable {
         }
     }
 
-    private boolean checkRectangleBordersWith(ADT_Rectangle shape) {
+    public boolean checkRectangleBordersWith(ADT_Rectangle shape) {
         return checkRectangleBordersFrom(shape.getX(), shape.getY(), shape.getWidth(), shape.getHeight());
     }
 
@@ -269,12 +273,17 @@ public class ADT_AreaExtended implements Cloneable {
         //Remember the original rectangle id by getting the id on it's position
         short id = (short)getIndex(rectangle.getX(), rectangle.getY());
         //Remove the original rectangle information
-        fillRectangleBordersWith(rectangle, EMPTY_INDEX);
+
+        if(array != null) {
+            fillRectangleBordersWith(rectangle, EMPTY_INDEX);
+        }
 
         rectangle.setX(newX);
         rectangle.setY(newY);
 
-        fillRectangleBordersWith(rectangle, id);
+        if(array != null) {
+            fillRectangleBordersWith(rectangle, id);
+        }
 
         return true;
     }
