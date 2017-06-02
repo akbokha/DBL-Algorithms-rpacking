@@ -19,25 +19,26 @@ public class Strat_ORP_BinaryTreePacker extends Strat_AbstractStrat {
     int fixedHeightValue;
     boolean fixedHeight;
     
-    public Strat_ORP_BinaryTreePacker (ADT_AreaExtended area) {
+    public Strat_ORP_BinaryTreePacker (ADT_Area area) {
         super(area);
         this.binaryTree = new BinaryTree();
         fixedHeight = area.getHeight() != -1;
         if (fixedHeight) {
             fixedHeightValue = area.getHeight();
+            area.setWidth(0);
         }
     }
     
     @Override
-    public ADT_AreaExtended compute() {
+    public ADT_Area compute() {
         ADT_Rectangle [] rectangles = area.getRectangles();
         for (int i = 0; i < rectangles.length; i++) {
-                greatestPaste = 0;
-                ADT_Rectangle rec = rectangles[i];
-                getBestPlacement(rec);
-                area.moveRectangle(rec, bestNode.point.x, bestNode.point.y);
-                bestNode.placeRectangle(rec);
-            }
+            greatestPaste = 0;
+            ADT_Rectangle rec = rectangles[i];
+            getBestPlacement(rec);
+            area.moveRectangle(rec, bestNode.point.x, bestNode.point.y);
+            bestNode.placeRectangle(rec);
+        }
         return area;
     }
     
