@@ -12,6 +12,7 @@ import java.util.Map;
 public class Strat_ORP_BinaryTreePacker extends Strat_AbstractStrat {
     
     BinaryTree binaryTree;
+    int recIndex; // the ith rectangle that is currently being placed
     
     Node bestNode = new Node(); // Best node to place rec
     int leastArea = Integer.MAX_VALUE; // Size of bounding box when rec is at bestNode
@@ -32,9 +33,9 @@ public class Strat_ORP_BinaryTreePacker extends Strat_AbstractStrat {
     @Override
     public ADT_Area compute() {
         ADT_Rectangle [] rectangles = area.getRectangles();
-        for (int i = 0; i < rectangles.length; i++) {
+        for (recIndex = 0; recIndex < rectangles.length; recIndex++) {
             greatestPaste = 0;
-            ADT_Rectangle rec = rectangles[i];
+            ADT_Rectangle rec = rectangles[recIndex];
             getBestPlacement(rec);
             area.moveRectangle(rec, bestNode.point.x, bestNode.point.y);
             bestNode.placeRectangle(rec);
@@ -154,24 +155,24 @@ public class Strat_ORP_BinaryTreePacker extends Strat_AbstractStrat {
         int y_rec_topLeft = node.point.y + rec.getHeight();
         // check left side of possible placement rectangle
         for (int i = y; i <= y_rec_topLeft; i++) {
-            if (! area.isEmptyAt(x, i)) {
+            if (! area.isRectangleAt(x, i, recIndex)) {
                 paste++;
                 break;
             } 
         }
         // check bottom side of possible placement rectangle
         for (int i = x; i <= x_rec_bottomRight; i++) {
-            if (! area.isEmptyAt(i, y)) {
+            if (! area.isRectangleAt(i, y, recIndex)) {
                 paste++;
                 break;
             } 
         }
         // check right side of possible placement rectangle
-        if (! area.isEmptyAt(x_rec_bottomRight, y)) {
+        if (! area.isRectangleAt(x_rec_bottomRight, y, recIndex)) {
             paste++;
         }
         // check top side of possible placement rectangle
-        if (! area.isEmptyAt(x, y_rec_topLeft)) {
+        if (! area.isRectangleAt(x, y_rec_topLeft, recIndex)) {
             paste++;
         }
         return paste;
