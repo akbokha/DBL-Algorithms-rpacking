@@ -14,7 +14,7 @@ public class Strat_ORP_AnyTime extends Strat_AbstractStrat {
         try {
             new Output_Plaintext(area).draw();
             //Used to initialize an average starting width and height
-            ADT_AreaExtended bestArea = new Strat_DummyImplementation(area.clone()).compute();
+            ADT_AreaExtended bestArea = new Strat_DummyImplementation(areaEx.clone()).compute();
             //Set initial width and height for a container to the getDimensions
             // of the bottom-left algorithm
             ADT_Vector dimension = bestArea.getDimensions();
@@ -23,7 +23,7 @@ public class Strat_ORP_AnyTime extends Strat_AbstractStrat {
             while(true) {
                 //Make sure that the area gets smaller and smaller until the
                 // minimal area is reached
-                if((width-STEPSIZE) * height >= area.getTotalAreaRectanglesToBePlaced() && width-STEPSIZE >= area.getRectanglesToBePlaced()[0].getWidth()) {
+                if((width-STEPSIZE) * height >= areaEx.getTotalAreaRectanglesToBePlaced() && width-STEPSIZE >= areaEx.getRectanglesToBePlaced()[0].getWidth()) {
                     width -= STEPSIZE;
                     System.err.print("W:" + width + "\tH:" + height + "\t");
 
@@ -60,7 +60,7 @@ public class Strat_ORP_AnyTime extends Strat_AbstractStrat {
     
     ADT_AreaExtended createNewSolution(int width, int height) {
         try {
-            ADT_AreaExtended newArea = area.clone();
+            ADT_AreaExtended newArea = areaEx.clone();
             newArea.setDimensions(width, height);
             newArea = (new Strat_CP_BT(newArea)).compute();
             return newArea;

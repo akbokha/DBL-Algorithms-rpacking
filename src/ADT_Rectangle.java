@@ -1,4 +1,4 @@
-public class ADT_Rectangle implements ADT_ShapeInterface, Comparable<ADT_Rectangle> {
+public class ADT_Rectangle implements Comparable<ADT_Rectangle> {
 
     static final int INF = -1;
     static final int NOTSET = -2;
@@ -28,80 +28,66 @@ public class ADT_Rectangle implements ADT_ShapeInterface, Comparable<ADT_Rectang
         return newRec;
     }
 
-    @Override
     public int getX() {
         return x;
     }
 
-    @Override
     public void setX(int x) {
         assert x == NOTSET || x >= 0;
 
         this.x = x;
     }
 
-    @Override
     public int getY() {
         return y;
     }
 
-    @Override
     public void setY(int y) {
         assert y == NOTSET || y >= 0;
 
         this.y = y;
     }
 
-    @Override
     public int getWidth() {
         return flipped ? height : width;
     }
 
-    @Override
     public void setWidth(int val) {
         width = val;
     }
 
-    @Override
     public int getHeight() {
         return flipped ? width : height;
     }
 
-    @Override
     public void setHeight(int val) {
         height = val;
     }
 
-    @Override
     public void setFlipped(boolean flipped) {
         assert !this.flipped || ! canFlip();
 
         this.flipped = flipped;
     }
 
-    @Override
     public void toggleFlipped() {
         assert ! canFlip();
 
         this.flipped = !this.flipped;
     }
 
-    @Override
     public boolean getFlipped() {
         return flipped;
     }
 
-    @Override
     public boolean canFlip() {
         return flippable;
     }
 
-    @Override
     public ADT_Vector getDimensions() {
         return new ADT_Vector(this.getWidth(), getHeight());
     }
 
-    @Override
     public int compareTo(ADT_Rectangle o) {
         int maxThis = this.getWidth();
         int maxOther = o.getWidth();
@@ -119,5 +105,9 @@ public class ADT_Rectangle implements ADT_ShapeInterface, Comparable<ADT_Rectang
         } else {
             return 1;
         }
+    }
+
+    public boolean hasValidPlacement() {
+        return x >= 0 && y >= 0;
     }
 }

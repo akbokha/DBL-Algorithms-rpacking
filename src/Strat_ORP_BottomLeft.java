@@ -8,17 +8,17 @@ public class Strat_ORP_BottomLeft extends Strat_AbstractStrat {
      * @param area contains input data such as
      *             Concrete strategies should call super() in constructor
      */
-    public Strat_ORP_BottomLeft(ADT_AreaExtended area) {
+    public Strat_ORP_BottomLeft(ADT_Area area) {
         super(area);
     }
 
     @Override
-    public ADT_AreaExtended compute() {
+    public ADT_Area compute() {
         List<ADT_Rectangle> rects = new ArrayList<>();
         List<ADT_Rectangle> newAreaRectangles = new ArrayList<>();
 
         //Add all types to a list such that we can sort the list
-        for (ADT_Rectangle type : area.getRectanglesToBePlaced()) {
+        for (ADT_Rectangle type : area.getRectangles()) {
             rects.add(type);
         }
 

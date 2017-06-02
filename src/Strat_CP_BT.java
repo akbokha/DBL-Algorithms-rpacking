@@ -12,21 +12,13 @@ class Strat_CP_BT extends Strat_BT_Template {
     Strat_CP_BT(ADT_AreaExtended area) {
         super(area);
 
-        RectangleType[] rectangleTypes = area.getRectanglesToBePlaced();
+        ADT_Rectangle[] rectangles = area.getRectanglesToBePlaced();
 
-        // Sum the amount of rectangles to be placed.
-        int count = 0;
-        for (RectangleType rectangleType : rectangleTypes) {
-            count += rectangleType.getNumberOfinstances();
-        }
-
-        rectangles = new ADT_Rectangle[count];
+        rectangles = new ADT_Rectangle[rectangles.length];
         int index = 0;
-        for (RectangleType rectangleType : rectangleTypes) {
-            while (rectangleType.canInstantiate()) {
-                ADT_Rectangle rectangle = rectangleType.createInstance();
+        for (ADT_Rectangle rec : rectangles) {
+                ADT_Rectangle rectangle = rec;
                 rectangles[index++] = rectangle;
-            }
         }
 
         //output = new Output_GraphicalOutput(area);
@@ -54,11 +46,7 @@ class Strat_CP_BT extends Strat_BT_Template {
 
     @Override
     boolean accept(ADT_Rectangle last) {
-        if (last == null) {
-            return false;
-        } else {
-            return index + 1 >= rectangles.length;
-        }
+        return last != null && index + 1 >= rectangles.length;
     }
 
     @Override
@@ -69,14 +57,12 @@ class Strat_CP_BT extends Strat_BT_Template {
         // Make distinction between the first rectangle and all others.
         if (index == 0) {
             // Let the first rectangle start with its center in the center such that it will only evaluate the top right corner.
-            area.moveRectangle(
-                    rectangle,
-                    Integer.MAX_VALUE - rectangle.getWidth(), // Note: rectangle width has to be subtracted in order to prevent an overflow.
-                    Math.max(0, (int) Math.ceil((area.getHeight() - rectangle.getHeight()) / 2))
-            );
+            rectangle.setX(Integer.MAX_VALUE - rectangle.getWidth() - 1); // Note: rectangle width has to be subtracted in order to prevent an overflow.
+            rectangle.setY(Math.max(0, (int) Math.ceil((area.getHeight() - rectangle.getHeight()) / 2)));
         } else {
             // Start at the bottom left.
-            area.moveRectangle(rectangle, 0, 0);
+            rectangle.setX(-1);
+            rectangle.setY(0);
         }
         return next();
     }
@@ -121,7 +107,10 @@ class Strat_CP_BT extends Strat_BT_Template {
                     }
                 }
             }
-        } while (!area.moveRectangle(rectangle, x, y));
+        } while (!areaEx.checkRectangleBordersWith(rectangle));
+
+        areaEx.add(rectangle);
+        areaEx.moveRectangle(rectangle, x, y);
 
         //output.draw();
 

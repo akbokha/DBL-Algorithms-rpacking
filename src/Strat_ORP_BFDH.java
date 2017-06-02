@@ -5,12 +5,12 @@ import java.util.Collections;
  * Best-Fit Decreasing Height algorithm to solve the rectangle packing problem.
  */
 public class Strat_ORP_BFDH extends Strat_AbstractStrat{
-    public Strat_ORP_BFDH(ADT_AreaExtended area) {
+    public Strat_ORP_BFDH(ADT_Area area) {
         super(area);
     }
     
     @Override
-    public ADT_AreaExtended compute() {
+    public ADT_Area compute() {
         ArrayList<ADT_Rectangle> toBePlaced = new ArrayList<>();
         area.getRectangleIterator().forEachRemaining(toBePlaced::add);
         Collections.sort(toBePlaced, new ADT_SortRecOnWidth()); //Sort list in non-increasing order on width

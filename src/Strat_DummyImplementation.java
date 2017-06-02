@@ -9,11 +9,11 @@ public class Strat_DummyImplementation extends Strat_AbstractStrat {
         // Simple dummy implementation that places all rectangles next to each other in one single strip
         int curX = 0;
         int widthCurrentRectangle = 0;
-        ADT_Rectangle[] recs = area.getRectanglesToBePlaced();
+        ADT_Rectangle[] recs = areaEx.getRectangles();
         for (ADT_Rectangle currentRec : recs) {
             
         }
-        return area;
+        return areaEx;
     }
     
 }

@@ -11,7 +11,7 @@ public class PackingSolver {
     public static void main(String[] args) throws Exception {
         long curTime = System.currentTimeMillis(); // to check running time
 
-        Input_InputInterface input = null;
+        Input_Scanner input = null;
         boolean graphical = false;
 
         // Handle all program arguments.
@@ -48,7 +48,7 @@ public class PackingSolver {
         StrategyPicker.area = area;
         Strat_AbstractStrat strategy = StrategyPicker.pickStrategy();
 
-        ADT_AreaExtended result = strategy.compute();
+        ADT_Area result = strategy.compute();
 
         if (result == null) {
             System.err.println("strategy computation failed");

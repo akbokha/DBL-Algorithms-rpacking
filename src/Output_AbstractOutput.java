@@ -1,8 +1,8 @@
 public abstract class Output_AbstractOutput {
 
-    protected ADT_AreaExtended area;
+    protected ADT_Area area;
 
-    public Output_AbstractOutput(ADT_AreaExtended area) {
+    public Output_AbstractOutput(ADT_Area area) {
         this.area = area;
     }
 

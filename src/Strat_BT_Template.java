@@ -9,8 +9,8 @@ abstract public class Strat_BT_Template extends Strat_AbstractStrat {
 
     private Collection<Strat_BT_PrunerInterface> pruners;
 
-    public Strat_BT_Template(ADT_AreaExtended area) {
-        super(area);
+    public Strat_BT_Template(ADT_AreaExtended areaEx) {
+        super(areaEx);
         pruners = new ArrayList<>(5);
     }
 
@@ -31,7 +31,7 @@ abstract public class Strat_BT_Template extends Strat_AbstractStrat {
     @Override
     public ADT_AreaExtended compute() {
         if (computeBranch()) {
-            return area;
+            return areaEx;
         } else {
             return null;
         }
@@ -52,7 +52,7 @@ abstract public class Strat_BT_Template extends Strat_AbstractStrat {
         // Check if this is a valid solution.
         if (accept(last)) {
             System.out.println("Success");
-            (new Output_Plaintext(area)).draw();
+            (new Output_Plaintext(areaEx)).draw();
             return true;
         }
 
@@ -79,7 +79,7 @@ abstract public class Strat_BT_Template extends Strat_AbstractStrat {
      */
     protected boolean reject(ADT_Rectangle last) {
         for (Strat_BT_PrunerInterface pruner : pruners) {
-            if (pruner.reject(area, last)) {
+            if (pruner.reject(areaEx, last)) {
                 return true;
             }
         }
@@ -110,4 +110,5 @@ abstract public class Strat_BT_Template extends Strat_AbstractStrat {
      * Revert the changes made by first().
      */
     abstract void revert();
+
 }

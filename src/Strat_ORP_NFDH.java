@@ -6,12 +6,12 @@ import java.util.Collections;
  */
 public class Strat_ORP_NFDH extends Strat_AbstractStrat {
     
-    public Strat_ORP_NFDH(ADT_AreaExtended area) {
+    public Strat_ORP_NFDH(ADT_Area area) {
         super(area);
     }
     
     @Override
-    public ADT_AreaExtended compute() {
+    public ADT_Area compute() {
         
         ArrayList<ADT_Rectangle> toBePlaced = new ArrayList<>();
         area.getRectangleIterator().forEachRemaining(toBePlaced::add);
