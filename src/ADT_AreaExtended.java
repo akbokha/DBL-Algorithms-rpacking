@@ -1,8 +1,5 @@
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
 
 /*
  * @todo requires rotate rectangle function
@@ -184,6 +181,13 @@ public class ADT_AreaExtended extends ADT_Area implements Cloneable {
     @Override
     public int[] getRectangleStrips(boolean horizontal) {
         return scanStrips(horizontal, false);
+    }
+
+    public void addAndMoveRectangle(ADT_Rectangle rectangle, int x, int y) {
+        rectangle.setX(x);
+        rectangle.setY(y);
+
+        add(rectangle);
     }
 
     public boolean moveRectangle(ADT_Rectangle rectangle, int newX, int newY) {

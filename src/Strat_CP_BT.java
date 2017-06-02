@@ -8,6 +8,8 @@ class Strat_CP_BT extends Strat_BT_Template {
     private ADT_Rectangle[] rectangles;
     private int index = -1;
     private Output_GraphicalOutput output;
+    private int x;
+    private int y;
 
     Strat_CP_BT(ADT_AreaExtended areaEx) {
         super(areaEx);
@@ -17,8 +19,7 @@ class Strat_CP_BT extends Strat_BT_Template {
         rectangles = new ADT_Rectangle[allRectangles.length];
         int index = 0;
         for (ADT_Rectangle rec : allRectangles) {
-                ADT_Rectangle rectangle = rec;
-                rectangles[index++] = rectangle;
+                rectangles[index++] = rec   ;
         }
 
         //output = new Output_GraphicalOutput(areaEx);
@@ -51,19 +52,27 @@ class Strat_CP_BT extends Strat_BT_Template {
 
     @Override
     boolean first() {
-        // Step one level down into the branch and retrieve a pointer to the currently placed rectangle.
+        // Step one level down into the branch and retrieve a pointer to the first rectangle.
         ADT_Rectangle rectangle = rectangles[++index];
+        x = 0;
+        y = 0;
 
         // Make distinction between the first rectangle and all others.
         if (index == 0) {
             // Let the first rectangle start with its center in the center such that it will only evaluate the top right corner.
-            rectangle.setX(Integer.MAX_VALUE - rectangle.getWidth() - 1); // Note: rectangle width has to be subtracted in order to prevent an overflow.
-            rectangle.setY(Math.max(0, (int) Math.ceil((areaEx.getHeight() - rectangle.getHeight()) / 2)));
-        } else {
-            // Start at the bottom left.
-            rectangle.setX(-1);
-            rectangle.setY(0);
+            x = Math.max(0, (int) Math.ceil((areaEx.getWidth() - rectangle.getWidth()) / 2));
+            y = Math.max(0, (int) Math.ceil((areaEx.getHeight() - rectangle.getHeight()) / 2));
         }
+
+        ADT_Vector next = findNextPosition(rectangle, rectangle.getX(), rectangle.getY());
+
+        if (next != null) {
+            areaEx.add(index);
+            areaEx.moveRectangle(rectangle, next.x, next.y);
+        } else {
+            return false;
+        }
+
         return next();
     }
 
@@ -71,9 +80,20 @@ class Strat_CP_BT extends Strat_BT_Template {
     boolean next() {
         // Retrieve a pointer to the currently placed rectangle.
         ADT_Rectangle rectangle = rectangles[index];
-        int x = rectangle.getX();
-        int y = rectangle.getY();
 
+        ADT_Vector next = findNextPosition(rectangle, rectangle.getX(), rectangle.getY());
+
+        if (next != null) {
+            areaEx.add(index);
+            areaEx.moveRectangle(rectangle, next.x, next.y);
+        } else {
+            return false;
+        }
+
+        return true;
+    }
+
+    private ADT_Vector findNextPosition(ADT_Rectangle rectangle, int x, int y) {
         do {
             // Increment x and check if this coordinate is valid.
             x++;
@@ -103,25 +123,17 @@ class Strat_CP_BT extends Strat_BT_Template {
                             return first();
                         }*/
                     } else {
-                        return false;
+                        return null;
                     }
                 }
             }
         } while (!areaEx.checkRectangleBordersWith(rectangle));
 
-        areaEx.add(index);
-        areaEx.moveRectangle(rectangle, x, y);
-
-        //output.draw();
-
-        return true;
+        return new ADT_Vector(x, y);
     }
 
     @Override
     void revert() {
-        // Revert the rectangle back to the initial place.
-        ADT_Rectangle rectangle = rectangles[index];
-
         areaEx.removeRectangle(index);
 
         // Move one level higher into the branch.
