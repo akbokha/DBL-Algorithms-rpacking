@@ -33,11 +33,7 @@ public class ADT_AreaExtended extends ADT_Area implements Cloneable {
         this.version = rectangles.length;
     }
     
-    /**
-     * Get the version w.r.t. how many rectangles have to be placed
-     * 
-     * @return 3, 5, 10, 25 or 10000
-     */
+    @Override
     public int getVersion(){
         return this.version;
     }
