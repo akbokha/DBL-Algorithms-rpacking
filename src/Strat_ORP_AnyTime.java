@@ -3,7 +3,7 @@ import java.util.logging.Logger;
 
 public class Strat_ORP_AnyTime extends Strat_AbstractStrat {
     
-    int STEPSIZE = 5;
+    int STEPSIZE = 1;
     
     public Strat_ORP_AnyTime(ADT_Area area) {
         super(area);
@@ -12,7 +12,7 @@ public class Strat_ORP_AnyTime extends Strat_AbstractStrat {
     @Override
     public ADT_Area compute() {
         try {
-            new Output_GraphicalOutput(area).draw();
+//            new Output_GraphicalOutput(area).draw();
             //Used to initialize an average starting width and height
             ADT_Area bestArea = new Strat_DummyImplementation(area.clone()).compute();
             //Set initial width and height for a container to the getDimensions
@@ -29,7 +29,7 @@ public class Strat_ORP_AnyTime extends Strat_AbstractStrat {
                     System.err.print("W:" + width + "\tH:" + height + "\t");
 
                     //Get a solution with this width and height
-                    ADT_AreaExtended newArea = createNewSolution(width, height);
+                    ADT_AreaExtended newArea = createNewSolution();
 
                     System.err.println(newArea);
 
@@ -37,7 +37,7 @@ public class Strat_ORP_AnyTime extends Strat_AbstractStrat {
                     if(newArea != null) {
                         bestArea = newArea.clone().toArea();
                     } else if (STEPSIZE == 1) {//If stepsize == 1 and no solution is found, increase height
-                        if(areaEx.getHeight() != ADT_Area.INF) {// but if the height was fixed, no better solution can be found
+                        if(area.getHeight() != ADT_Area.INF) {// but if the height was fixed, no better solution can be found
                             break;
                         }
                         width += STEPSIZE;
@@ -59,10 +59,9 @@ public class Strat_ORP_AnyTime extends Strat_AbstractStrat {
         }
     }
     
-    ADT_AreaExtended createNewSolution(int width, int height) {
+    ADT_AreaExtended createNewSolution() {
         try {
             ADT_AreaExtended newArea = areaEx.clone();
-            newArea.setDimensions(width, height);
             newArea = (new Strat_CP_BT(newArea)).compute();
             return newArea;
         } catch (CloneNotSupportedException ex) {
