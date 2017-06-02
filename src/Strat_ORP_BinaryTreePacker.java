@@ -18,6 +18,7 @@ public class Strat_ORP_BinaryTreePacker extends Strat_AbstractStrat {
     int greatestPaste = 0; // Number of sides of rec at bestNode where other rectangles are pasted
     int fixedHeightValue;
     boolean fixedHeight;
+    boolean isFlipped;
     
     public Strat_ORP_BinaryTreePacker (ADT_Area area) {
         super(area);
@@ -36,6 +37,9 @@ public class Strat_ORP_BinaryTreePacker extends Strat_AbstractStrat {
             greatestPaste = 0;
             ADT_Rectangle rec = rectangles[recIndex];
             getBestPlacement(rec);
+            if (isFlipped) {
+                rec.setFlipped(true);
+            }
             rec.setX(bestNode.point.x);
             rec.setY(bestNode.point.y);
             bestNode.placeRectangle(rec);
@@ -58,15 +62,15 @@ public class Strat_ORP_BinaryTreePacker extends Strat_AbstractStrat {
                 if (area.canFlip()) { // if rotatable
                     // rotate rectangle
                     dummyRec.setFlipped(true);
-                    dummyRec.setHeight(dummyRec.getWidth());
-                    dummyRec.setWidth(dummyRec.getHeight());
-                    isLocationBetter(node, dummyRec);
+                    if (isLocationBetter(node, dummyRec)) {
+                        isFlipped = true;
+                    }
                     // undo rotation dummyRec
-                    dummyRec.setHeight(dummyRec.getWidth());
-                    dummyRec.setWidth(dummyRec.getHeight());
                     dummyRec.setFlipped(false);
                 }
-                isLocationBetter(node, dummyRec);
+                if (isLocationBetter(node, dummyRec)) {
+                    isFlipped = false;
+                }
             }
         }
     }
