@@ -212,9 +212,6 @@ public class Strat_ORP_BinaryTreePacker extends Strat_AbstractStrat {
     private class Node {
         ADT_Rectangle rec = null;
         ADT_Vector point = new ADT_Vector(-1, -1);
-        Node node_TL;
-        Node node_BR;
-        
         /**
          * @pre no rectangle at x,y
          * @param x 
@@ -230,13 +227,12 @@ public class Strat_ORP_BinaryTreePacker extends Strat_AbstractStrat {
         
         public void placeRectangle(ADT_Rectangle rec) {
             this.rec = rec;
-            Node nodeTL = new Node(rec.getX(), (rec.getY() + rec.getHeight()));
-            binaryTree.addNode(nodeTL);
-            this.node_TL  = nodeTL;
             
-            Node nodeBR = new Node((rec.getX() + rec.getWidth()), rec.getY());
-            binaryTree.addNode(nodeBR);
-            this.node_BR = nodeBR;
+            Node TopLeftChildNode = new Node(rec.getX(), (rec.getY() + rec.getHeight()));
+            binaryTree.addNode(TopLeftChildNode);
+            Node BottomRightChildNode = new Node((rec.getX() + rec.getWidth()), rec.getY());
+            binaryTree.addNode(BottomRightChildNode);
+            
             binaryTree.points.get(bestNode.point.x).remove(bestNode);
             checkNodes(rec);
         }
