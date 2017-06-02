@@ -1,8 +1,6 @@
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
 
 /*
  * @todo requires rotate rectangle function
@@ -24,6 +22,7 @@ public class ADT_AreaExtended extends ADT_Area implements Cloneable {
 
     public ADT_AreaExtended(int width, int height, boolean flippable, ADT_Rectangle[] rectangles) {
         super(width, height, flippable, rectangles);
+        setDimensions(width, height);
         this.width = width;
         this.height = height;
         this.flippable = flippable;
@@ -66,11 +65,15 @@ public class ADT_AreaExtended extends ADT_Area implements Cloneable {
         return i;
     }
 
-    private int getIndex(int x, int y) {
-        return y * getWidth() + x;
+    private short getIndex(int x, int y) {
+        assert x > 0 && y > 0 && x < getWidth() && y < getHeight();
+
+        return (short) (y * getWidth() + x);
     }
 
     private void setArrayAt(int x, int y, short val) {
+        assert x > 0 && y > 0 && x < getWidth() && y < getHeight();
+
         int i = getIndex(x, y);
         array[i] = val;
     }
@@ -79,7 +82,7 @@ public class ADT_AreaExtended extends ADT_Area implements Cloneable {
      * Returns true if there is no rectangle border at this position
      */
     public boolean isEmptyAt(int x, int y) {
-        if (x < 0 || y < 0 || y > getHeight() || x > getWidth()) {
+        if (x < 0 || y < 0 || y >= getHeight() || x >= getWidth()) {
             return false;
         }
         int i = getIndex(x, y);
@@ -132,7 +135,7 @@ public class ADT_AreaExtended extends ADT_Area implements Cloneable {
         return checkRectangleBordersFrom(shape.getX(), shape.getY(), shape.getWidth(), shape.getHeight());
     }
 
-    private boolean checkRectangleBordersFrom(int posX, int posY, int width, int height) {
+    boolean checkRectangleBordersFrom(int posX, int posY, int width, int height) {
         //Check horizontal borders to this shape's id
         for (int x = posX; x <= posX + width; x++) {
             if(!isEmptyAt(x, posY)) return false;

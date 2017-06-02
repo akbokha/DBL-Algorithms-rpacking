@@ -9,8 +9,8 @@ class Strat_CP_BT extends Strat_BT_Template {
     private int index = -1;
     private Output_GraphicalOutput output;
 
-    Strat_CP_BT(ADT_AreaExtended area) {
-        super(area);
+    Strat_CP_BT(ADT_AreaExtended areaEx) {
+        super(areaEx);
 
         ADT_Rectangle[] allRectangles = areaEx.getRectanglesToBePlaced();
 
@@ -107,7 +107,7 @@ class Strat_CP_BT extends Strat_BT_Template {
                     }
                 }
             }
-        } while (!areaEx.checkRectangleBordersWith(rectangle));
+        } while (!areaEx.checkRectangleBordersFrom(x, y, rectangle.getWidth(), rectangle.getHeight()));
 
         areaEx.add(rectangle);
         areaEx.moveRectangle(rectangle, x, y);
@@ -121,12 +121,8 @@ class Strat_CP_BT extends Strat_BT_Template {
     void revert() {
         // Revert the rectangle back to the initial place.
         ADT_Rectangle rectangle = rectangles[index];
-        rectangle.setX(ADT_Rectangle.NOTSET);
-        rectangle.setY(ADT_Rectangle.NOTSET);
 
-        // @todo remove rectangle from the placed rectangles in area.
-
-        rectangle.setFlipped(false);
+        areaEx.removeRectangle(rectangle);
 
         // Move one level higher into the branch.
         index--;
