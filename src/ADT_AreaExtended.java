@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -9,9 +10,8 @@ import java.util.List;
  * @notice currently it is possible that the position of the rectangle in the array is different
  *      than what it defined in its own coordinate variables. Has potential for unreliable behaviour.
  */
-public class ADT_AreaExtended implements Cloneable {
+public class ADT_AreaExtended extends ADT_Area implements Cloneable {
     private final short EMPTY_INDEX = 0;
-    private final int INF = ADT_Area.INF;
     private HashMap<Short, ADT_Rectangle> shapes;
     private short[] array;
     private short lastIssuedIndex;
@@ -19,29 +19,18 @@ public class ADT_AreaExtended implements Cloneable {
     private int height;
     private final boolean flippable;
     private final int version; // 3, 5, 10, 25 or 10000
+    
+    private ADT_Rectangle[] toBePlacedRecs;
 
-    private RectangleType[] toBePlacedRects;
-
-    public ADT_AreaExtended(int width, int height, boolean flippable, RectangleType[] rectangleTypes) {
+    public ADT_AreaExtended(int width, int height, boolean flippable, ADT_Rectangle[] rectangles) {
+        super(width, height, flippable, rectangles);
         this.width = width;
         this.height = height;
         this.flippable = flippable;
         lastIssuedIndex = 0;
         shapes = new HashMap<>();
-        toBePlacedRects = rectangleTypes;
-        this.version = this.toBePlacedRects.length;
-    }
-
-    public boolean canFlip() {
-        return flippable;
-    }
-
-    public int getWidth() {
-        return width;
-    }
-
-    public int getHeight() {
-        return height;
+        toBePlacedRecs = rectangles;
+        this.version = rectangles.length;
     }
     
     /**
@@ -55,17 +44,16 @@ public class ADT_AreaExtended implements Cloneable {
 
     @Override
     public ADT_AreaExtended clone() throws CloneNotSupportedException {
-        RectangleType[] recs = getRectangleTypesToBePlaced();
-        RectangleType[] newRecs = new RectangleType[recs.length];
-        for(int i = 0; i < recs.length; i++) {
-            newRecs[i] = recs[i].clone();
+        super.clone();
+        
+        ADT_AreaExtended newArea = new ADT_AreaExtended(getWidth(), getHeight(), canFlip(), Arrays.copyOf(toBePlacedRecs, toBePlacedRecs.length));
+        
+        ADT_Rectangle[] oldPlacedRecs = getRectangles();
+        
+        for (ADT_Rectangle oldPlacedRec : oldPlacedRecs) {
+            newArea.add(oldPlacedRec.clone());
         }
         
-        ADT_AreaExtended newArea = new ADT_AreaExtended(getWidth(), getHeight(), canFlip(), newRecs);
-        
-        for(ADT_Rectangle r : this.getPlacedRectangles()) {
-            newArea.add(r.clone());
-        }
         return newArea;
     }
 
@@ -101,12 +89,30 @@ public class ADT_AreaExtended implements Cloneable {
     /**
      * Adds an rectangle to this area.
      *
+     * @param i
+     */
+    public void add(int i) {
+        short id = getNewId();
+        shapes.put(id, toBePlacedRecs[i]);
+        fillRectangleBordersWith(toBePlacedRecs[i], id);
+    }
+    
+    /**
+     *
      * @param shape
      */
     public void add(ADT_Rectangle shape) {
         short id = getNewId();
         shapes.put(id, shape);
-//        fillRectangleBordersWith(shape, id);
+        fillRectangleBordersWith(shape, id);
+    }
+    
+    /**
+     *
+     * @param shape
+     */
+    public void removeLastRectangle() {
+        removeRectangleBorders(shapes.remove(lastIssuedIndex));
     }
 
     private void fillRectangleBordersWith(ADT_Rectangle shape, short id) {
@@ -147,16 +153,8 @@ public class ADT_AreaExtended implements Cloneable {
     /*
      * Returns all rectangle types which can still be instantiated
      */
-    public RectangleType[] getRectangleTypesToBePlaced() {
-
-        List<RectangleType> list = new ArrayList<>();
-        for(RectangleType type : toBePlacedRects) {
-            if(type.canInstantiate()) {
-                list.add(type);
-            }
-        }
-
-        return list.toArray(new RectangleType[list.size()]);
+    public ADT_Rectangle[] getRectanglesToBePlaced() {
+        return toBePlacedRecs;
     }
 
     /*
@@ -171,7 +169,8 @@ public class ADT_AreaExtended implements Cloneable {
      *
      * @return the amount of rectangles this area contains.
      */
-    int getCount() {
+    @Override
+    public int getCount() {
         return shapes.size();
     }
 
@@ -192,6 +191,7 @@ public class ADT_AreaExtended implements Cloneable {
         return new ADT_Vector(maxX, maxY);
     }
 
+    @Override
     public ADT_Vector getDimensions() {
         int maxWidth = getWidth();
         int maxHeight = getHeight();
@@ -211,38 +211,34 @@ public class ADT_AreaExtended implements Cloneable {
         return new ADT_Vector(maxWidth, maxHeight);
     }
 
-
-    /**
-     * Constructs an iterator over all rectangles.
-     *
-     * @return iterator over all rectangles it contains.
-     */
-    public Iterator<ADT_Rectangle> getRectangleIterator() {
-        return shapes.values().iterator();
-    }
-
     public ADT_Rectangle[] getRectangles() {
         return shapes.values().toArray(new ADT_Rectangle[shapes.size()]);
     }
 
+    @Override
     public boolean isNewRectangleValid(ADT_Rectangle rectangle) {
         return checkRectangleBordersWith(rectangle);
     }
 
+    @Override
     public boolean isOccupied(ADT_Vector position) {
         return !isEmptyAt(position.x, position.y);
     }
 
     /**
      * Returns the strips populated with the number of empty spaces in each strip
+     * @return 
      */
+    @Override
     public int[] getEmptySpaceStrips(boolean horizontal) {
         return scanStrips(horizontal, true);
     }
 
     /**
      * Returns the strips populated with the total sum of (minimal side) occupied spaces of the to be placed rectangles.
+     * @return 
      */
+    @Override
     public int[] getRectangleStrips(boolean horizontal) {
         return scanStrips(horizontal, false);
     }
@@ -298,12 +294,13 @@ public class ADT_AreaExtended implements Cloneable {
 
     public int getTotalAreaRectanglesToBePlaced() {
         int total = 0;
-        for (RectangleType type : getRectangleTypesToBePlaced()) {
-            total += type.getHeight() * type.getWidth() * type.getNumberOfinstances();
+        for (ADT_Rectangle type : getRectanglesToBePlaced()) {
+            total += type.getHeight() * type.getWidth();
         }
         return total;
     }
     
+    @Override
     public int getTotalAreaRectangles(){
         int total = 0;
         for(short key : shapes.keySet()){
@@ -313,6 +310,7 @@ public class ADT_AreaExtended implements Cloneable {
         return total;
     }
 
+    @Override
     public boolean isValid() {
         ArrayList<ADT_Rectangle> checkedRecs = new ArrayList<>();
 
@@ -365,12 +363,24 @@ public class ADT_AreaExtended implements Cloneable {
 
         if (l1.getX() >= r2.getX() || l2.getX() >= r1.getX()) { // Check if one rectangle is on the left side of the other rectangle.
             return false;
-        } else if (l1.getY() <= r2.getY() || l2.getY() <= r1.getY()) { // Check if one rectangle is above the other rectangle.
-            return false;
-        } else {
-            return true;
+        } else return !(l1.getY() <= r2.getY() || l2.getY() <= r1.getY()); // Check if one rectangle is above the other rectangle.
+        
+    }
+
+    private void removeRectangleBorders(ADT_Rectangle shape) {
+        //Set horizontal borders
+        for (int x = shape.getX(); x <= shape.getX() + shape.getWidth(); x++) {
+            setArrayAt(x, shape.getY(), EMPTY_INDEX);
+            setArrayAt(x, shape.getY() + shape.getHeight(), EMPTY_INDEX);
+        }
+
+        //Set vertical borders
+        for (int y = shape.getX(); y <= shape.getX() + shape.getHeight(); y++) {
+            setArrayAt(shape.getX(), y, EMPTY_INDEX);
+            setArrayAt(shape.getX() + shape.getWidth(), y, EMPTY_INDEX);
         }
     }
+    
     private class Point {
         private int x;
         private int y;

@@ -23,7 +23,7 @@ public class Strat_ORP_AnyTime extends Strat_AbstractStrat {
             while(true) {
                 //Make sure that the area gets smaller and smaller until the
                 // minimal area is reached
-                if((width-STEPSIZE) * height >= area.getTotalAreaRectanglesToBePlaced() && width-STEPSIZE >= area.getRectangleTypesToBePlaced()[0].getWidth()) {
+                if((width-STEPSIZE) * height >= area.getTotalAreaRectanglesToBePlaced() && width-STEPSIZE >= area.getRectanglesToBePlaced()[0].getWidth()) {
                     width -= STEPSIZE;
                     System.err.print("W:" + width + "\tH:" + height + "\t");
 

@@ -12,7 +12,7 @@ class Strat_CP_BT extends Strat_BT_Template {
     Strat_CP_BT(ADT_AreaExtended area) {
         super(area);
 
-        RectangleType[] rectangleTypes = area.getRectangleTypesToBePlaced();
+        RectangleType[] rectangleTypes = area.getRectanglesToBePlaced();
 
         // Sum the amount of rectangles to be placed.
         int count = 0;

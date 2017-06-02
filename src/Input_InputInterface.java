@@ -1,3 +1,3 @@
 public interface Input_InputInterface {
-    ADT_AreaExtended read(RectangleTypeCombiner combiner) throws Exception;
+    ADT_AreaExtended read() throws Exception;
 }

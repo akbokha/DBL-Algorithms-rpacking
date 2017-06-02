@@ -13,7 +13,6 @@ public class PackingSolver {
 
         Input_InputInterface input = null;
         boolean graphical = false;
-        boolean printCombinerOutput = false;
 
         // Handle all program arguments.
         int index = 0;
@@ -30,9 +29,6 @@ public class PackingSolver {
                 case "-g":
                     graphical = true;
                     break;
-                case "-c":
-                    printCombinerOutput = true;
-                    break;
                 default:
                     System.err.println("Invalid parameter '" + args[index] + "' given.");
                     return;
@@ -46,18 +42,8 @@ public class PackingSolver {
         }
 
         ADT_AreaExtended area;
-
-        RectangleTypeCombiner combiner = new RectangleTypeCombiner();
-        area = input.read(combiner);
-
-
-        if(printCombinerOutput) {
-            RectangleType[] rectangleTypes = area.getRectangleTypesToBePlaced();
-
-            for (RectangleType r : rectangleTypes) {
-                System.out.println("Rectangle [" + r.getWidth() + "," + r.getHeight() + "] canRotate: " + r.canRotate() + " with " + r.getNumberOfinstances() + " instances");
-            }
-        }
+        
+        area = input.read();
         
         StrategyPicker.area = area;
         Strat_AbstractStrat strategy = StrategyPicker.pickStrategy();

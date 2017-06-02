@@ -14,11 +14,11 @@ public class Strat_ORP_BottomLeft extends Strat_AbstractStrat {
 
     @Override
     public ADT_AreaExtended compute() {
-        List<RectangleType> rects = new ArrayList<>();
+        List<ADT_Rectangle> rects = new ArrayList<>();
         List<ADT_Rectangle> newAreaRectangles = new ArrayList<>();
 
         //Add all types to a list such that we can sort the list
-        for (RectangleType type : area.getRectangleTypesToBePlaced()) {
+        for (ADT_Rectangle type : area.getRectanglesToBePlaced()) {
             rects.add(type);
         }
 
@@ -34,15 +34,8 @@ public class Strat_ORP_BottomLeft extends Strat_AbstractStrat {
         });
 
         //Meat of the algorithm: Pick the largest item and place it at the most bottom left position
-        for (RectangleType type : rects) {
-            while (type.canInstantiate()) {
-                //Pick the first items in the list (eg. the largest, we may want a more efficient data structure here)
-                ADT_Rectangle rectangle = type.createInstance();
-
-
-                //System.out.println("Processing rectangle " + rectangle.getWidth() + "," + rectangle.getHeight());
-                ProcessNextRectangle(rectangle, newAreaRectangles);
-            }
+        for (ADT_Rectangle rec : rects) {
+            ProcessNextRectangle(rec, newAreaRectangles);
         }
 
         //Find the final area width
