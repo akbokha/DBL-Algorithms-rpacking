@@ -1,3 +1,4 @@
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 
@@ -18,9 +19,12 @@ public class Strat_ORP_BinaryTreePacker extends Strat_AbstractStrat {
     int fixedHeightValue;
     boolean fixedHeight;
     boolean isFlipped;
+    ADT_Rectangle[] sortedRectangles;
     
     public Strat_ORP_BinaryTreePacker (ADT_Area area) {
         super(area);
+        sortedRectangles = area.getRectangles().clone();
+        Arrays.sort(sortedRectangles, new ADT_SortOnArea()); // sort on area
         this.binaryTree = new BinaryTree();
         fixedHeight = area.getHeight() != -1;
         if (fixedHeight) {
@@ -73,6 +77,28 @@ public class Strat_ORP_BinaryTreePacker extends Strat_AbstractStrat {
                 }
             }
         }
+    }
+    
+      /**
+     * Check if there is already a rectangle placed at (x,y)
+     * @param x coordinate to be checked
+     * @param y coordinate to be checked
+     * @param index of the rectangle in the array
+     * @return true iff there is a rectangle at (x,y) or if x < 0 or y <0
+     */
+    public boolean isRectangleAt (int x, int y, int index) {
+        if (x < 0 ||  y < 0) {
+            return true;
+        }
+        for (int i = 0; i <= index; i++) {
+            ADT_Rectangle rec = sortedRectangles[i];
+            boolean x_dim = (x >= rec.getX()) && (x < (rec.getX() + rec.getWidth()));
+            boolean y_dim = (y >= rec.getY()) && (y < rec.getY() + rec.getHeight());
+            if (x_dim && y_dim) {
+                return true;
+            }
+        }
+        return false;
     }
     
     /**
@@ -158,24 +184,24 @@ public class Strat_ORP_BinaryTreePacker extends Strat_AbstractStrat {
         int y_rec_topLeft = node.point.y + rec.getHeight();
         // check left side of possible placement rectangle
         for (int i = y; i <= y_rec_topLeft; i++) {
-            if (area.isRectangleAt(x-1, i, recIndex)) {
+            if (isRectangleAt(x-1, i, recIndex)) {
                 paste++;
                 break;
             } 
         }
         // check bottom side of possible placement rectangle
         for (int i = x; i <= x_rec_bottomRight; i++) {
-            if (area.isRectangleAt(i, y-1, recIndex)) {
+            if (isRectangleAt(i, y-1, recIndex)) {
                 paste++;
                 break;
             } 
         }
         // check right side of possible placement rectangle
-        if (area.isRectangleAt(x_rec_bottomRight, y, recIndex)) {
+        if (isRectangleAt(x_rec_bottomRight, y, recIndex)) {
             paste++;
         }
         // check top side of possible placement rectangle
-        if (area.isRectangleAt(x, y_rec_topLeft, recIndex)) {
+        if (isRectangleAt(x, y_rec_topLeft, recIndex)) {
             paste++;
         }
         return paste;
