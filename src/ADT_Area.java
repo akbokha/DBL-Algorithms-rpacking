@@ -8,8 +8,11 @@ public class ADT_Area extends ADT_Rectangle implements Cloneable {
     public ADT_Area(int width, int height, boolean flippable, ADT_Rectangle[] rectangles) {
         super(width, height, 0, 0, flippable);
         shapes = rectangles;
-        Arrays.sort(shapes);
+        // Arrays.sort(shapes, new ADT_SortOnArea());
+        // Sorting is moved to local strategies
     }
+    
+    
     
     @Override
     public ADT_Area clone() throws CloneNotSupportedException {
@@ -104,14 +107,6 @@ public class ADT_Area extends ADT_Rectangle implements Cloneable {
         assert rectangle.getY() != NOTSET;
         assert rectangle.getX() >= 0;
         assert rectangle.getY() >= 0;
-
-        // Check if it doesn't exceed the area boundaries
-        if (
-                rectangle.getX() + rectangle.getWidth() > this.getWidth()
-                || rectangle.getY() + rectangle.getHeight() > this.getHeight()
-        ) {
-            return false;
-        }
 
         // Check if it overlaps
         for(Iterator<ADT_Rectangle> recs = getRectangleIterator(); recs.hasNext();) {

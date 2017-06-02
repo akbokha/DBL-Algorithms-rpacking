@@ -1,3 +1,4 @@
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 
@@ -12,15 +13,18 @@ public class Strat_ORP_BinaryTreePacker extends Strat_AbstractStrat {
     BinaryTree binaryTree;
     int recIndex; // the ith rectangle that is currently being placed
     
-    Node bestNode = new Node(0, 0); // Best node to place rec
+    Node bestNode = new Node(-1, -1); // Best node to place rec
     int leastArea = Integer.MAX_VALUE; // Size of bounding box when rec is at bestNode
-    int greatestPaste = 0; // Number of sides of rec at bestNode where other rectangles are pasted
+    int greatestPaste = -1; // Number of sides of rec at bestNode where other rectangles are pasted
     int fixedHeightValue;
     boolean fixedHeight;
     boolean isFlipped;
+    ADT_Rectangle[] sortedRectangles;
     
     public Strat_ORP_BinaryTreePacker (ADT_Area area) {
         super(area);
+        sortedRectangles = area.getRectangles().clone();
+        Arrays.sort(sortedRectangles, new ADT_SortOnArea()); // sort on area
         this.binaryTree = new BinaryTree();
         fixedHeight = area.getHeight() != -1;
         if (fixedHeight) {
@@ -33,7 +37,6 @@ public class Strat_ORP_BinaryTreePacker extends Strat_AbstractStrat {
     public ADT_Area compute() {
         ADT_Rectangle [] rectangles = area.getRectangles();
         for (recIndex = 0; recIndex < rectangles.length; recIndex++) {
-            greatestPaste = 0;
             ADT_Rectangle rec = rectangles[recIndex];
             getBestPlacement(rec);
             if (isFlipped) {
@@ -42,6 +45,9 @@ public class Strat_ORP_BinaryTreePacker extends Strat_AbstractStrat {
             rec.setX(bestNode.point.x);
             rec.setY(bestNode.point.y);
             bestNode.placeRectangle(rec);
+            
+            leastArea = Integer.MAX_VALUE;
+            greatestPaste = -1;
         }
         return area;
     }
@@ -71,6 +77,28 @@ public class Strat_ORP_BinaryTreePacker extends Strat_AbstractStrat {
                 }
             }
         }
+    }
+    
+      /**
+     * Check if there is already a rectangle placed at (x,y)
+     * @param x coordinate to be checked
+     * @param y coordinate to be checked
+     * @param index of the rectangle in the array
+     * @return true iff there is a rectangle at (x,y) or if x < 0 or y <0
+     */
+    public boolean isRectangleAt (int x, int y, int index) {
+        if (x < 0 ||  y < 0) {
+            return true;
+        }
+        for (int i = 0; i <= index; i++) {
+            ADT_Rectangle rec = sortedRectangles[i];
+            boolean x_dim = (x >= rec.getX()) && (x < (rec.getX() + rec.getWidth()));
+            boolean y_dim = (y >= rec.getY()) && (y < rec.getY() + rec.getHeight());
+            if (x_dim && y_dim) {
+                return true;
+            }
+        }
+        return false;
     }
     
     /**
@@ -156,24 +184,24 @@ public class Strat_ORP_BinaryTreePacker extends Strat_AbstractStrat {
         int y_rec_topLeft = node.point.y + rec.getHeight();
         // check left side of possible placement rectangle
         for (int i = y; i <= y_rec_topLeft; i++) {
-            if (! area.isRectangleAt(x, i, recIndex)) {
+            if (isRectangleAt(x-1, i, recIndex)) {
                 paste++;
                 break;
             } 
         }
         // check bottom side of possible placement rectangle
         for (int i = x; i <= x_rec_bottomRight; i++) {
-            if (! area.isRectangleAt(i, y, recIndex)) {
+            if (isRectangleAt(i, y-1, recIndex)) {
                 paste++;
                 break;
             } 
         }
         // check right side of possible placement rectangle
-        if (! area.isRectangleAt(x_rec_bottomRight, y, recIndex)) {
+        if (isRectangleAt(x_rec_bottomRight, y, recIndex)) {
             paste++;
         }
         // check top side of possible placement rectangle
-        if (! area.isRectangleAt(x, y_rec_topLeft, recIndex)) {
+        if (isRectangleAt(x, y_rec_topLeft, recIndex)) {
             paste++;
         }
         return paste;
@@ -208,11 +236,8 @@ public class Strat_ORP_BinaryTreePacker extends Strat_AbstractStrat {
     }
         
     private class Node {
-        ADT_Rectangle rec;
-        ADT_Vector point;
-        Node node_TL;
-        Node node_BR;
-        
+        ADT_Rectangle rec = null;
+        ADT_Vector point = new ADT_Vector(-1, -1);
         /**
          * @pre no rectangle at x,y
          * @param x 
@@ -222,54 +247,62 @@ public class Strat_ORP_BinaryTreePacker extends Strat_AbstractStrat {
             this.point = new ADT_Vector(x, y);
         }
         
-        public Node(){
-            // create terminating node
-        }
+//        public Node(){
+//            // create terminating node
+//        }
         
         public void placeRectangle(ADT_Rectangle rec) {
             this.rec = rec;
-            Node nodeTL = new Node(rec.getX(), (rec.getY() + rec.getHeight()));
-            binaryTree.addNode(nodeTL);
-            this.node_TL  = nodeTL;
             
-            Node nodeBR = new Node((rec.getX() + rec.getWidth()), rec.getY());
-            binaryTree.addNode(nodeBR);
-            this.node_BR = nodeBR;
+            Node TopLeftChildNode = new Node(rec.getX(), (rec.getY() + rec.getHeight()));
+            binaryTree.addNode(TopLeftChildNode);
+            Node BottomRightChildNode = new Node((rec.getX() + rec.getWidth()), rec.getY());
+            binaryTree.addNode(BottomRightChildNode);
+            
+            binaryTree.points.get(bestNode.point.x).remove(bestNode);
             checkNodes(rec);
         }
         
         /**
          * Checks if a node should be removed from collection
          * And terminates node (node.rec and node.point become null)
+         * @pre x and y of rec have to be set
          * @param rec 
          */
         private void checkNodes(ADT_Rectangle rec) {
-            int x = rec.getX();
-            int y = rec.getY();
-            int [] x_values = new int[rec.getWidth()]; // the x_coordinates that are overlapped by rec
-            int [] y_values = new int[rec.getHeight()]; // the y_coordinates that are overlapped by rec
-            for (int i = 0; i < x_values.length; i++) {
-                x_values[i] = x + i;
+            // Check left edge of rec
+            HashSet<Node> x_collection = binaryTree.points.get(rec.getX());
+            for(Node node : x_collection){
+                if((node.point.y >= rec.getY() && 
+                        node.point.y < rec.getY()+rec.getHeight())){
+                    binaryTree.removeNode(node);
+                }
             }
-            for (int i = 0; i < y_values.length; i++) {
-                y_values[i] = y + 1;
-            }
-            // iterate over all possible coordinates on which we could ternminate nodes.
-            for (int i = 0; i < x_values.length; i++) {
-                HashSet<Node> x_collection;
-                if (binaryTree.points.get(x_values[i]) != null) {
-                    x_collection = binaryTree.points.get(x_values[i]);
-                    for (Node node : x_collection) {
-                        for (int j = 0; j < y_values.length; j++) {
-                            if (node.point.y == j) {
-                               binaryTree.removeNode(node);
-                               node.rec = null;
-                               node.point = null; 
-                            }
+            
+            // Check for bottom edge
+            for(int i = rec.getX(); i<rec.getX()+rec.getWidth(); ++i){
+                if(binaryTree.points.get(i) != null){
+                    for(Node node : binaryTree.points.get(i)){
+                        if(node.point.x == rec.getX()){
+                            binaryTree.removeNode(node);
                         }
                     }
                 }
             }
+        }
+        
+        public String toString(){
+            String result = new String();
+            if(rec != null && point != null){
+                result = "ERROR - BOTH POINT AND REC WERE FILLED";
+            }else if(rec == null && point != null){
+                result = "(" + point.x + ", " + point.y + ")";
+            }else if(rec != null && point == null){
+                result = rec.toString();
+            }else{
+                result = "Terminating node";
+            }
+            return result;
         }
     }
     
@@ -298,11 +331,13 @@ public class Strat_ORP_BinaryTreePacker extends Strat_AbstractStrat {
         }
         
         /**
+         * Removes node from tree and terminates it
          * @pre node /in points
          * @param node 
          */
         public void removeNode(Node node) {
             int x = node.point.x;
+            node.point = null;
             HashSet<Node> collection = points.get(x);
             collection.remove(node);
             if (collection.isEmpty()) {
