@@ -12,9 +12,9 @@ public class Strat_ORP_BinaryTreePacker extends Strat_AbstractStrat {
     BinaryTree binaryTree;
     int recIndex; // the ith rectangle that is currently being placed
     
-    Node bestNode = new Node(0, 0); // Best node to place rec
+    Node bestNode = new Node(-1, -1); // Best node to place rec
     int leastArea = Integer.MAX_VALUE; // Size of bounding box when rec is at bestNode
-    int greatestPaste = 0; // Number of sides of rec at bestNode where other rectangles are pasted
+    int greatestPaste = -1; // Number of sides of rec at bestNode where other rectangles are pasted
     int fixedHeightValue;
     boolean fixedHeight;
     boolean isFlipped;
@@ -33,7 +33,6 @@ public class Strat_ORP_BinaryTreePacker extends Strat_AbstractStrat {
     public ADT_Area compute() {
         ADT_Rectangle [] rectangles = area.getRectangles();
         for (recIndex = 0; recIndex < rectangles.length; recIndex++) {
-            greatestPaste = 0;
             ADT_Rectangle rec = rectangles[recIndex];
             getBestPlacement(rec);
             if (isFlipped) {
@@ -42,6 +41,9 @@ public class Strat_ORP_BinaryTreePacker extends Strat_AbstractStrat {
             rec.setX(bestNode.point.x);
             rec.setY(bestNode.point.y);
             bestNode.placeRectangle(rec);
+            
+            leastArea = Integer.MAX_VALUE;
+            greatestPaste = -1;
         }
         return area;
     }
