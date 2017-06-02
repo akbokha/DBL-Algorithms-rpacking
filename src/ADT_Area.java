@@ -105,14 +105,6 @@ public class ADT_Area extends ADT_Rectangle implements Cloneable {
         assert rectangle.getX() >= 0;
         assert rectangle.getY() >= 0;
 
-        // Check if it doesn't exceed the area boundaries
-        if (
-                rectangle.getX() + rectangle.getWidth() > this.getWidth()
-                || rectangle.getY() + rectangle.getHeight() > this.getHeight()
-        ) {
-            return false;
-        }
-
         // Check if it overlaps
         for(Iterator<ADT_Rectangle> recs = getRectangleIterator(); recs.hasNext();) {
             ADT_Rectangle currentRec = recs.next();
