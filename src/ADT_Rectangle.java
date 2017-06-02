@@ -111,4 +111,10 @@ public class ADT_Rectangle implements Comparable<ADT_Rectangle> {
     public boolean hasValidPlacement() {
         return x >= 0 && y >= 0;
     }
+    
+    @Override
+    public String toString(){
+        return "(" + x + ", " + y + ") " + "width = " + getWidth() + 
+                " height = " + getHeight();
+    }
 }
