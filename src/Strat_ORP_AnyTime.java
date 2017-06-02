@@ -37,7 +37,7 @@ public class Strat_ORP_AnyTime extends Strat_AbstractStrat {
                     if(newArea != null) {
                         bestArea = newArea.clone().toArea();
                     } else if (STEPSIZE == 1) {//If stepsize == 1 and no solution is found, increase height
-                        if(area.getHeight() != ADT_Area.INF) {// but if the height was fixed, no better solution can be found
+                        if(areaEx.getHeight() != ADT_Area.INF) {// but if the height was fixed, no better solution can be found
                             break;
                         }
                         width += STEPSIZE;
