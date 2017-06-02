@@ -12,9 +12,8 @@ import java.util.List;
  */
 public class ADT_AreaExtended extends ADT_Area implements Cloneable {
     private final short EMPTY_INDEX = 0;
-    private HashMap<Short, ADT_Rectangle> shapes;
+    private ADT_Rectangle[] shapes;
     private short[] array;
-    private short lastIssuedIndex;
     private int width;
     private int height;
     private final boolean flippable;
@@ -27,8 +26,7 @@ public class ADT_AreaExtended extends ADT_Area implements Cloneable {
         this.width = width;
         this.height = height;
         this.flippable = flippable;
-        lastIssuedIndex = 0;
-        shapes = new HashMap<>();
+        shapes = new ADT_Rectangle[rectangles.length];
         toBePlacedRecs = rectangles;
         this.version = rectangles.length;
     }
@@ -39,7 +37,7 @@ public class ADT_AreaExtended extends ADT_Area implements Cloneable {
     }
     
     public ADT_Area toArea() {
-        return new ADT_Area(width, height, flippable, shapes.values().toArray(new ADT_Rectangle[shapes.size()]));
+        return new ADT_Area(width, height, flippable, shapes);
     }
 
     @Override
@@ -50,20 +48,9 @@ public class ADT_AreaExtended extends ADT_Area implements Cloneable {
         
         ADT_Rectangle[] oldPlacedRecs = getRectangles();
         
-        for (ADT_Rectangle oldPlacedRec : oldPlacedRecs) {
-            newArea.add(oldPlacedRec.clone());
-        }
+        newArea.shapes = Arrays.copyOf(shapes, shapes.length);
         
         return newArea;
-    }
-
-    private short getNewId() {
-        short i = (short)(lastIssuedIndex + 1);
-        while (shapes.containsKey(i)) {
-            i++;
-        }
-        lastIssuedIndex = i;
-        return i;
     }
 
     private int getIndex(int x, int y) {
@@ -92,26 +79,19 @@ public class ADT_AreaExtended extends ADT_Area implements Cloneable {
      * @param i
      */
     public void add(int i) {
-        short id = getNewId();
-        shapes.put(id, toBePlacedRecs[i]);
-        fillRectangleBordersWith(toBePlacedRecs[i], id);
+        shapes[i] = toBePlacedRecs[i];
+        toBePlacedRecs[i] = null;
+        fillRectangleBordersWith(shapes[i], (short)i);
     }
     
     /**
      *
-     * @param shape
+     * @param i
      */
-    public void add(ADT_Rectangle shape) {
-        short id = getNewId();
-        shapes.put(id, shape);
-        fillRectangleBordersWith(shape, id);
-    }
-    
-    /**
-     *
-     */
-    public void removeLastRectangle() {
-        removeRectangleBorders(shapes.remove(lastIssuedIndex));
+    public void removeRectangle(int i) {
+        removeRectangleBorders(shapes[i]);
+        toBePlacedRecs[i] = shapes[i];
+        shapes[i] = null;
     }
 
     private void fillRectangleBordersWith(ADT_Rectangle shape, short id) {
@@ -160,7 +140,7 @@ public class ADT_AreaExtended extends ADT_Area implements Cloneable {
      * Returns the already placed rectangles in the area
      */
     public Iterable<ADT_Rectangle> getPlacedRectangles() {
-        return shapes.values();
+        return Arrays.asList(shapes);
     }
 
     /**
@@ -170,12 +150,12 @@ public class ADT_AreaExtended extends ADT_Area implements Cloneable {
      */
     @Override
     public int getCount() {
-        return shapes.size();
+        return shapes.length;
     }
 
     @Override
     public ADT_Rectangle[] getRectangles() {
-        return shapes.values().toArray(new ADT_Rectangle[shapes.size()]);
+        return shapes;
     }
 
     @Override
@@ -257,8 +237,8 @@ public class ADT_AreaExtended extends ADT_Area implements Cloneable {
 
     public int getTotalAreaRectanglesToBePlaced() {
         int total = 0;
-        for (ADT_Rectangle type : getRectanglesToBePlaced()) {
-            total += type.getHeight() * type.getWidth();
+        for (ADT_Rectangle rec : toBePlacedRecs) {
+            total += rec.getHeight() * rec.getWidth();
         }
         return total;
     }
@@ -266,8 +246,8 @@ public class ADT_AreaExtended extends ADT_Area implements Cloneable {
     @Override
     public int getTotalAreaRectangles(){
         int total = 0;
-        for(short key : shapes.keySet()){
-            total += shapes.get(key).getHeight() * shapes.get(key).getHeight();
+        for(ADT_Rectangle rec : shapes){
+            total += rec.getHeight() * rec.getHeight();
         }
         total += getTotalAreaRectanglesToBePlaced();
         return total;
