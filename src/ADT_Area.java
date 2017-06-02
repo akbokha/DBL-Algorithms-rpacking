@@ -33,8 +33,14 @@ public class ADT_Area extends ADT_Rectangle implements Cloneable {
     public Iterator<ADT_Rectangle> getRectangleIterator() {
         return Arrays.asList(shapes).iterator();
     }
-
-
+    
+    /**
+     * Get the version w.r.t. how many rectangles have to be placed
+     * @return 3, 5, 10, 25, 10000
+     */
+    public int getVersion() {
+        return getCount();
+    }
 
     /**
      * Return true if none of the already placed rectangles overlap with the parameter rectangle
