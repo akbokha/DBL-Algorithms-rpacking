@@ -1,11 +1,5 @@
-
 import java.util.Comparator;
 
-
-/**
- *
- * @author Bastiaan
- */
 public class ADT_SortRecOnWidth implements Comparator<ADT_Rectangle> {
 
     @Override

@@ -1,4 +1,3 @@
-
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -9,9 +8,6 @@ import java.util.Map;
  * bottom-right corner of a previously placed rectangle. The corner is chosen by
  * the least amount of extra space of the bounding box. If the space is equal,
  * the location with the highest paste number is chosen.
- * 
- * @author Abdel and Jorrit
- * @date May 31st, 2017
  */
 public class Strat_ORP_BinaryTreePacker extends Strat_AbstractStrat {
     

@@ -1,13 +1,9 @@
-
 import java.util.ArrayList;
 import java.util.Collections;
 
-
 /**
- *
- * @author Bastiaan
+ * Best-Fit Decreasing Height algorithm to solve the rectangle packing problem.
  */
-//Best-Fit Decreasing Height
 public class Strat_ORP_BFDH extends Strat_AbstractStrat{
     public Strat_ORP_BFDH(ADT_AreaExtended area) {
         super(area);

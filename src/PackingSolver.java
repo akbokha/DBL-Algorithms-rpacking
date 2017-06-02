@@ -3,9 +3,6 @@
  * Rectangle Packing - Group 10
  */
 
-/**
- * @author s158881
- */
 public class PackingSolver {
 
     /**

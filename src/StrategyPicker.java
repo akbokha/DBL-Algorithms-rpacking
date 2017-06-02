@@ -1,12 +1,3 @@
-/**
- * StrategyPicker that picks a strategy based on data in an ADT_Area object
- */
-
-
-/**
- * @author Abdel
- * 01-05-2017
- */
 public class StrategyPicker {
     
     /**

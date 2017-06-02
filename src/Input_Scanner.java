@@ -1,10 +1,6 @@
 import java.util.Scanner;
 import java.util.regex.Pattern;
 
-/**
- * @date Apr 26, 2017
- * @author Adriaan Knapen <a.d.knapen@student.tue.nl>
- */
 public abstract class Input_Scanner implements Input_InputInterface {
 
     private Scanner scanner = null;

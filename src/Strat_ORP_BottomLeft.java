@@ -1,9 +1,6 @@
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by s157035 on 8-5-2017.
- */
 public class Strat_ORP_BottomLeft extends Strat_AbstractStrat {
     /**
      * Constructor

@@ -51,6 +51,8 @@ abstract public class Strat_BT_Template extends Strat_AbstractStrat {
 
         // Check if this is a valid solution.
         if (accept(last)) {
+            System.out.println("Success");
+            (new Output_Plaintext(area)).draw();
             return true;
         }
 

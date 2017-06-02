@@ -1,5 +1,3 @@
-
-
 public abstract class Output_AbstractOutput {
 
     protected ADT_AreaExtended area;

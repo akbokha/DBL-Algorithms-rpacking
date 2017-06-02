@@ -1,9 +1,3 @@
-
-
-/**
- * @date Apr 26, 2017
- * @author Adriaan Knapen <a.d.knapen@student.tue.nl>
- */
 public class ADT_Rectangle implements ADT_ShapeInterface, Comparable<ADT_Rectangle> {
 
     static final int INF = -1;

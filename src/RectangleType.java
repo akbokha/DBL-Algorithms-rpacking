@@ -1,6 +1,3 @@
-/**
- * Created by s157035 on 12-5-2017.
- */
 public class RectangleType implements Cloneable {
     private final int width;
     private final int height;
@@ -64,7 +61,7 @@ public class RectangleType implements Cloneable {
         }
 
         decreaseInstances();
-        ADT_Rectangle rectangle = new ADT_Rectangle(width, height, 0, 0, canRotate());
+        ADT_Rectangle rectangle = new ADT_Rectangle(width, height, ADT_Rectangle.NOTSET, ADT_Rectangle.NOTSET, canRotate());
         return rectangle;
     }
     

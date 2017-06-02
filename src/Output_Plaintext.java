@@ -1,5 +1,3 @@
-
-
 public class Output_Plaintext extends Output_AbstractOutput {
 
     public Output_Plaintext(ADT_AreaExtended area) {

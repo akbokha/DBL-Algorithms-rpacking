@@ -1,9 +1,5 @@
 import java.util.*;
 
-/**
- * @date Apr 26, 2017
- * @author Adriaan Knapen <a.d.knapen@student.tue.nl>
- */
 @SuppressWarnings("Duplicates")
 public class ADT_Area extends ADT_Rectangle implements Cloneable {
 

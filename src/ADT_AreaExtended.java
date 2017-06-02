@@ -1,7 +1,10 @@
 import java.util.*;
 
-/**
- * Created by s157035 on 15-5-2017.
+/*
+ * @todo requires rotate rectangle function
+ * @todo requires function to remove rectangles from the set of placed rectangles.
+ * @notice currently it is possible that the position of the rectangle in the array is different
+ *      than what it defined in its own coordinate variables. Has potential for unreliable behaviour.
  */
 public class ADT_AreaExtended implements Cloneable {
     private final short EMPTY_INDEX = 0;
@@ -11,8 +14,8 @@ public class ADT_AreaExtended implements Cloneable {
     private short lastIssuedIndex;
     private int width;
     private int height;
-    private boolean flippable;
-    private int version; // 3, 5, 10, 25 or 10000
+    private final boolean flippable;
+    private final int version; // 3, 5, 10, 25 or 10000
 
     private RectangleType[] toBePlacedRects;
 
@@ -180,7 +183,7 @@ public class ADT_AreaExtended implements Cloneable {
      *
      * @return the amount of rectangles this area contains.
      */
-    public int getCount() {
+    int getCount() {
         return shapes.size();
     }
 
@@ -259,7 +262,7 @@ public class ADT_AreaExtended implements Cloneable {
     }
 
     public boolean moveRectangle(ADT_Rectangle rectangle, int newX, int newY) {
-        if(checkRectangleBordersFrom(newX, newY, rectangle.getWidth(), rectangle.getHeight())) {
+        if(checkRectangleBordersFrom(newX, newY, rectangle.getWidth(), rectangle.getHeight())) { //@todo not gonna work since it can be moved inside its previous area, thus causing invalid rejection.
             return false;
         }
 
@@ -335,6 +338,15 @@ public class ADT_AreaExtended implements Cloneable {
         for (RectangleType type : getRectangleTypesToBePlaced()) {
             total += type.getHeight() * type.getWidth() * type.getNumberOfinstances();
         }
+        return total;
+    }
+    
+    public int getTotalAreaRectangles(){
+        int total = 0;
+        for(short key : shapes.keySet()){
+            total += shapes.get(key).getHeight() * shapes.get(key).getHeight();
+        }
+        total += getTotalAreaRectanglesToBePlaced();
         return total;
     }
 

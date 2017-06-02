@@ -1,12 +1,9 @@
-
 import java.util.ArrayList;
 import java.util.Collections;
 
 /**
- *
- * @author Bastiaan
+ * Next-Fit Decreasing Height algorithm to solve the rectangle packing problem.
  */
-//Next-Fit Decreasing Height
 public class Strat_ORP_NFDH extends Strat_AbstractStrat {
     
     public Strat_ORP_NFDH(ADT_AreaExtended area) {

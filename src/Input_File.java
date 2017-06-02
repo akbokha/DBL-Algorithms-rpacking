@@ -2,10 +2,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 
-/**
- * @date 01-05-2017
- * @author Adriaan Knapen <a.d.knapen@student.tue.nl>
- */
 public class Input_File extends Input_Scanner {
 
     private static final String EXTENSION = ".txt";
