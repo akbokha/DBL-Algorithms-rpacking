@@ -37,7 +37,8 @@ public class Strat_ORP_BinaryTreePacker extends Strat_AbstractStrat {
             greatestPaste = 0;
             ADT_Rectangle rec = rectangles[recIndex];
             getBestPlacement(rec);
-            area.moveRectangle(rec, bestNode.point.x, bestNode.point.y);
+            rec.setX(bestNode.point.x);
+            rec.setY(bestNode.point.y);
             bestNode.placeRectangle(rec);
         }
         return area;
