@@ -158,24 +158,24 @@ public class Strat_ORP_BinaryTreePacker extends Strat_AbstractStrat {
         int y_rec_topLeft = node.point.y + rec.getHeight();
         // check left side of possible placement rectangle
         for (int i = y; i <= y_rec_topLeft; i++) {
-            if (! area.isRectangleAt(x, i, recIndex)) {
+            if (area.isRectangleAt(x-1, i, recIndex)) {
                 paste++;
                 break;
             } 
         }
         // check bottom side of possible placement rectangle
         for (int i = x; i <= x_rec_bottomRight; i++) {
-            if (! area.isRectangleAt(i, y, recIndex)) {
+            if (area.isRectangleAt(i, y-1, recIndex)) {
                 paste++;
                 break;
             } 
         }
         // check right side of possible placement rectangle
-        if (! area.isRectangleAt(x_rec_bottomRight, y, recIndex)) {
+        if (area.isRectangleAt(x_rec_bottomRight, y, recIndex)) {
             paste++;
         }
         // check top side of possible placement rectangle
-        if (! area.isRectangleAt(x, y_rec_topLeft, recIndex)) {
+        if (area.isRectangleAt(x, y_rec_topLeft, recIndex)) {
             paste++;
         }
         return paste;
