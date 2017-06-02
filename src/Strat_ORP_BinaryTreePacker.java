@@ -1,7 +1,6 @@
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.Map;
 
 /**
  * This greedy algorithm places a new rectangle next to another top-left or
@@ -51,11 +50,10 @@ public class Strat_ORP_BinaryTreePacker extends Strat_AbstractStrat {
      * @param rec the rectangle that is considered
      */
     private void getBestPlacement(ADT_Rectangle rec) {
-        Map<Integer, HashSet> points = binaryTree.getPoints();
-        for(Integer i : points.keySet()){
-            HashSet set = points.get(i);
+        for(Integer i : binaryTree.points.keySet()){
+            HashSet<Node> set = binaryTree.points.get(i);
             for (Iterator iter = set.iterator(); iter.hasNext();) { // iterate over nodes
-                Node node = (Node) iter.next(); // to do: check why cast is necessary
+                Node node =  (Node) iter.next(); // Check why cast is necessary
                 ADT_Rectangle dummyRec = dummyRectangle(rec, node);
                 if (area.canFlip()) { // if rotatable
                     // rotate rectangle
@@ -244,10 +242,8 @@ public class Strat_ORP_BinaryTreePacker extends Strat_AbstractStrat {
             int y = rec.getY();
             
             HashSet<Node> x_collection;
-            Map points = binaryTree.getPoints();
-            if (points.get(x) != null) {
-                // To Do: Check why this cast is necessary
-                x_collection =  (HashSet<Node>) points.get(x);
+            if (binaryTree.points.get(x) != null) {
+                x_collection =  binaryTree.points.get(x);
                 for (Node node : x_collection) {
                     if (node.point.y == y ){
                         binaryTree.removeNode(node);
@@ -257,7 +253,7 @@ public class Strat_ORP_BinaryTreePacker extends Strat_AbstractStrat {
                 }
                 for (int i = 0; i < rec.getWidth(); i++) {
                     int x_cor = rec.getX() + i;
-                    x_collection =  (HashSet<Node>) points.get(x_cor);
+                    x_collection =  binaryTree.points.get(x_cor);
                     for (Node node : x_collection) {
                         if (node.point.y == y) {
                             binaryTree.removeNode(node);
@@ -273,16 +269,12 @@ public class Strat_ORP_BinaryTreePacker extends Strat_AbstractStrat {
     
     private class BinaryTree {
         Node root; 
-        private final HashMap<Integer, HashSet<Node>> points;
+        private HashMap<Integer, HashSet<Node>> points;
         
         public BinaryTree() {
             root = new Node(0, 0);
             points = new HashMap<>();
             addNode(root);
-        }
-        
-        public HashMap getPoints() {
-            return this.points;
         }
         
         public void addNode(Node node){
@@ -293,7 +285,7 @@ public class Strat_ORP_BinaryTreePacker extends Strat_AbstractStrat {
                collection.add(node);
                points.put(x, collection);
             } else { // add to collection of key = x
-                HashSet collection = points.get(x);
+                HashSet<Node> collection = points.get(x);
                 collection.add(node);
             }
         }
@@ -304,7 +296,7 @@ public class Strat_ORP_BinaryTreePacker extends Strat_AbstractStrat {
          */
         public void removeNode(Node node) {
             int x = node.point.x;
-            HashSet collection = points.get(x);
+            HashSet<Node> collection = points.get(x);
             collection.remove(node);
             if (collection.isEmpty()) {
                 points.remove(x);
