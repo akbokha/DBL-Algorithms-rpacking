@@ -85,9 +85,10 @@ public class ADT_Rectangle implements Comparable<ADT_Rectangle> {
     }
 
     public ADT_Vector getDimensions() {
-        return new ADT_Vector(this.getWidth(), getHeight());
+        return new ADT_Vector(getWidth(), getHeight());
     }
 
+    @Override
     public int compareTo(ADT_Rectangle o) {
         int maxThis = this.getWidth();
         int maxOther = o.getWidth();

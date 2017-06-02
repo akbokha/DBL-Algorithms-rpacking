@@ -5,21 +5,22 @@ public class Strat_ORP_AnyTime extends Strat_AbstractStrat {
     
     int STEPSIZE = 5;
     
-    public Strat_ORP_AnyTime(ADT_AreaExtended area) {
+    public Strat_ORP_AnyTime(ADT_Area area) {
         super(area);
     }
 
     @Override
-    public ADT_AreaExtended compute() {
+    public ADT_Area compute() {
         try {
             new Output_Plaintext(area).draw();
             //Used to initialize an average starting width and height
-            ADT_AreaExtended bestArea = new Strat_DummyImplementation(areaEx.clone()).compute();
+            ADT_Area bestArea = new Strat_DummyImplementation(area.clone()).compute();
             //Set initial width and height for a container to the getDimensions
             // of the bottom-left algorithm
             ADT_Vector dimension = bestArea.getDimensions();
             int width = dimension.x;
             int height = dimension.y;
+            areaEx = area.toExtended(width, height);
             while(true) {
                 //Make sure that the area gets smaller and smaller until the
                 // minimal area is reached
@@ -34,7 +35,7 @@ public class Strat_ORP_AnyTime extends Strat_AbstractStrat {
 
                     //If a solution was set, use it as the new best solution
                     if(newArea != null) {
-                        bestArea = newArea.clone();
+                        bestArea = newArea.clone().toArea();
                     } else if (STEPSIZE == 1) {//If stepsize == 1 and no solution is found, increase height
                         if(area.getHeight() != ADT_Area.INF) {// but if the height was fixed, no better solution can be found
                             break;
