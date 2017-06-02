@@ -54,11 +54,7 @@ class Strat_CP_BT extends Strat_BT_Template {
 
     @Override
     boolean accept(ADT_Rectangle last) {
-        if (last == null) {
-            return false;
-        } else {
-            return index + 1 >= rectangles.length;
-        }
+        return last != null && index + 1 >= rectangles.length;
     }
 
     @Override
@@ -121,7 +117,10 @@ class Strat_CP_BT extends Strat_BT_Template {
                     }
                 }
             }
-        } while (!area.moveRectangle(rectangle, x, y));
+        } while (!area.checkRectangleBordersWith(rectangle));
+
+        area.add(rectangle);
+        area.moveRectangle(rectangle, x, y);
 
         //output.draw();
 

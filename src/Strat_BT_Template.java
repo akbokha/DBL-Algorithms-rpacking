@@ -110,4 +110,5 @@ abstract public class Strat_BT_Template extends Strat_AbstractStrat {
      * Revert the changes made by first().
      */
     abstract void revert();
+
 }
