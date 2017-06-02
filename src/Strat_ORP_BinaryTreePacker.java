@@ -16,10 +16,16 @@ public class Strat_ORP_BinaryTreePacker extends Strat_AbstractStrat {
     Node bestNode = new Node(); // Best node to place rec
     int leastArea = Integer.MAX_VALUE; // Size of bounding box when rec is at bestNode
     int greatestPaste = 0; // Number of sides of rec at bestNode where other rectangles are pasted
+    int fixedHeightValue;
+    boolean fixedHeight;
     
     public Strat_ORP_BinaryTreePacker (ADT_AreaExtended area) {
         super(area);
         this.binaryTree = new BinaryTree();
+        fixedHeight = area.getHeight() != -1;
+        if (fixedHeight) {
+            fixedHeightValue = area.getHeight();
+        }
     }
     
     @Override
@@ -129,13 +135,12 @@ public class Strat_ORP_BinaryTreePacker extends Strat_AbstractStrat {
      * @param rec that is considered (dummyRectangle)
      */
     private boolean isValidPlacement (Node node, ADT_Rectangle rec){
-        if (area.getHeight() != (-1)) {
-            // no fixed heigth
-            return area.isNewRectangleValid(rec);
-        } else {
+        if (fixedHeight) {
             // Check if fixed height is exceeded
-            boolean exceedsBound = node.point.y + rec.getHeight() > area.getHeight();
+            boolean exceedsBound = node.point.y + rec.getHeight() > fixedHeightValue;
             return area.isNewRectangleValid(rec) && !exceedsBound;
+        } else { // no fixed heigth
+           return area.isNewRectangleValid(rec); 
         }
     }
     
