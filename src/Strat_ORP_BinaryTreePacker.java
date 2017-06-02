@@ -266,6 +266,20 @@ public class Strat_ORP_BinaryTreePacker extends Strat_AbstractStrat {
                 }
             }
         }
+        
+        public String toString(){
+            String result = new String();
+            if(rec != null && point != null){
+                result = "ERROR - BOTH POINT AND REC WERE FILLED";
+            }else if(rec == null && point != null){
+                result = "(" + point.x + ", " + point.y + ")";
+            }else if(rec != null && point == null){
+                result = rec.toString();
+            }else{
+                result = "Terminating node";
+            }
+            return result;
+        }
     }
     
     private final class BinaryTree {
