@@ -2,12 +2,12 @@ public class ADT_Rectangle implements Comparable<ADT_Rectangle> {
 
     static final int INF = -1;
     static final int NOTSET = -2;
-    private int width;
-    private int height;
+    protected int width;
+    protected int height;
     private int x;
     private int y;
     private boolean flipped = false;
-    private boolean flippable;
+    protected boolean flippable;
 
     public ADT_Rectangle(int width, int height, int x, int y, boolean flippable) {
         assert height == INF || height > 0;

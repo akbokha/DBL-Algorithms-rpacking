@@ -19,7 +19,7 @@ class Strat_CP_BT extends Strat_BT_Template {
         rectangles = new ADT_Rectangle[allRectangles.length];
         int index = 0;
         for (ADT_Rectangle rec : allRectangles) {
-                rectangles[index++] = rec   ;
+            rectangles[index++] = rec;
         }
 
         //output = new Output_GraphicalOutput(areaEx);
@@ -27,11 +27,6 @@ class Strat_CP_BT extends Strat_BT_Template {
 
     @Override
     protected boolean reject(ADT_Rectangle last) {
-        // Check if the last added rectangle is valid
-        if (last != null && !areaEx.isNewRectangleValid(last)) {
-            return true;
-        }
-
         // Consult all pruners
         return super.reject(last);
     }
@@ -64,16 +59,15 @@ class Strat_CP_BT extends Strat_BT_Template {
             y = Math.max(0, (int) Math.ceil((areaEx.getHeight() - rectangle.getHeight()) / 2));
         }
 
-        ADT_Vector next = findNextPosition(rectangle, rectangle.getX(), rectangle.getY());
+        ADT_Vector next = findNextPosition(rectangle, x, y);
 
         if (next != null) {
-            areaEx.add(index);
-            areaEx.moveRectangle(rectangle, next.x, next.y);
+            areaEx.add(index, next.x, next.y);
         } else {
             return false;
         }
 
-        return next();
+        return true;
     }
 
     @Override
@@ -81,10 +75,12 @@ class Strat_CP_BT extends Strat_BT_Template {
         // Retrieve a pointer to the currently placed rectangle.
         ADT_Rectangle rectangle = rectangles[index];
 
-        ADT_Vector next = findNextPosition(rectangle, rectangle.getX(), rectangle.getY());
+        // Remove it
+        areaEx.remove(index);
+
+        ADT_Vector next = findNextPosition(rectangle, rectangle.getX() + 1, rectangle.getY());
 
         if (next != null) {
-            areaEx.add(index);
             areaEx.moveRectangle(rectangle, next.x, next.y);
         } else {
             return false;
@@ -94,6 +90,7 @@ class Strat_CP_BT extends Strat_BT_Template {
     }
 
     private ADT_Vector findNextPosition(ADT_Rectangle rectangle, int x, int y) {
+        x--;
         do {
             // Increment x and check if this coordinate is valid.
             x++;
@@ -127,17 +124,17 @@ class Strat_CP_BT extends Strat_BT_Template {
                     }
                 }
             }
-        } while (!areaEx.checkRectangleBordersWith(rectangle));
+        } while (areaEx.checkIntersection(x, y, rectangle.getWidth(), rectangle.getHeight()));
 
         return new ADT_Vector(x, y);
     }
 
     @Override
     void revert() {
-        areaEx.removeRectangle(index);
-
-        // Move one level higher into the branch.
-        index--;
+        // Move one level higher into the branch. Is not needed when first never managed to achieve this.
+        if (areaEx.getRectangleIsPlaced(index)) {
+            areaEx.remove(index--);
+        }
     }
 
 }
