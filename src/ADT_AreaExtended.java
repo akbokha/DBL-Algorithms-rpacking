@@ -123,7 +123,7 @@ public class ADT_AreaExtended implements Cloneable {
         }
     }
 
-    private boolean checkRectangleBordersWith(ADT_Rectangle shape) {
+    boolean checkRectangleBordersWith(ADT_Rectangle shape) {
         return checkRectangleBordersFrom(shape.getX(), shape.getY(), shape.getWidth(), shape.getHeight());
     }
 
