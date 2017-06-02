@@ -2,6 +2,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.text.DecimalFormat;
 import java.util.Iterator;
+import java.util.Random;
 
 public class Output_GraphicalOutput extends Output_AbstractOutput {
 
@@ -15,6 +16,7 @@ public class Output_GraphicalOutput extends Output_AbstractOutput {
 
     Output_GraphicalOutput(ADT_AreaExtended area) {
         super(area);
+
         ADT_Vector dim = area.getDimensions();
         rectWidth = dim.x;
         rectHeight = dim.y;
@@ -29,15 +31,8 @@ public class Output_GraphicalOutput extends Output_AbstractOutput {
         window.setBounds(30, 30, windowWidth, windowHeight);
         window.setPreferredSize(new Dimension(windowWidth + 2 * border, windowHeight + 2 * border));
         window.getContentPane().add(new RectanglesCanvas());
-        window.setTitle("Width: " + rectWidth + " Height: " + rectHeight + " Area: " + rectWidth * rectHeight);
+        setTitle();
         window.setVisible(true);
-        
-        // Print fillrate such that it can only be printed out of Momotor (-g)
-        double surface = area.getDimensions().x*area.getDimensions().y;
-        double fillRate = ((double) area.getTotalAreaRectangles() / surface) * 100;
-        DecimalFormat df = new DecimalFormat("#0.0000");
-        System.err.println("The bounding box has a fillrate of " + 
-                df.format(fillRate) + "%");
     }
 
     @Override
@@ -46,11 +41,19 @@ public class Output_GraphicalOutput extends Output_AbstractOutput {
     }
 
     class RectanglesCanvas extends JComponent {
-        @Override
-        public void paint(Graphics g) {
-            g.drawRect(border - 1, border - 1, (int) (rectWidth * scale) + 2, (int) (rectHeight * scale) + 2);
+        private Random rand;
 
-            g.setColor(Color.red);
+        RectanglesCanvas() {
+            rand = new Random();
+        }
+
+        @Override
+        public void paint(Graphics graphics) {
+            setTitle();
+
+            graphics.drawRect(border - 1, border - 1, (int) (rectWidth * scale) + 2, (int) (rectHeight * scale) + 2);
+
+            graphics.setColor(Color.red);
 
             Iterator<ADT_Rectangle> i = area.getRectangleIterator();
             while (i.hasNext()) {
@@ -60,12 +63,25 @@ public class Output_GraphicalOutput extends Output_AbstractOutput {
                 int x = (int) Math.floor(rect.getX() * scale) + border;
                 int y = (int) Math.floor((rectHeight - rect.getY()) * scale + border - h);
 
-                g.setColor(Color.darkGray);
-                g.fillRect(x, y, w, h);
+                float r = rand.nextFloat() / 1.25f + .15f;
+                float g = rand.nextFloat() / 1.25f + .15f;
+                float b = rand.nextFloat() / 1.4f + .2f;
+                graphics.setColor(new Color(r, g, b));
+                graphics.fillRect(x, y, w, h);
 
-                g.setColor(Color.red);
-                g.drawRect(x, y, w, h);
+                graphics.setColor(Color.red);
+                graphics.drawRect(x, y, w, h);
             }
         }
+    }
+
+    private void setTitle() {
+        // Print fillrate such that it can only be printed out of Momotor (-g)
+        double surface = area.getDimensions().x*area.getDimensions().y;
+        double fillRate = ((double) area.getTotalAreaRectangles() / surface) * 100;
+        DecimalFormat df = new DecimalFormat("#0.0000");
+
+        window.setTitle("Width: " + rectWidth + " Height: " + rectHeight + " Area: " + rectWidth * rectHeight
+                + " Fill rate " + df.format(fillRate) + "%");
     }
 }

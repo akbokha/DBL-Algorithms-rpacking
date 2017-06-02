@@ -65,14 +65,12 @@ class Strat_CP_BT extends Strat_BT_Template {
         // Make distinction between the first rectangle and all others.
         if (index == 0) {
             // Let the first rectangle start with its center in the center such that it will only evaluate the top right corner.
-            area.moveRectangle(
-                    rectangle,
-                    Integer.MAX_VALUE - rectangle.getWidth(), // Note: rectangle width has to be subtracted in order to prevent an overflow.
-                    Math.max(0, (int) Math.ceil((area.getHeight() - rectangle.getHeight()) / 2))
-            );
+            rectangle.setX(Integer.MAX_VALUE - rectangle.getWidth() - 1); // Note: rectangle width has to be subtracted in order to prevent an overflow.
+            rectangle.setY(Math.max(0, (int) Math.ceil((area.getHeight() - rectangle.getHeight()) / 2)));
         } else {
             // Start at the bottom left.
-            area.moveRectangle(rectangle, 0, 0);
+            rectangle.setX(-1);
+            rectangle.setY(0);
         }
         return next();
     }

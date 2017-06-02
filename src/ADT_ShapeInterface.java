@@ -1,5 +1,3 @@
-
-
 /**
  * Interface for the ADT of the rectangle.
  */
