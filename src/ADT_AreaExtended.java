@@ -1,7 +1,4 @@
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by s157035 on 15-5-2017.
@@ -52,7 +49,7 @@ public class ADT_AreaExtended implements Cloneable {
 
     @Override
     public ADT_AreaExtended clone() throws CloneNotSupportedException {
-        RectangleType[] recs = getRectangleTypesToBePlaced();
+        RectangleType[] recs = toBePlacedRects;
         RectangleType[] newRecs = new RectangleType[recs.length];
         for(int i = 0; i < recs.length; i++) {
             newRecs[i] = recs[i].clone();
@@ -60,8 +57,15 @@ public class ADT_AreaExtended implements Cloneable {
         
         ADT_AreaExtended newArea = new ADT_AreaExtended(getWidth(), getHeight(), canFlip(), newRecs);
         
-        for(ADT_Rectangle r : this.getPlacedRectangles()) {
-            newArea.add(r.clone());
+        for(short id : shapes.keySet()) {
+            ADT_Rectangle r = shapes.get(id);
+            if (array == null) {
+                //If the array has not been initialized yet, simply copy the shapes array to the new area
+                newArea.shapes.put(id, r.clone());
+            } else {
+                //Otherwise, also fill the new area's array with the rectangles
+                newArea.add(r.clone());
+            }
         }
         return newArea;
     }
@@ -96,14 +100,22 @@ public class ADT_AreaExtended implements Cloneable {
     }
 
     /**
-     * Adds an rectangle to this area.
+     * Adds an rectangle to this area and fills the array with the rectangle
      *
      * @param shape
      */
     public void add(ADT_Rectangle shape) {
         short id = getNewId();
         shapes.put(id, shape);
-//        fillRectangleBordersWith(shape, id);
+        fillRectangleBordersWith(shape, id);
+    }
+
+    /*
+     * Adds the rectangle to the area without any overlap checking and without filling the internal array
+     */
+    public void addUnchecked(ADT_Rectangle shape) {
+        short id = getNewId();
+        shapes.put(id, shape);
     }
 
     private void fillRectangleBordersWith(ADT_Rectangle shape, short id) {
@@ -214,9 +226,11 @@ public class ADT_AreaExtended implements Cloneable {
      *
      * @return iterator over all rectangles it contains.
      */
+    @Deprecated
     public Iterator<ADT_Rectangle> getRectangleIterator() {
         return shapes.values().iterator();
     }
+
 
     public ADT_Rectangle[] getRectangles() {
         return shapes.values().toArray(new ADT_Rectangle[shapes.size()]);
@@ -286,13 +300,36 @@ public class ADT_AreaExtended implements Cloneable {
         return vals;
     }
 
+    /*
+     * Changes the dimensions of the array and initialized the internal array, filling in any rectangles that are already present in the shapes map
+     */
     public void setDimensions(int width, int height) {
         this.width = width;
         this.height = height;
 
+        //Create the array
         array = new short[width * height];
+
+        //Fill in the array if there are already rectangles 'placed'
+        for(Map.Entry<Short, ADT_Rectangle> entry : shapes.entrySet()) {
+            ADT_Rectangle rectangle = entry.getValue();
+            short id = entry.getKey();
+
+            //Check that we can actually place the rectangle (eg. does not overlap with already filled in rectangles
+            if(checkRectangleBordersWith(rectangle)) {
+                fillRectangleBordersWith(rectangle, id);
+            }
+            else {
+                //There were rectangles in the shape list that overlapped eachother. Something went wrong when adding them
+                //using unchecked methods
+                System.err.println("Encountered rectangle overlap during array initialization");
+            }
+        }
     }
 
+    /*
+     * Gets the total area of the input rectangles that have not yet been placed in the area
+     */
     public int getTotalAreaRectanglesToBePlaced() {
         int total = 0;
         for (RectangleType type : getRectangleTypesToBePlaced()) {
@@ -359,6 +396,7 @@ public class ADT_AreaExtended implements Cloneable {
             return true;
         }
     }
+
     private class Point {
         private int x;
         private int y;

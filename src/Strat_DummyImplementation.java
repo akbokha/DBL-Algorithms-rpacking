@@ -4,8 +4,6 @@
  * and open the template in the editor.
  */
 
-import java.util.Arrays;
-
 /**
  * @author Abdel 
  * 01-05-2017
@@ -25,7 +23,7 @@ public class Strat_DummyImplementation extends Strat_AbstractStrat {
         for (RectangleType currentRec : recs) {
             while(currentRec.canInstantiate()) {
             // Set the x and y coordinate of the rectangle.
-            area.add(currentRec.createInstance(curX, 0));
+            area.addUnchecked(currentRec.createInstance(curX, 0));
             curX += currentRec.getWidth();
 
             // If the rectangle is flippable, rotate it such that the longest side is horizontally.
