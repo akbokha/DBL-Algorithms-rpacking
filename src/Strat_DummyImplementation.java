@@ -11,7 +11,9 @@ public class Strat_DummyImplementation extends Strat_AbstractStrat {
         int widthCurrentRectangle = 0;
         ADT_Rectangle[] recs = area.getRectangles();
         for (ADT_Rectangle currentRec : recs) {
-            
+            currentRec.setX(curX);
+            currentRec.setY(0);
+            curX += currentRec.getWidth();
         }
         return area;
     }

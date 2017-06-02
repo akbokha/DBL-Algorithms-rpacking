@@ -12,7 +12,7 @@ public class Strat_ORP_AnyTime extends Strat_AbstractStrat {
     @Override
     public ADT_Area compute() {
         try {
-            new Output_Plaintext(area).draw();
+            new Output_GraphicalOutput(area).draw();
             //Used to initialize an average starting width and height
             ADT_Area bestArea = new Strat_DummyImplementation(area.clone()).compute();
             //Set initial width and height for a container to the getDimensions

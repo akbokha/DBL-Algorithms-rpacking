@@ -173,43 +173,6 @@ public class ADT_AreaExtended extends ADT_Area implements Cloneable {
         return shapes.size();
     }
 
-
-
-    ADT_Vector getMinimalDimensions() {
-        Iterable<ADT_Rectangle> i = getPlacedRectangles();
-        int maxX = 0;
-        int maxY = 0;
-
-        for (ADT_Rectangle r : i) {
-            if (r.getWidth() != ADT_Rectangle.INF) {
-                maxX = Math.max(r.getWidth() + r.getX(), maxX);
-                maxY = Math.max(r.getHeight() + r.getY(), maxY);
-            }
-        }
-
-        return new ADT_Vector(maxX, maxY);
-    }
-
-    @Override
-    public ADT_Vector getDimensions() {
-        int maxWidth = getWidth();
-        int maxHeight = getHeight();
-
-        // Check if either the width or the height is infinite, if so replace them with the minimal dimension.
-        if (maxWidth == INF || maxHeight == INF) {
-            ADT_Vector minDimensions = getMinimalDimensions();
-
-            if (maxWidth == INF) {
-                maxWidth = minDimensions.x;
-            }
-            if (maxHeight == INF) {
-                maxHeight = minDimensions.y;
-            }
-        }
-
-        return new ADT_Vector(maxWidth, maxHeight);
-    }
-
     @Override
     public ADT_Rectangle[] getRectangles() {
         return shapes.values().toArray(new ADT_Rectangle[shapes.size()]);

@@ -13,7 +13,14 @@ public class ADT_Area extends ADT_Rectangle implements Cloneable {
     
     @Override
     public ADT_Area clone() throws CloneNotSupportedException {
-        return new ADT_Area(this.getWidth(), this.getHeight(), this.canFlip(), shapes);
+        ADT_Rectangle[] newShapes = new ADT_Rectangle[shapes.length];
+        
+        for(int i = 0; i < shapes.length; i++) {
+            newShapes[i] = shapes[i].clone();
+        }
+        
+        ADT_Area newArea = new ADT_Area(this.getWidth(), this.getHeight(), this.canFlip(), newShapes);
+        return newArea;
     }
 
     /**
@@ -50,6 +57,41 @@ public class ADT_Area extends ADT_Rectangle implements Cloneable {
         return getCount();
     }
 
+    @Override
+    public ADT_Vector getDimensions() {
+        int maxWidth = getWidth();
+        int maxHeight = getHeight();
+
+        // Check if either the width or the height is infinite, if so replace them with the minimal dimension.
+        if (maxWidth == INF || maxHeight == INF) {
+            ADT_Vector minDimensions = getMinimalDimensions();
+
+            if (maxWidth == INF) {
+                maxWidth = minDimensions.x;
+            }
+            if (maxHeight == INF) {
+                maxHeight = minDimensions.y;
+            }
+        }
+
+        return new ADT_Vector(maxWidth, maxHeight);
+    }
+    
+    private ADT_Vector getMinimalDimensions() {
+        ADT_Rectangle[] i = getRectangles();
+        int maxX = 0;
+        int maxY = 0;
+
+        for (ADT_Rectangle r : i) {
+            if (r.getWidth() != ADT_Rectangle.INF) {
+                maxX = Math.max(r.getWidth() + r.getX(), maxX);
+                maxY = Math.max(r.getHeight() + r.getY(), maxY);
+            }
+        }
+
+        return new ADT_Vector(maxX, maxY);
+    }
+    
     /**
      * Return true if none of the already placed rectangles overlap with the parameter rectangle
      * @pre Rectangle coordinates are non-negative.
