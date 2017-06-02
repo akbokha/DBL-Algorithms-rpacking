@@ -51,9 +51,8 @@ public class Output_GraphicalOutput extends Output_AbstractOutput {
         public void paint(Graphics graphics) {
             setTitle();
 
+            graphics.setColor(Color.darkGray);
             graphics.drawRect(border - 1, border - 1, (int) (rectWidth * scale) + 2, (int) (rectHeight * scale) + 2);
-
-            graphics.setColor(Color.red);
 
             Iterator<ADT_Rectangle> i = area.getRectangleIterator();
             while (i.hasNext()) {
@@ -63,10 +62,8 @@ public class Output_GraphicalOutput extends Output_AbstractOutput {
                 int x = (int) Math.floor(rect.getX() * scale) + border;
                 int y = (int) Math.floor((rectHeight - rect.getY()) * scale + border - h);
 
-                float r = rand.nextFloat() / 1.25f + .15f;
-                float g = rand.nextFloat() / 1.25f + .15f;
-                float b = rand.nextFloat() / 1.4f + .2f;
-                graphics.setColor(new Color(r, g, b));
+                float c = (float) rect.hashCode() / Integer.MAX_VALUE;
+                graphics.setColor(new Color((int)(c * 0x1000000)));
                 graphics.fillRect(x, y, w, h);
 
                 graphics.setColor(Color.red);
