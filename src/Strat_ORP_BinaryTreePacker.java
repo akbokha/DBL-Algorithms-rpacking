@@ -18,7 +18,7 @@ public class Strat_ORP_BinaryTreePacker extends Strat_AbstractStrat {
     int greatestPaste = -1; // Number of sides of rec at bestNode where other rectangles are pasted
     int fixedHeightValue;
     boolean fixedHeight;
-    boolean isFlipped;
+    boolean isFlipped = false; // Is the best rectangle flipped
     ADT_Rectangle[] sortedRectangles;
     
     public Strat_ORP_BinaryTreePacker (ADT_Area area) {
@@ -39,7 +39,7 @@ public class Strat_ORP_BinaryTreePacker extends Strat_AbstractStrat {
         for (recIndex = 0; recIndex < rectangles.length; recIndex++) {
             ADT_Rectangle rec = rectangles[recIndex];
             getBestPlacement(rec);
-            if (isFlipped) {
+            if (isFlipped) { // If best solution was to flip, do so.
                 rec.setFlipped(true);
             }
             rec.setX(bestNode.point.x);
@@ -292,6 +292,7 @@ public class Strat_ORP_BinaryTreePacker extends Strat_AbstractStrat {
             }
         }
         
+        @Override
         public String toString(){
             String result = new String();
             if(rec != null && point != null){
