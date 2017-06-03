@@ -21,7 +21,8 @@ public abstract class Strat_AbstractStrat {
     }
     
     /**
-     * The actual computation behind the placement of the rectangles
+     * The actual computation behind the placement of the rectangles.
+     * Method can only be called once per object.
      * @return an area such that isValid(), or null if one wasn't found.
      */
     public abstract ADT_Area compute();
