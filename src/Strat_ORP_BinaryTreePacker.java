@@ -284,7 +284,7 @@ public class Strat_ORP_BinaryTreePacker extends Strat_AbstractStrat {
             for(int i = rec.getX(); i<rec.getX()+rec.getWidth(); ++i){
                 if(binaryTree.points.get(i) != null){
                     for(Node node : binaryTree.points.get(i)){
-                        if(node.point.x == rec.getX()){
+                        if(node.point.y == rec.getY()){
                             binaryTree.removeNode(node);
                         }
                     }
