@@ -34,8 +34,7 @@ public class Output_Plaintext extends Output_AbstractOutput {
 
         // Iterate through all rectangle to get their getDimensions and locations.
         ADT_Rectangle[] i = area.getRectangles();
-        
-        System.out.println(i.length);
+
         StringBuilder rectangleDimensions = new StringBuilder();
         StringBuilder rectangleLocations = new StringBuilder();
         for (ADT_Rectangle rectangle : i) {
