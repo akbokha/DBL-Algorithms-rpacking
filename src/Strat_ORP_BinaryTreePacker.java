@@ -35,7 +35,7 @@ public class Strat_ORP_BinaryTreePacker extends Strat_AbstractStrat {
     
     @Override
     public ADT_Area compute() {
-        ADT_Rectangle [] rectangles = area.getRectangles();
+        ADT_Rectangle [] rectangles = sortedRectangles;
         for (recIndex = 0; recIndex < rectangles.length; recIndex++) {
             ADT_Rectangle rec = rectangles[recIndex];
             getBestPlacement(rec);
@@ -80,7 +80,8 @@ public class Strat_ORP_BinaryTreePacker extends Strat_AbstractStrat {
     }
     
       /**
-     * Check if there is already a rectangle placed at (x,y)
+     * Check if there is already a rectangle placed at (x,y). Use for sorted
+     * rectangles in BTP.
      * @param x coordinate to be checked
      * @param y coordinate to be checked
      * @param index of the rectangle in the array
