@@ -255,6 +255,13 @@ public class Strat_ORP_BinaryTreePacker extends Strat_AbstractStrat {
         public void placeRectangle(ADT_Rectangle rec) {
             this.rec = rec;
             
+            if(area.getWidth() < rec.getX()+rec.getWidth()){
+                area.setWidth(rec.getX()+rec.getWidth());
+            }
+            if(area.getHeight() < rec.getY()+rec.getHeight()){
+                area.setHeight(rec.getY()+rec.getHeight());
+            }
+            
             Node TopLeftChildNode = new Node(rec.getX(), (rec.getY() + rec.getHeight()));
             binaryTree.addNode(TopLeftChildNode);
             Node BottomRightChildNode = new Node((rec.getX() + rec.getWidth()), rec.getY());
