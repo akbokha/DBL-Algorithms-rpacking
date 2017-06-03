@@ -27,6 +27,10 @@ public class ADT_AreaExtended extends ADT_Area implements Cloneable {
         return this.version;
     }
     
+    /**
+     * Converts this to ADT_Area
+     * @return 
+     */
     public ADT_Area toArea() {
         return new ADT_Area(width, height, flippable, rectangles);
     }
@@ -41,21 +45,37 @@ public class ADT_AreaExtended extends ADT_Area implements Cloneable {
         
         return newArea;
     }
-
+    
+    /**
+     * Get an index for the array in which 
+     * @param x
+     * @param y
+     * @return 
+     */
     private int getIndex(int x, int y) {
         return y * getWidth() + x;
     }
-
+    
+    /**
+     * 
+     * @param x
+     * @param y
+     * @param val 
+     */
     private void setArrayAt(int x, int y, short val) {
         int i = getIndex(x, y);
+//        System.out.println(x + ", " + y);
         array[i] = val;
     }
 
-    /*
+    /**
      * Returns true if there is no rectangle border at this position
+     * @param x
+     * @param y
+     * @return 
      */
     public boolean isEmptyAt(int x, int y) {
-        if (x < 0 || y < 0 || y > getHeight() || x > getWidth()) { // @todo replace for assert in final version
+        if (x < 0 || y < 0 || y >= getHeight() || x >= getWidth()) { // @todo replace for assert in final version
             throw new IllegalArgumentException();
         }
         int i = getIndex(x, y);
@@ -66,10 +86,11 @@ public class ADT_AreaExtended extends ADT_Area implements Cloneable {
      * Adds an rectangle to this area.
      *
      * @param i
+     * @param x
+     * @param y
      */
     public void add(int i, int x, int y) {
         placedRectangles[i] = true;
-
         // Define its coordinates.
         rectangles[i].setX(x);
         rectangles[i].setY(y);
@@ -91,13 +112,13 @@ public class ADT_AreaExtended extends ADT_Area implements Cloneable {
         //Set horizontal borders to this shape's id
         for (int x = shape.getX(), max = x + shape.getWidth() - 1; x <= max; x++) {
             setArrayAt(x, shape.getY(), id);
-            setArrayAt(x, shape.getY() + shape.getHeight(), id);
+            setArrayAt(x, shape.getY() + shape.getHeight()-1, id);
         }
 
         //Set vertical borders
-        for (int y = shape.getX(), max = y + shape.getHeight() - 1; y <= max; y++) {
+        for (int y = shape.getY(), max = y + shape.getHeight() - 1; y <= max; y++) {
             setArrayAt(shape.getX(), y, id);
-            setArrayAt(shape.getX() + shape.getWidth(), y, id);
+            setArrayAt(shape.getX() + shape.getWidth()-1, y, id);
         }
     }
 
@@ -116,7 +137,7 @@ public class ADT_AreaExtended extends ADT_Area implements Cloneable {
             if (! isEmptyAt(x, posY)) {
                 return true;
             }
-            if (! isEmptyAt(x, posY + height)) {
+            if (! isEmptyAt(x, posY + height-1)) {
                 return true;
             }
         }
