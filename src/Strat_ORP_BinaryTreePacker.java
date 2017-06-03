@@ -21,6 +21,10 @@ public class Strat_ORP_BinaryTreePacker extends Strat_AbstractStrat {
     boolean isFlipped = false; // Is the best rectangle flipped
     ADT_Rectangle[] sortedRectangles;
     
+    int currentArea;
+    int current_area_width;
+    int current_area_height;
+    
     public Strat_ORP_BinaryTreePacker (ADT_Area area) {
         super(area);
         sortedRectangles = area.getRectangles().clone();
@@ -216,8 +220,8 @@ public class Strat_ORP_BinaryTreePacker extends Strat_AbstractStrat {
      * (node.point.x, node.point.y)
      */
     private int computeResultingArea (Node node, ADT_Rectangle rec) {
-        int currentWidthBoundingBox = area.getWidth();
-        int currentHeightBoundingBox = area.getHeight();
+        int currentWidthBoundingBox = current_area_width;
+        int currentHeightBoundingBox = current_area_height;
         int newWidthBoundingBox;
         int newHeightBoundingBox;
         
@@ -234,6 +238,34 @@ public class Strat_ORP_BinaryTreePacker extends Strat_AbstractStrat {
             newHeightBoundingBox = currentHeightBoundingBox;
         }
         return (newWidthBoundingBox * newHeightBoundingBox);
+    }
+    
+    /**
+     * @param rec the rectangle that is placed
+     * @return the resulting area when you place rectangle at
+     * (bestNode.point.x, bestNode.point.y)
+     */
+    private void computeAreaBoundingBox (ADT_Rectangle rec) {
+        int currentWidthBoundingBox = current_area_width;
+        int currentHeightBoundingBox = current_area_height;
+        int newWidthBoundingBox;
+        int newHeightBoundingBox;
+        
+        if (bestNode.point.x + rec.getWidth() > currentWidthBoundingBox) {
+            // resultingArea is larger than area of currentBoundingBox
+            newWidthBoundingBox = bestNode.point.x + rec.getWidth();
+        } else {
+            newWidthBoundingBox = currentWidthBoundingBox;
+        }
+        if (bestNode.point.y + rec.getHeight() > currentHeightBoundingBox) {
+            // resultingArea is larger than area of currentBoundingBox
+            newHeightBoundingBox = bestNode.point.y + rec.getHeight();
+        } else {
+            newHeightBoundingBox = currentHeightBoundingBox;
+        }
+        current_area_width = newWidthBoundingBox;
+        current_area_height = newHeightBoundingBox;
+        currentArea = (newWidthBoundingBox * newHeightBoundingBox);
     }
         
     private class Node {
@@ -254,19 +286,11 @@ public class Strat_ORP_BinaryTreePacker extends Strat_AbstractStrat {
         
         public void placeRectangle(ADT_Rectangle rec) {
             this.rec = rec;
-            
-            if(area.getWidth() < rec.getX()+rec.getWidth()){
-                area.setWidth(rec.getX()+rec.getWidth());
-            }
-            if(area.getHeight() < rec.getY()+rec.getHeight()){
-                area.setHeight(rec.getY()+rec.getHeight());
-            }
-            
             Node TopLeftChildNode = new Node(rec.getX(), (rec.getY() + rec.getHeight()));
             binaryTree.addNode(TopLeftChildNode);
             Node BottomRightChildNode = new Node((rec.getX() + rec.getWidth()), rec.getY());
             binaryTree.addNode(BottomRightChildNode);
-            
+            computeAreaBoundingBox(rec); // update current area trackers
             binaryTree.points.get(bestNode.point.x).remove(bestNode);
             checkNodes(rec);
         }
