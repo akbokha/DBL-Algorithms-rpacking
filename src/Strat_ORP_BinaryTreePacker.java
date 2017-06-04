@@ -11,6 +11,7 @@ import java.util.Iterator;
  * the location with the highest paste number is chosen.
  */
 public class Strat_ORP_BinaryTreePacker extends Strat_AbstractStrat {
+    static final int NOTSET = -2;
     
     BinaryTree binaryTree;
     int recIndex; // the ith rectangle that is currently being placed
@@ -115,6 +116,32 @@ public class Strat_ORP_BinaryTreePacker extends Strat_AbstractStrat {
         return false;
     }
     
+        /**
+     * Return true if none of the already placed rectangles overlap with the parameter rectangle
+     * @pre Rectangle coordinates are non-negative.
+     * @param rectangle
+     * @return boolean
+     */
+    public boolean isNewRectangleValid(ADT_Rectangle rectangle) {
+        assert rectangle != null;
+        assert rectangle.getX() != NOTSET;
+        assert rectangle.getY() != NOTSET;
+        assert rectangle.getX() >= 0;
+        assert rectangle.getY() >= 0;
+
+        if(fixedHeight && rectangle.getY()+rectangle.getHeight()>fixedHeightValue) return false;
+        
+        // Check if it overlaps
+        for(int i=0; i<recIndex; ++i){
+            ADT_Rectangle rec = sortedRectangles[i];
+            if(rec != rectangle && rec.getX() != NOTSET && area.checkRectangleOverlap(rec, rectangle)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+    
     /**
      * dummyRectangle returns a new ADT_Rectangle that can be used to check
      * overlap / exceeding the fixedHeight 
@@ -184,9 +211,9 @@ public class Strat_ORP_BinaryTreePacker extends Strat_AbstractStrat {
         if (fixedHeight) {
             // Check if fixed height is exceeded
             boolean exceedsBound = node.point.y + rec.getHeight() > fixedHeightValue;
-            return area.isNewRectangleValid(rec) && !exceedsBound;
+            return isNewRectangleValid(rec) && !exceedsBound;
         } else { // no fixed heigth
-           return area.isNewRectangleValid(rec); 
+           return isNewRectangleValid(rec); 
         }
     }
     
