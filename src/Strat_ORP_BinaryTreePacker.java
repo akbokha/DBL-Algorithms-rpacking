@@ -70,7 +70,7 @@ public class Strat_ORP_BinaryTreePacker extends Strat_AbstractStrat {
                 // Use a dummyRectangle to check overlap
                 // we do not want to set x and y coordinates, because it is unsure whether this is the bestnode
                 ADT_Rectangle dummyRec = dummyRectangle(rec, node);
-                if (area.canFlip()) { // if rotatable
+                if (area.canFlip() && !isSquare(rec)) { // if rotatable & not a square
                     // rotate rectangle
                     dummyRec.setFlipped(true);
                     if (isLocationBetter(node, dummyRec)) {
@@ -181,6 +181,17 @@ public class Strat_ORP_BinaryTreePacker extends Strat_AbstractStrat {
         } else { // no fixed heigth
            return area.isNewRectangleValid(rec); 
         }
+    }
+    
+    /**
+     * Check if the rectangle is a square
+     * @param rec that is considered
+     * @return true if rec.width == rec.height
+     */
+    private boolean isSquare (ADT_Rectangle rec) {
+        int width = rec.getWidth();
+        int height = rec.getHeight();
+        return width == height;
     }
     
     // compute number of sides that are occupied by a rectangle
