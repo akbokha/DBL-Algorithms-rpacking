@@ -1,5 +1,5 @@
 container height: fixed 300
-rotations allowed: yes
+rotations allowed: no
 number of rectangles: 10000
 1 1
 34 2
