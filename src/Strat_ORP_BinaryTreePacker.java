@@ -15,12 +15,14 @@ public class Strat_ORP_BinaryTreePacker extends Strat_AbstractStrat {
     BinaryTree binaryTree;
     int recIndex; // the ith rectangle that is currently being placed
     
+    // These variables are reset for each rectangle
     Node bestNode = new Node(-1, -1); // Best node to place rec
-    int leastArea = Integer.MAX_VALUE; // Size of bounding box when rec is at bestNode
+    boolean isFlipped = false; // Is the best rectangle flipped
     int greatestPaste = -1; // Number of sides of rec at bestNode where other rectangles are pasted
+    
+    int leastArea = Integer.MAX_VALUE; // Size of bounding box when rec is at bestNode
     int fixedHeightValue;
     boolean fixedHeight;
-    boolean isFlipped = false; // Is the best rectangle flipped
     ADT_Rectangle[] sortedRectangles;
     
     int currentArea;
@@ -44,13 +46,13 @@ public class Strat_ORP_BinaryTreePacker extends Strat_AbstractStrat {
         ADT_Rectangle [] rectangles = sortedRectangles;
         for (recIndex = 0; recIndex < rectangles.length; recIndex++) {
             ADT_Rectangle rec = rectangles[recIndex];
-            getBestPlacement(rec);
+            getBestPlacement(rec); // sets bestNode for this rectangle
             if (isFlipped) { // If best solution was to flip, do so.
                 rec.setFlipped(true);
             }
             rec.setX(bestNode.point.x);
             rec.setY(bestNode.point.y);
-            bestNode.placeRectangle(rec);
+            bestNode.placeRectangle(rec); // place the rectangle on the bestNode
             
             leastArea = Integer.MAX_VALUE;
             greatestPaste = -1;
@@ -69,6 +71,8 @@ public class Strat_ORP_BinaryTreePacker extends Strat_AbstractStrat {
         for(Integer i : binaryTree.points.keySet()){
             HashSet<Node> set = binaryTree.points.get(i);
             for (Node node : set) {
+                // Use a dummyRectangle to check overlap
+                // we do not want to set x and y coordinates, because it is unsure whether this is the bestnode
                 ADT_Rectangle dummyRec = dummyRectangle(rec, node);
                 if (area.canFlip()) { // if rotatable
                     // rotate rectangle
@@ -80,7 +84,7 @@ public class Strat_ORP_BinaryTreePacker extends Strat_AbstractStrat {
                     dummyRec.setFlipped(false);
                 }
                 if (isLocationBetter(node, dummyRec)) {
-                    isFlipped = false;
+                    isFlipped = false; // no rotation results in a better placement
                 }
             }
         }
@@ -138,7 +142,7 @@ public class Strat_ORP_BinaryTreePacker extends Strat_AbstractStrat {
         // check if placement of rectangle @ node results in overlap
         if (isValidPlacement(node, rec)) {
             // if greatest paste == 4
-            if (greatestPaste == 4){
+            if (greatestPaste == 4){ // there is already a node that has the best checkable result for this re 
                 return false;
             }
             int paste = computePaste(node, rec);
