@@ -29,10 +29,15 @@ public class Strat_ORP_AnyTime extends Strat_AbstractStrat {
                 //Get a solution with this width and height
                 ADT_AreaExtended newArea = createNewSolution(width, height);
 
+                if (newArea == null) {
+                    System.err.println("Failed");
+                } else {
+                    System.err.println("Success");
+                }
+
                 //If a solution was set, use it as the new best solution
                 if(newArea != null) {
                     bestArea = newArea.clone().toArea();
-                    new Output_GraphicalOutput(bestArea).draw();
                 } else if (STEPSIZE == 1) {//If stepsize == 1 and no solution is found, increase height
                     if(area.getHeight() != ADT_Area.INF) {// but if the height was fixed, no better solution can be found
                         break;
