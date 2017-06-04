@@ -35,7 +35,7 @@ public class Strat_ORP_BinaryTreePacker extends Strat_AbstractStrat {
         fixedHeight = area.getHeight() != -1;
         if (fixedHeight) {
             fixedHeightValue = area.getHeight();
-            area.setWidth(0);
+            area.setWidth(0); // to do: discuss with Jorrit
         }
     }
     
@@ -55,6 +55,7 @@ public class Strat_ORP_BinaryTreePacker extends Strat_AbstractStrat {
             leastArea = Integer.MAX_VALUE;
             greatestPaste = -1;
         }
+        area.setWidth(current_area_width); // fix for divide by zero error (graphical output) see line 38
         return area;
     }
     
@@ -377,21 +378,6 @@ public class Strat_ORP_BinaryTreePacker extends Strat_AbstractStrat {
             } else { // add to collection of key = x
                 HashSet<Node> collection = points.get(x);
                 collection.add(node);
-            }
-        }
-        
-        /**
-         * Removes node from tree and terminates it
-         * @pre node /in points
-         * @param node 
-         */
-        public void removeNode(Node node) {
-            int x = node.point.x;
-            node.point = null;
-            HashSet<Node> collection = points.get(x);
-            collection.remove(node);
-            if (collection.isEmpty()) {
-                points.remove(x);
             }
         }
     }
