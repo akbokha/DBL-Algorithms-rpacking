@@ -327,6 +327,7 @@ public class ADT_AreaExtended extends ADT_Area implements Cloneable {
      * @param rec2 The second rectangle to be taken into account
      * @return False if the body of the rectangles intersect, true otherwise.
      */
+    @Override
     public boolean checkRectangleOverlap(ADT_Rectangle rec1, ADT_Rectangle rec2) {
         assert rec1 != null;
         assert rec2 != null;
