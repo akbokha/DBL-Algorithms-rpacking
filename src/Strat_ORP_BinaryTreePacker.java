@@ -75,12 +75,18 @@ public class Strat_ORP_BinaryTreePacker extends Strat_AbstractStrat {
                     dummyRec.setFlipped(true);
                     if (isLocationBetter(node, dummyRec)) {
                         isFlipped = true;
+                        if (greatestPaste == 4) {
+                            return;
+                        }
                     }
                     // undo rotation dummyRec
                     dummyRec.setFlipped(false);
                 }
                 if (isLocationBetter(node, dummyRec)) {
                     isFlipped = false; // no rotation results in a better placement
+                    if (greatestPaste == 4) {
+                            return;
+                    }
                 }
             }
         }
@@ -138,9 +144,10 @@ public class Strat_ORP_BinaryTreePacker extends Strat_AbstractStrat {
         // check if placement of rectangle @ node results in overlap
         if (isValidPlacement(node, rec)) {
             // if greatest paste == 4
+            /*
             if (greatestPaste == 4){ // there is already a node that has the best checkable result for this re 
                 return false;
-            }
+            }*/
             int paste = computePaste(node, rec);
             if (paste == 4){
                 greatestPaste = 4;
