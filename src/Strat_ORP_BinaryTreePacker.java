@@ -1,6 +1,8 @@
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 
 /**
  * This greedy algorithm places a new rectangle next to another top-left or
@@ -304,21 +306,36 @@ public class Strat_ORP_BinaryTreePacker extends Strat_AbstractStrat {
         private void checkNodes(ADT_Rectangle rec) {
             // Check left edge of rec
             HashSet<Node> x_collection = binaryTree.points.get(rec.getX());
-            for(Node node : x_collection){
+            ArrayList<Integer> checkIfEmpty = new ArrayList<>(); // to track x coordinates of nodes that are removed
+            
+            for (Iterator<Node> nodeIterator = x_collection.iterator(); nodeIterator.hasNext();) {
+                Node node = nodeIterator.next();
                 if((node.point.y >= rec.getY() && 
                         node.point.y < rec.getY()+rec.getHeight())){
-                    binaryTree.removeNode(node);
+                    checkIfEmpty.add(node.point.x);
+                    node.point = null;
+                    nodeIterator.remove();
                 }
             }
             
             // Check for bottom edge
             for(int i = rec.getX(); i<rec.getX()+rec.getWidth(); ++i){
                 if(binaryTree.points.get(i) != null){
-                    for(Node node : binaryTree.points.get(i)){
+                    x_collection = binaryTree.points.get(i);
+                    for (Iterator<Node> nodeIterator = x_collection.iterator(); nodeIterator.hasNext();) {
+                        Node node = nodeIterator.next();
                         if(node.point.y == rec.getY()){
-                            binaryTree.removeNode(node);
+                            checkIfEmpty.add(node.point.x);
+                            node.point = null;
+                            nodeIterator.remove();
                         }
                     }
+                }
+            }
+            // check if there are empty collections (and remove them)
+            for (Integer i : checkIfEmpty) {
+                if (binaryTree.points.get(i).isEmpty()) {
+                    binaryTree.points.remove(i);
                 }
             }
         }
