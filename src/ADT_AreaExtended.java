@@ -171,7 +171,7 @@ public class ADT_AreaExtended extends ADT_Area implements Cloneable {
         return 0;
     }
 
-    int isRectangleAt(int x, int y) {
+    private int isRectangleAt(int x, int y) {
         assert x >= 0 && y >= 0 && x < width && y < height;
 
         int index = array[getIndex(x, y)];

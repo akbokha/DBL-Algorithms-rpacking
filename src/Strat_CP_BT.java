@@ -123,11 +123,11 @@ class Strat_CP_BT extends Strat_BT_Template {
                 }
             }
 
-            int displacement = areaEx.checkIntersection(x, y, rectangle.getWidth(), rectangle.getHeight());
-            if (displacement == 0) {
+            int res = areaEx.checkIntersection(x, y, rectangle.getWidth(), rectangle.getHeight());
+            if (res == 0) {
                 break;
             } else {
-                x += displacement;
+                x = res;
             }
         }
 
