@@ -41,11 +41,6 @@ public class Output_GraphicalOutput extends Output_AbstractOutput {
     }
 
     class RectanglesCanvas extends JComponent {
-        private Random rand;
-
-        RectanglesCanvas() {
-            rand = new Random();
-        }
 
         @Override
         public void paint(Graphics graphics) {

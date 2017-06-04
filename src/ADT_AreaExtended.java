@@ -8,7 +8,7 @@ import java.util.Arrays;
  *      than what it defined in its own coordinate variables. Has potential for unreliable behaviour.
  */
 public class ADT_AreaExtended extends ADT_Area implements Cloneable {
-    private final short EMPTY_INDEX = 0;
+    private final short EMPTY_INDEX = Short.MIN_VALUE;
     private ADT_Rectangle[] rectangles;
     private boolean[] placedRectangles;
     private short[] array;
@@ -16,6 +16,7 @@ public class ADT_AreaExtended extends ADT_Area implements Cloneable {
     
     public ADT_AreaExtended(int width, int height, boolean flippable, ADT_Rectangle[] rectangles) {
         super(width, height, flippable, rectangles);
+        Arrays.sort(rectangles);
         setDimensions(width, height);
         this.rectangles = rectangles;
         this.placedRectangles = new boolean[rectangles.length];
@@ -36,7 +37,7 @@ public class ADT_AreaExtended extends ADT_Area implements Cloneable {
     }
 
     @Override
-    public ADT_AreaExtended clone() throws CloneNotSupportedException {
+    public ADT_AreaExtended clone() {
         super.clone();
         
         ADT_AreaExtended newArea = new ADT_AreaExtended(getWidth(), getHeight(), canFlip(), Arrays.copyOf(rectangles, rectangles.length));
@@ -63,8 +64,9 @@ public class ADT_AreaExtended extends ADT_Area implements Cloneable {
      * @param val 
      */
     private void setArrayAt(int x, int y, short val) {
+        assert x >= 0 && y >= 0 && x < width && y < height;
+
         int i = getIndex(x, y);
-//        System.out.println(x + ", " + y);
         array[i] = val;
     }
 
@@ -74,10 +76,9 @@ public class ADT_AreaExtended extends ADT_Area implements Cloneable {
      * @param y
      * @return 
      */
-    public boolean isEmptyAt(int x, int y) {
-        if (x < 0 || y < 0 || y >= getHeight() || x >= getWidth()) { // @todo replace for assert in final version
-            throw new IllegalArgumentException();
-        }
+    boolean isEmptyAt(int x, int y) {
+        assert x >= 0 && y >= 0 && x < width && y < height;
+
         int i = getIndex(x, y);
         return array[i] == EMPTY_INDEX;
     }
@@ -105,20 +106,29 @@ public class ADT_AreaExtended extends ADT_Area implements Cloneable {
      */
     public void remove(int i) {
         placedRectangles[i] = false;
-        removeRectangleBorders(rectangles[i]);
+        ADT_Rectangle rectangle = rectangles[i];
+        removeRectangleBorders(rectangle);
+
+        rectangle.setX(ADT_Rectangle.NOTSET);
+        rectangle.setY(ADT_Rectangle.NOTSET);
     }
 
     private void fillRectangleBordersWith(ADT_Rectangle shape, short id) {
+        int xx = shape.getX();
+        int yy = shape.getY();
+        int height = shape.getHeight();
+        int width = shape.getWidth();
+
         //Set horizontal borders to this shape's id
-        for (int x = shape.getX(), max = x + shape.getWidth() - 1; x <= max; x++) {
-            setArrayAt(x, shape.getY(), id);
-            setArrayAt(x, shape.getY() + shape.getHeight()-1, id);
+        for (int x = xx, max = x + width; x < max; x++) {
+            setArrayAt(x, yy, id);
+            setArrayAt(x, yy + height - 1, id);
         }
 
         //Set vertical borders
-        for (int y = shape.getY(), max = y + shape.getHeight() - 1; y <= max; y++) {
-            setArrayAt(shape.getX(), y, id);
-            setArrayAt(shape.getX() + shape.getWidth()-1, y, id);
+        for (int y = yy + 1, max = y + height - 1; y < max; y++) {
+            setArrayAt(xx, y, id);
+            setArrayAt(xx + width - 1, y, id);
         }
     }
 
@@ -131,28 +141,46 @@ public class ADT_AreaExtended extends ADT_Area implements Cloneable {
      * @param height
      * @return True if an intersection was detected, else false.
      */
-    boolean checkIntersection(int posX, int posY, int width, int height) {
+    int checkIntersection(int posX, int posY, int width, int height) {
         //Check horizontal borders to this shape's id
-        for (int x = posX, max = posX + width - 1; x <= max; x++) {
-            if (! isEmptyAt(x, posY)) {
-                return true;
+        for (int x = posX, max = posX + width; x < max; x++) {
+            int res = isRectangleAt(x, posY);
+            if (res != 0) {
+                return res;
             }
-            if (! isEmptyAt(x, posY + height-1)) {
-                return true;
+
+            res = isRectangleAt(x, posY + height - 1);
+            if (res != 0) {
+                return res;
             }
         }
 
         //Check vertical borders
-        for (int y = posY, max = posY + height - 1; y <= max; y++) {
-            if(! isEmptyAt(posX, y)) {
-                return true;
+        for (int y = posY + 1, max = posY + height - 1; y < max; y++) {
+            int res = isRectangleAt(posX, y);
+            if(res != 0) {
+                return res;
             }
-            if(! isEmptyAt(posX + width, y)) {
-                return true;
+
+            res = isRectangleAt(posX + width - 1, y);
+            if(res != 0) {
+                return res;
             }
         }
 
-        return false;
+        return 0;
+    }
+
+    int isRectangleAt(int x, int y) {
+        assert x >= 0 && y >= 0 && x < width && y < height;
+
+        int index = array[getIndex(x, y)];
+
+        if (index == EMPTY_INDEX) {
+            return 0;
+        } else {
+            return rectangles[index].getWidth() + rectangles[index].getX();
+        }
     }
 
     boolean getRectangleIsPlaced(int index) {
@@ -171,13 +199,6 @@ public class ADT_AreaExtended extends ADT_Area implements Cloneable {
         result.toArray(arrayResult);
 
         return arrayResult;
-    }
-
-    /*
-     * Returns the already placed rectangles in the area
-     */
-    public Iterable<ADT_Rectangle> getPlacedRectangles() {
-        return Arrays.asList(rectangles);
     }
 
     /**
@@ -223,24 +244,6 @@ public class ADT_AreaExtended extends ADT_Area implements Cloneable {
         return scanStrips(horizontal, false);
     }
 
-    public boolean moveRectangle(ADT_Rectangle rectangle, int newX, int newY) {
-        if(! checkIntersection(newX, newY, rectangle.getWidth(), rectangle.getHeight())) {
-            return false;
-        }
-
-        //Remember the original rectangle id by getting the id on it's position
-        short id = (short)getIndex(rectangle.getX(), rectangle.getY());
-        //Remove the original rectangle information
-        fillRectangleBordersWith(rectangle, EMPTY_INDEX);
-
-        rectangle.setX(newX);
-        rectangle.setY(newY);
-
-        fillRectangleBordersWith(rectangle, id);
-
-        return true;
-    }
-
     private int[] scanStrips(boolean horizontal, boolean lookingForEmpty) {
         int[] vals;
         if (horizontal) {
@@ -270,6 +273,9 @@ public class ADT_AreaExtended extends ADT_Area implements Cloneable {
         this.height = height;
 
         array = new short[width * height];
+        for (int i = 0, max = array.length; i < max; i++) {
+            array[i] = EMPTY_INDEX;
+        }
     }
 
     public int getTotalAreaRectanglesToBePlaced() {
@@ -295,29 +301,7 @@ public class ADT_AreaExtended extends ADT_Area implements Cloneable {
 
     @Override
     public boolean isValid() {
-        ArrayList<ADT_Rectangle> checkedRecs = new ArrayList<>();
-
-        for(ADT_Rectangle currentRec : getPlacedRectangles()) {
-
-            // Check if the newly added rectangle has valid coordinates;
-            if (currentRec.getX() < 0 || currentRec.getY() < 0) {
-                return false;
-            } else if (
-                    (this.getWidth() != ADT_Rectangle.INF && currentRec.getX() + currentRec.getWidth() > this.getWidth()) // !(this.w != inf ==> rec.x + rec.w <= this.w)
-                            || (this.getHeight() != ADT_Rectangle.INF && currentRec.getY() + currentRec.getHeight() > this.getHeight()) // !(this.h != inf ==> rec.y + rec.h <= this.h)
-                    ) {
-                return false;
-            }
-
-            // Check if the newly added rectangle intersects with any previously checked rectangle.
-            for(ADT_Rectangle rec : checkedRecs) {
-                if (checkRectangleOverlap(currentRec, rec)) {
-                    return false;
-                }
-            }
-            checkedRecs.add(currentRec);
-        }
-        return true;
+        throw new UnsupportedOperationException();
     }
 
     /**

@@ -23,9 +23,8 @@ public class ADT_Rectangle implements Comparable<ADT_Rectangle> {
     }
     
     @Override
-    public ADT_Rectangle clone() throws CloneNotSupportedException {
-        ADT_Rectangle newRec = new ADT_Rectangle(this.getWidth(), this.getHeight(), NOTSET, NOTSET, flippable);
-        return newRec;
+    public ADT_Rectangle clone() {
+        return new ADT_Rectangle(this.getWidth(), this.getHeight(), NOTSET, NOTSET, flippable);
     }
 
     public int getX() {
