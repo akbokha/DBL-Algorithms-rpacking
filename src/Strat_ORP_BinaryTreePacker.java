@@ -1,6 +1,8 @@
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 
 /**
  * This greedy algorithm places a new rectangle next to another top-left or
@@ -18,8 +20,12 @@ public class Strat_ORP_BinaryTreePacker extends Strat_AbstractStrat {
     int greatestPaste = -1; // Number of sides of rec at bestNode where other rectangles are pasted
     int fixedHeightValue;
     boolean fixedHeight;
-    boolean isFlipped;
+    boolean isFlipped = false; // Is the best rectangle flipped
     ADT_Rectangle[] sortedRectangles;
+    
+    int currentArea;
+    int current_area_width;
+    int current_area_height;
     
     public Strat_ORP_BinaryTreePacker (ADT_Area area) {
         super(area);
@@ -35,11 +41,11 @@ public class Strat_ORP_BinaryTreePacker extends Strat_AbstractStrat {
     
     @Override
     public ADT_Area compute() {
-        ADT_Rectangle [] rectangles = area.getRectangles();
+        ADT_Rectangle [] rectangles = sortedRectangles;
         for (recIndex = 0; recIndex < rectangles.length; recIndex++) {
             ADT_Rectangle rec = rectangles[recIndex];
             getBestPlacement(rec);
-            if (isFlipped) {
+            if (isFlipped) { // If best solution was to flip, do so.
                 rec.setFlipped(true);
             }
             rec.setX(bestNode.point.x);
@@ -80,7 +86,8 @@ public class Strat_ORP_BinaryTreePacker extends Strat_AbstractStrat {
     }
     
       /**
-     * Check if there is already a rectangle placed at (x,y)
+     * Check if there is already a rectangle placed at (x,y). Use for sorted
+     * rectangles in BTP.
      * @param x coordinate to be checked
      * @param y coordinate to be checked
      * @param index of the rectangle in the array
@@ -215,8 +222,8 @@ public class Strat_ORP_BinaryTreePacker extends Strat_AbstractStrat {
      * (node.point.x, node.point.y)
      */
     private int computeResultingArea (Node node, ADT_Rectangle rec) {
-        int currentWidthBoundingBox = area.getWidth();
-        int currentHeightBoundingBox = area.getHeight();
+        int currentWidthBoundingBox = current_area_width;
+        int currentHeightBoundingBox = current_area_height;
         int newWidthBoundingBox;
         int newHeightBoundingBox;
         
@@ -233,6 +240,34 @@ public class Strat_ORP_BinaryTreePacker extends Strat_AbstractStrat {
             newHeightBoundingBox = currentHeightBoundingBox;
         }
         return (newWidthBoundingBox * newHeightBoundingBox);
+    }
+    
+    /**
+     * @param rec the rectangle that is placed
+     * @return the resulting area when you place rectangle at
+     * (bestNode.point.x, bestNode.point.y)
+     */
+    private void computeAreaBoundingBox (ADT_Rectangle rec) {
+        int currentWidthBoundingBox = current_area_width;
+        int currentHeightBoundingBox = current_area_height;
+        int newWidthBoundingBox;
+        int newHeightBoundingBox;
+        
+        if (bestNode.point.x + rec.getWidth() > currentWidthBoundingBox) {
+            // resultingArea is larger than area of currentBoundingBox
+            newWidthBoundingBox = bestNode.point.x + rec.getWidth();
+        } else {
+            newWidthBoundingBox = currentWidthBoundingBox;
+        }
+        if (bestNode.point.y + rec.getHeight() > currentHeightBoundingBox) {
+            // resultingArea is larger than area of currentBoundingBox
+            newHeightBoundingBox = bestNode.point.y + rec.getHeight();
+        } else {
+            newHeightBoundingBox = currentHeightBoundingBox;
+        }
+        current_area_width = newWidthBoundingBox;
+        current_area_height = newHeightBoundingBox;
+        currentArea = (newWidthBoundingBox * newHeightBoundingBox);
     }
         
     private class Node {
@@ -253,12 +288,11 @@ public class Strat_ORP_BinaryTreePacker extends Strat_AbstractStrat {
         
         public void placeRectangle(ADT_Rectangle rec) {
             this.rec = rec;
-            
             Node TopLeftChildNode = new Node(rec.getX(), (rec.getY() + rec.getHeight()));
             binaryTree.addNode(TopLeftChildNode);
             Node BottomRightChildNode = new Node((rec.getX() + rec.getWidth()), rec.getY());
             binaryTree.addNode(BottomRightChildNode);
-            
+            computeAreaBoundingBox(rec); // update current area trackers
             binaryTree.points.get(bestNode.point.x).remove(bestNode);
             checkNodes(rec);
         }
@@ -272,25 +306,41 @@ public class Strat_ORP_BinaryTreePacker extends Strat_AbstractStrat {
         private void checkNodes(ADT_Rectangle rec) {
             // Check left edge of rec
             HashSet<Node> x_collection = binaryTree.points.get(rec.getX());
-            for(Node node : x_collection){
+            ArrayList<Integer> checkIfEmpty = new ArrayList<>(); // to track x coordinates of nodes that are removed
+            
+            for (Iterator<Node> nodeIterator = x_collection.iterator(); nodeIterator.hasNext();) {
+                Node node = nodeIterator.next();
                 if((node.point.y >= rec.getY() && 
                         node.point.y < rec.getY()+rec.getHeight())){
-                    binaryTree.removeNode(node);
+                    checkIfEmpty.add(node.point.x);
+                    node.point = null;
+                    nodeIterator.remove();
                 }
             }
             
             // Check for bottom edge
             for(int i = rec.getX(); i<rec.getX()+rec.getWidth(); ++i){
                 if(binaryTree.points.get(i) != null){
-                    for(Node node : binaryTree.points.get(i)){
-                        if(node.point.x == rec.getX()){
-                            binaryTree.removeNode(node);
+                    x_collection = binaryTree.points.get(i);
+                    for (Iterator<Node> nodeIterator = x_collection.iterator(); nodeIterator.hasNext();) {
+                        Node node = nodeIterator.next();
+                        if(node.point.y == rec.getY()){
+                            checkIfEmpty.add(node.point.x);
+                            node.point = null;
+                            nodeIterator.remove();
                         }
                     }
                 }
             }
+            // check if there are empty collections (and remove them)
+            for (Integer i : checkIfEmpty) {
+                if (binaryTree.points.get(i).isEmpty()) {
+                    binaryTree.points.remove(i);
+                }
+            }
         }
         
+        @Override
         public String toString(){
             String result = new String();
             if(rec != null && point != null){
