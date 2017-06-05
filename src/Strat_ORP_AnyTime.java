@@ -21,7 +21,7 @@ public class Strat_ORP_AnyTime extends Strat_AbstractStrat {
             // minimal area is reached
             if((width-STEPSIZE) * height >= areaEx.getTotalAreaRectanglesToBePlaced() && width-STEPSIZE >= areaEx.getRectanglesToBePlaced()[0].getWidth()) {
                 width -= STEPSIZE;
-                System.err.print("W:" + width + "\tH:" + height + "\t");
+                System.err.print("W:" + width + "\tH:" + height + "\tArea: " + (width * height) + "\t");
 
                 //Get a solution with this width and height
                 ADT_AreaExtended newArea = createNewSolution(width, height);

@@ -3,9 +3,10 @@ import java.util.Arrays;
 
 /*
  * @todo requires rotate rectangle function
- * @todo requires function to remove rectangles from the set of placed rectangles.
  * @notice currently it is possible that the position of the rectangle in the array is different
  *      than what it defined in its own coordinate variables. Has potential for unreliable behaviour.
+ *      When using this class, do not alter the rectangle positions directly, but use methods supplied
+ *      by this class instead.
  */
 public class ADT_AreaExtended extends ADT_Area implements Cloneable {
     private final short EMPTY_INDEX = Short.MIN_VALUE;
@@ -154,20 +155,20 @@ public class ADT_AreaExtended extends ADT_Area implements Cloneable {
                 return res;
             }
 
-            res = isRectangleAt(x, posY + height-1);
+            res = isRectangleAt(x, posY + height - 1);
             if (res != 0) {
                 return res;
             }
         }
 
         //Check vertical borders
-        for (int y = posY, max = posY + height; y < max; y++) {
+        for (int y = posY + 1, max = posY + height - 1; y < max; y++) { // Skipping the corners (1)
             int res = isRectangleAt(posX, y);
             if(res != 0) {
                 return res;
             }
 
-            res = isRectangleAt(posX + width-1, y);
+            res = isRectangleAt(posX + width - 1, y);
             if(res != 0) {
                 return res;
             }
@@ -377,3 +378,7 @@ public class ADT_AreaExtended extends ADT_Area implements Cloneable {
         }
     }
 }
+/*
+ * 1) First and last y coordinate can be skipped, since these are the corners which are already checked when the
+ *      horizontal strips are checked.
+ */

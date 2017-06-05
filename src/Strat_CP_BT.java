@@ -47,7 +47,7 @@ class Strat_CP_BT extends Strat_BT_Template {
     boolean first() {
         // Step one level down into the branch and retrieve a pointer to the first rectangle.
         ADT_Rectangle rectangle = rectangles[++index];
-        int x = -1;
+        int x = 0;
         int y = 0;
 
         // Make distinction between the first rectangle and all others.
@@ -79,7 +79,7 @@ class Strat_CP_BT extends Strat_BT_Template {
         // Remove it
         areaEx.remove(index);
 
-        ADT_Vector next = findNextPosition(rectangle, x, y);
+        ADT_Vector next = findNextPosition(rectangle, x + 1, y);
 
         if (next != null) {
             areaEx.add(index, next.x, next.y);
@@ -91,7 +91,6 @@ class Strat_CP_BT extends Strat_BT_Template {
     }
 
     private ADT_Vector findNextPosition(ADT_Rectangle rectangle, int x, int y) {
-        x++;
         while (true) {
             // Increment x and check if this coordinate is valid.
 
