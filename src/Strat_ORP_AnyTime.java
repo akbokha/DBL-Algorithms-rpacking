@@ -56,7 +56,7 @@ public class Strat_ORP_AnyTime extends Strat_AbstractStrat {
     
     ADT_AreaExtended createNewSolution(int width, int height) {
         Strat_BT_PrunerInterface[] pruners = new Strat_BT_PrunerInterface[]{
-            new Strat_BT_PrunerEmptySpace()/*, new Strat_BT_PrunerPerfectRectangle(), new Strat_BT_Pruner_NarrowEmptyStrips()*/, new Strat_BT_Pruner_WS2()
+            /*new Strat_BT_PrunerEmptySpace()/*, new Strat_BT_PrunerPerfectRectangle()/*, new Strat_BT_Pruner_NarrowEmptyStrips()/*, new Strat_BT_Pruner_WS2()*/
         };
         ADT_AreaExtended newArea = area.toExtended(width, height);
         

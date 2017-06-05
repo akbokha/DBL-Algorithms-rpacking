@@ -76,9 +76,11 @@ abstract public class Strat_BT_Template extends Strat_AbstractStrat {
      * @return true if any of the pruners think that this branch should be rejected, else false.
      */
     protected boolean reject(ADT_Rectangle last) {
-        for (Strat_BT_PrunerInterface pruner : pruners) {
-            if (pruner.reject(areaEx, last)) {
-                return true;
+        if(last != null) {
+            for (Strat_BT_PrunerInterface pruner : pruners) {
+                if (pruner.reject(areaEx, last)) {
+                    return true;
+                }
             }
         }
 

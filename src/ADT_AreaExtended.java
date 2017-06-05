@@ -80,8 +80,8 @@ public class ADT_AreaExtended extends ADT_Area implements Cloneable {
         assert x >= 0 && y >= 0 && x < width && y < height;
 
         int i = getIndex(x, y);
-        if(i >= array.length) {
-            throw new IllegalArgumentException(Integer.toString(i) + " >= " + Integer.toString(array.length));
+        if(i >= array.length || i < 0) {
+            throw new IllegalArgumentException(Integer.toString(i) + ", max = " + Integer.toString(array.length));
         }
         return array[i] == EMPTY_INDEX;
     }
@@ -125,13 +125,13 @@ public class ADT_AreaExtended extends ADT_Area implements Cloneable {
         //Set horizontal borders to this shape's id
         for (int x = xx, max = x + width; x < max; x++) {
             setArrayAt(x, yy, id);
-            setArrayAt(x, yy + height - 1, id);
+            setArrayAt(x, yy + height-1, id);
         }
 
         //Set vertical borders
-        for (int y = yy + 1, max = y + height - 1; y < max; y++) {
+        for (int y = yy, max = y + height; y < max; y++) {
             setArrayAt(xx, y, id);
-            setArrayAt(xx + width - 1, y, id);
+            setArrayAt(xx + width-1, y, id);
         }
     }
 
