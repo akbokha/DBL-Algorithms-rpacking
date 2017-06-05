@@ -92,7 +92,7 @@ public class ADT_Rectangle implements Comparable<ADT_Rectangle> {
         int maxThis = this.getWidth();
         int maxOther = o.getWidth();
 
-        if (this.canFlip() && o.canFlip()) {
+        if (this.canFlip() || o.canFlip()) {
             // Sort on maximum dimension if both can flip.
             maxThis = Math.max(maxThis, this.getHeight());
             maxOther = Math.max(maxOther, o.getHeight());

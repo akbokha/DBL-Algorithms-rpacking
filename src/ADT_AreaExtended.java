@@ -85,13 +85,13 @@ public class ADT_AreaExtended extends ADT_Area implements Cloneable {
     }
 
     /**
-     * Adds an rectangle to this area.
+     * Places a rectangle inside the area.
      *
-     * @param i
-     * @param x
-     * @param y
+     * @param i The index of the rectangle.
+     * @param x The x-coordinate where the rectangle should be placed.
+     * @param y The y-coordinate where the rectangle should be placed.
      */
-    public void add(int i, int x, int y) {
+    void add(int i, int x, int y) {
         placedRectangles[i] = true;
         // Define its coordinates.
         rectangles[i].setX(x);
@@ -102,10 +102,13 @@ public class ADT_AreaExtended extends ADT_Area implements Cloneable {
     }
     
     /**
+     * Undoes the placement of a rectangle.
      *
-     * @param i
+     * @param i The index of the rectangle.
      */
-    public void remove(int i) {
+    void remove(int i) {
+        assert placedRectangles[i];
+        
         placedRectangles[i] = false;
         ADT_Rectangle rectangle = rectangles[i];
         removeRectangleBorders(rectangle);
@@ -114,6 +117,12 @@ public class ADT_AreaExtended extends ADT_Area implements Cloneable {
         rectangle.setY(ADT_Rectangle.NOTSET);
     }
 
+    /**
+     * Fills the inner borders of a rectangle in the two-dimensional placement array.
+     *
+     * @param shape The shape which borders should be added.
+     * @param id The value the borders should have.
+     */
     private void fillRectangleBordersWith(ADT_Rectangle shape, short id) {
         int xx = shape.getX();
         int yy = shape.getY();
@@ -142,11 +151,11 @@ public class ADT_AreaExtended extends ADT_Area implements Cloneable {
      * @param height The height of the area to be checked.
      * @return 0 if no intersection was detected, or the x-coordinates adjacent on the right side of one of the intersecting
      *      rectangles.
-     * Optimalization (to be verified): Might be more efficient to first check the right most rectangles, since they will
+     * Optimization (to be verified): Might be more efficient to first check the right most rectangles, since they will
      *      potentially cause a larger horizontal displacement. Thus decreasing the amount of coordinates which have to be checked.
      */
     int checkIntersection(int posX, int posY, int width, int height) {
-        //Check horizontal borders to this shape's id
+        // Check horizontal borders to this shape's id
         for (int x = posX, max = posX + width; x < max; x++) {
             int res = isRectangleAt(x, posY);
             if (res != 0) {
@@ -159,7 +168,7 @@ public class ADT_AreaExtended extends ADT_Area implements Cloneable {
             }
         }
 
-        //Check vertical borders
+        // Check vertical borders
         for (int y = posY + 1, max = posY + height - 1; y < max; y++) { // Skipping the corners (o1)
             int res = isRectangleAt(posX, y);
             if(res != 0) {
@@ -176,10 +185,12 @@ public class ADT_AreaExtended extends ADT_Area implements Cloneable {
     }
 
     /**
-     * 
-     * @param x
-     * @param y
-     * @return 
+     * Checks if there is a rectangle border at a specific coordinate.
+     *
+     * @param x The x-coordinate to be checked.
+     * @param y The y-coordinate to be checked.
+     * @return 0 if no rectangle was found at this coordinate, else the x-coordinate adjacent to the
+     *      right side of the rectangle inhabiting this border.
      */
     private int isRectangleAt(int x, int y) {
         assert x >= 0 && y >= 0 && x < width && y < height;
@@ -194,17 +205,20 @@ public class ADT_AreaExtended extends ADT_Area implements Cloneable {
     }
     
     /**
-     * 
-     * @param index
-     * @return 
+     * Checks is a rectangle is placed.
+     *
+     * @param index The index of the rectangle.
+     * @return True if the rectangle is placed, else false.
      */
     boolean getRectangleIsPlaced(int index) {
         return placedRectangles[index];
     }
 
     /**
-     * 
-     * @return all rectangles that still need to be placed
+     * Gives all rectangles which currently are not placed.
+     *
+     * @return An array containing all rectangles that still need to be placed
+
      */
     ADT_Rectangle[] getRectanglesToBePlaced() {
         ArrayList<ADT_Rectangle> result = new ArrayList<>(rectangles.length / 2);
@@ -219,12 +233,7 @@ public class ADT_AreaExtended extends ADT_Area implements Cloneable {
 
         return arrayResult;
     }
-
-    /**
-     * Gives the amount of rectangles this area contains.
-     *
-     * @return the amount of rectangles this area contains.
-     */
+    
     @Override
     public int getCount() {
         return rectangles.length;
@@ -311,8 +320,15 @@ public class ADT_AreaExtended extends ADT_Area implements Cloneable {
         
         return vals;
     }
+    
+    /**
+     * Sets the width, height, and multi-dimensional array.
+     *
+     * @param width The new width of this area.
+     * @param height The height of this area.
+     */
+    private void setDimensions(int width, int height) {
 
-    public void setDimensions(int width, int height) {
         this.width = width;
         this.height = height;
 
@@ -321,8 +337,14 @@ public class ADT_AreaExtended extends ADT_Area implements Cloneable {
             array[i] = EMPTY_INDEX;
         }
     }
+    
+    /**
+     * Computes the sum of the area of all rectangles which still have to be placed.
+     *
+     * @return The sum of the area of all rectangles which still have to be placed.
+     */
+    int getTotalAreaRectanglesToBePlaced() {
 
-    public int getTotalAreaRectanglesToBePlaced() {
         int total = 0;
         for (int i = 0; i < rectangles.length; i++) {
             if (! placedRectangles[i]) {
