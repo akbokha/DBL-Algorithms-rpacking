@@ -39,10 +39,12 @@ public class ADT_AreaExtended extends ADT_Area implements Cloneable {
     @Override
     public ADT_AreaExtended clone() {
         super.clone();
+        ADT_Rectangle[] newShapes = new ADT_Rectangle[rectangles.length];
         
-        ADT_AreaExtended newArea = new ADT_AreaExtended(getWidth(), getHeight(), canFlip(), Arrays.copyOf(rectangles, rectangles.length));
-        
-        newArea.rectangles = Arrays.copyOf(rectangles, rectangles.length);
+        for(int i = 0; i < rectangles.length; i++) {
+            newShapes[i] = rectangles[i].clone();
+        }
+        ADT_AreaExtended newArea = new ADT_AreaExtended(getWidth(), getHeight(), canFlip(), newShapes);
         
         return newArea;
     }
