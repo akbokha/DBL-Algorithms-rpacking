@@ -17,8 +17,12 @@ class Strat_CP_BT extends Strat_BT_Template {
 
     @Override
     protected boolean reject(ADT_Rectangle last) {
-        // Consult all pruners
-        return super.reject(last);
+        // Consult all pruners but not earlier than depth 6
+        if(index > 6) {
+            return super.reject(last);
+        } else {
+            return false;
+        }
     }
 
     @Override

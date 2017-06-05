@@ -246,44 +246,69 @@ public class ADT_AreaExtended extends ADT_Area implements Cloneable {
     }
 
     /**
-     * Returns the strips populated with the number of empty spaces in each strip
-     * @return 
+     * Calculates an array of the empty space cut in strips
+     * 
+     * @return an array <code>a</code> with the index, the length of the strips
+     * and <code>a[i]</code> the amount of strips of that length
      */
     @Override
     public int[] getEmptySpaceStrips(boolean horizontal) {
-        return scanStrips(horizontal, true);
-    }
-
-    /**
-     * Returns the strips populated with the total sum of (minimal side) occupied spaces of the to be placed rectangles.
-     * @return 
-     */
-    @Override
-    public int[] getRectangleStrips(boolean horizontal) {
-        return scanStrips(horizontal, false);
-    }
-
-    private int[] scanStrips(boolean horizontal, boolean lookingForEmpty) {
         int[] vals;
         if (horizontal) {
-            vals = new int[getHeight()];
-            for (int i = 0; i < vals.length; i++) {
-                for (int x = 0; x < getWidth(); x++) {
-                    if(isEmptyAt(x, i) == lookingForEmpty) {
-                        vals[i]++;
+            vals = new int[getWidth()+1];
+            int stripLength = 0;
+            for (int y = 0; y < getHeight(); y++) {
+                for(int x = 0; x < getWidth(); x++) {
+                    if(isEmptyAt(x, y)) {
+                        stripLength++;
+                    } else {
+                        vals[stripLength]++;
+                        stripLength = 0;
+                        x += rectangles[array[getIndex(x, y)]].getWidth();
                     }
                 }
             }
         } else {
-            vals = new int[getWidth()];
-            for (int i = 0; i < vals.length; i++) {
-                for (int y = 0; y < getHeight(); y++) {
-                    if(isEmptyAt(i, y) == lookingForEmpty) {
-                        vals[i]++;
+            vals = new int[getHeight()+1];
+            int stripLength = 0;
+            for (int x = 0; x < getWidth(); x++) {
+                for(int y = 0; y < getHeight(); y++) {
+                    if(isEmptyAt(x, y)) {
+                        stripLength++;
+                    } else {
+                        vals[stripLength]++;
+                        stripLength = 0;
+                        x += rectangles[array[getIndex(x, y)]].getHeight();
+                        
                     }
                 }
             }
         }
+        return vals;
+    }
+
+    /**
+     * Calculates an array of the rectangles to be placed cut in strips
+     * 
+     * @return an array <code>a</code> with the index, the length of the strips
+     * and <code>a[i]</code> the amount of strips of that length
+     */
+    @Override
+    public int[] getRectangleStrips(boolean horizontal) {
+        ADT_Rectangle[] toBePlacedRectangles = getRectanglesToBePlaced();
+        int[] vals;
+        if(horizontal) {
+            vals = new int[toBePlacedRectangles[0].getWidth()+1];
+            for(ADT_Rectangle rec : toBePlacedRectangles) {
+                vals[rec.getWidth()] = rec.getHeight();
+            }
+        } else {
+            vals = new int[toBePlacedRectangles[0].getHeight()+1];
+            for(ADT_Rectangle rec : toBePlacedRectangles) {
+                vals[rec.getHeight()] = rec.getWidth();
+            }
+        }
+        
         return vals;
     }
 

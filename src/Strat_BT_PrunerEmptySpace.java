@@ -2,6 +2,9 @@ public class Strat_BT_PrunerEmptySpace implements Strat_BT_PrunerInterface {
     
     @Override
     public boolean reject(ADT_AreaExtended area, ADT_Rectangle last) {
+        if(last != null) { //If no rectangles are left to place
+            return false;
+        }
         int[] stripsEmptySpace; //Array which stores the strips of empty space
         int[] stripsRecsTBP; //Array which stores the strips of rectangles to be placed
         //true = horizontal strips
@@ -35,16 +38,16 @@ public class Strat_BT_PrunerEmptySpace implements Strat_BT_PrunerInterface {
                 //If there is an empty space the same size as the rectangle strip
                 // place it there
                 if(stripsEmptySpace[i] > 0) {
-                    stripsEmptySpace[i] -= 1;
+                    stripsEmptySpace[i]--;
                     stripsRecsTBP[i]--;
                 } else {
                     //Otherwise search for the next strip where it fits
-                    for(int j = i; j < stripsEmptySpace.length; j++) {
+                    for(int j = i+1; j < stripsEmptySpace.length; j++) {
                         if(stripsEmptySpace[j] != 0) {
                             //By placing the strip in a spot with a larger width
                             // you create a place with j - i width
-                            stripsEmptySpace[j] -= 1;
-                            stripsEmptySpace[j-i] += 1;
+                            stripsEmptySpace[j]--;
+                            stripsEmptySpace[j-i]++;
                             stripsRecsTBP[i]--;
                             continue nextRec; //Place next rectangle
                         }
