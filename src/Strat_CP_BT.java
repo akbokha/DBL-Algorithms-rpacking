@@ -6,21 +6,13 @@ class Strat_CP_BT extends Strat_BT_Template {
 
     private ADT_Rectangle[] rectangles;
     private int index = -1;
-    Output_GraphicalOutput output;
 
     Strat_CP_BT(ADT_AreaExtended areaEx) {
         super(areaEx);
 
         assert areaEx.getRectanglesToBePlaced().length == areaEx.getCount(); // Check that none of the rectangles are placed.
 
-        ADT_Rectangle[] allRectangles = areaEx.getRectanglesToBePlaced();
-
-        rectangles = new ADT_Rectangle[allRectangles.length];
-        int index = 0;
-        for (ADT_Rectangle rec : allRectangles) {
-            rectangles[index++] = rec;
-        }
-//        output = new Output_GraphicalOutput(areaEx);
+        rectangles = areaEx.getRectanglesToBePlaced();
     }
 
     @Override
@@ -86,7 +78,7 @@ class Strat_CP_BT extends Strat_BT_Template {
         } else {
             return false;
         }
-//        output.draw();
+
         return true;
     }
 
