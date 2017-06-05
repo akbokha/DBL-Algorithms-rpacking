@@ -71,7 +71,7 @@ class Strat_CP_BT extends Strat_BT_Template {
         // Retrieve a pointer to the currently placed rectangle.
         ADT_Rectangle rectangle = rectangles[index];
 
-        int x = rectangle.getX() + 1;
+        int x = rectangle.getX();
         int y = rectangle.getY();
 
         // Remove it
