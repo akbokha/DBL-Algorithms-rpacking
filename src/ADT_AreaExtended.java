@@ -154,20 +154,20 @@ public class ADT_AreaExtended extends ADT_Area implements Cloneable {
                 return res;
             }
 
-            res = isRectangleAt(x, posY + height - 1);
+            res = isRectangleAt(x, posY + height-1);
             if (res != 0) {
                 return res;
             }
         }
 
         //Check vertical borders
-        for (int y = posY + 1, max = posY + height - 1; y < max; y++) {
+        for (int y = posY, max = posY + height; y < max; y++) {
             int res = isRectangleAt(posX, y);
             if(res != 0) {
                 return res;
             }
 
-            res = isRectangleAt(posX + width - 1, y);
+            res = isRectangleAt(posX + width-1, y);
             if(res != 0) {
                 return res;
             }
@@ -176,6 +176,12 @@ public class ADT_AreaExtended extends ADT_Area implements Cloneable {
         return 0;
     }
 
+    /**
+     * 
+     * @param x
+     * @param y
+     * @return 
+     */
     private int isRectangleAt(int x, int y) {
         assert x >= 0 && y >= 0 && x < width && y < height;
 
@@ -187,11 +193,20 @@ public class ADT_AreaExtended extends ADT_Area implements Cloneable {
             return rectangles[index].getWidth() + rectangles[index].getX();
         }
     }
-
+    
+    /**
+     * 
+     * @param index
+     * @return 
+     */
     boolean getRectangleIsPlaced(int index) {
         return placedRectangles[index];
     }
 
+    /**
+     * 
+     * @return all rectangles that still need to be placed
+     */
     ADT_Rectangle[] getRectanglesToBePlaced() {
         ArrayList<ADT_Rectangle> result = new ArrayList<>(rectangles.length / 2);
         for (int i = 0; i < rectangles.length; i++) {

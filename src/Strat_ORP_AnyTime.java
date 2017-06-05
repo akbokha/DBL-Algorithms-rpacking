@@ -35,16 +35,15 @@ public class Strat_ORP_AnyTime extends Strat_AbstractStrat {
                 //If a solution was set, use it as the new best solution
                 if(newArea != null) {
                     bestArea = newArea.clone().toArea();
-                    System.out.println(bestArea.getRectangles());
                 } else if (STEPSIZE == 1) {//If stepsize == 1 and no solution is found, increase height
-                    if(area.getHeight() != ADT_Area.INF || (height+1) * (width) >= bestArea.getWidth() * bestArea.getHeight()) {// but if the height was fixed, no better solution can be found
+                    if(area.getHeight() != ADT_Area.INF/* || (height+1) * (width) >= bestArea.getWidth() * bestArea.getHeight()*/) {// but if the height was fixed, no better solution can be found
                         break;
                     }
-                    width += STEPSIZE;
+//                    width += STEPSIZE;
                     height += 1;
                 } else {//If this area is not possible try one larger width
                     width += STEPSIZE;
-                    STEPSIZE--;
+                    STEPSIZE = 1;
                 }
             } else if(STEPSIZE == 1) {//If stepsize is 1 and cant be made smaller
                 break;
@@ -52,12 +51,13 @@ public class Strat_ORP_AnyTime extends Strat_AbstractStrat {
                 STEPSIZE--;
             }
         }
+        bestArea.setHeight(area.getHeight());
         return bestArea;
     }
     
     ADT_AreaExtended createNewSolution(int width, int height) {
         Strat_BT_PrunerInterface[] pruners = new Strat_BT_PrunerInterface[]{
-            /*new Strat_BT_PrunerEmptySpace()/*, new Strat_BT_PrunerPerfectRectangle()/*, new Strat_BT_Pruner_NarrowEmptyStrips()/*, new Strat_BT_Pruner_WS2()*/
+            /*new Strat_BT_PrunerEmptySpace()/*, new Strat_BT_Pruner_WS2()/*, new Strat_BT_PrunerPerfectRectangle()/*, new Strat_BT_Pruner_NarrowEmptyStrips()*/
         };
         ADT_AreaExtended newArea = area.toExtended(width, height);
         

@@ -6,6 +6,7 @@ class Strat_CP_BT extends Strat_BT_Template {
 
     private ADT_Rectangle[] rectangles;
     private int index = -1;
+    Output_GraphicalOutput output;
 
     Strat_CP_BT(ADT_AreaExtended areaEx) {
         super(areaEx);
@@ -19,6 +20,7 @@ class Strat_CP_BT extends Strat_BT_Template {
         for (ADT_Rectangle rec : allRectangles) {
             rectangles[index++] = rec;
         }
+//        output = new Output_GraphicalOutput(areaEx);
     }
 
     @Override
@@ -45,7 +47,7 @@ class Strat_CP_BT extends Strat_BT_Template {
     boolean first() {
         // Step one level down into the branch and retrieve a pointer to the first rectangle.
         ADT_Rectangle rectangle = rectangles[++index];
-        int x = 0;
+        int x = -1;
         int y = 0;
 
         // Make distinction between the first rectangle and all others.
@@ -84,7 +86,7 @@ class Strat_CP_BT extends Strat_BT_Template {
         } else {
             return false;
         }
-
+//        output.draw();
         return true;
     }
 
