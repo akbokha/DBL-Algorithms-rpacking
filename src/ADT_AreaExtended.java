@@ -24,11 +24,6 @@ public class ADT_AreaExtended extends ADT_Area implements Cloneable {
         this.version = rectangles.length;
     }
     
-    @Override
-    public int getVersion(){
-        return this.version;
-    }
-    
     /**
      * Converts this to ADT_Area
      * @return 
@@ -132,20 +127,23 @@ public class ADT_AreaExtended extends ADT_Area implements Cloneable {
         }
 
         //Set vertical borders
-        for (int y = yy, max = y + height; y < max; y++) {
+        for (int y = yy + 1, max = y + height - 1; y < max; y++) { // Skipping the corners (o1)
             setArrayAt(xx, y, id);
             setArrayAt(xx + width-1, y, id);
         }
     }
 
     /**
-     * Checks if an rectangle with would intersect on a specific position.
+     * Checks if an rectangular area with would intersect with any other currently placed rectangles.
      *
-     * @param posX
-     * @param posY
-     * @param width
-     * @param height
-     * @return True if an intersection was detected, else false.
+     * @param posX The x-coordinate of the area to be checked.
+     * @param posY The y-coordinate of the area to be checked.
+     * @param width The width of the area to be checked.
+     * @param height The height of the area to be checked.
+     * @return 0 if no intersection was detected, or the x-coordinates adjacent on the right side of one of the intersecting
+     *      rectangles.
+     * Optimalization (to be verified): Might be more efficient to first check the right most rectangles, since they will
+     *      potentially cause a larger horizontal displacement. Thus decreasing the amount of coordinates which have to be checked.
      */
     int checkIntersection(int posX, int posY, int width, int height) {
         //Check horizontal borders to this shape's id
@@ -162,7 +160,7 @@ public class ADT_AreaExtended extends ADT_Area implements Cloneable {
         }
 
         //Check vertical borders
-        for (int y = posY + 1, max = posY + height - 1; y < max; y++) { // Skipping the corners (1)
+        for (int y = posY + 1, max = posY + height - 1; y < max; y++) { // Skipping the corners (o1)
             int res = isRectangleAt(posX, y);
             if(res != 0) {
                 return res;
@@ -379,6 +377,6 @@ public class ADT_AreaExtended extends ADT_Area implements Cloneable {
     }
 }
 /*
- * 1) First and last y coordinate can be skipped, since these are the corners which are already checked when the
+ * o1) First and last y coordinate can be skipped, since these are the corners which are already checked when the
  *      horizontal strips are checked.
  */

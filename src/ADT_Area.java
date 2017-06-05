@@ -52,14 +52,6 @@ public class ADT_Area extends ADT_Rectangle implements Cloneable {
         return new ADT_AreaExtended(width, height, canFlip(), shapes);
     }
     
-    /**
-     * Get the version w.r.t. how many rectangles have to be placed
-     * @return 3, 5, 10, 25, 10000
-     */
-    public int getVersion() {
-        return getCount();
-    }
-
     @Override
     public ADT_Vector getDimensions() {
         int maxWidth = getWidth();

@@ -14,7 +14,7 @@ public class StrategyPicker {
     }
     
     static Strat_AbstractStrat pickStrategy() {
-        if (area.getVersion() > 25) { // i.e. versions 25 and 10000
+        if (area.getCount() > 25) { // i.e. versions 25 and 10000
             return new Strat_ORP_BinaryTreePacker(area);
         } else { // 3, 5 and 10
             return new Strat_ORP_AnyTime(area);
