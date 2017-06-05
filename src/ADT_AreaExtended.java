@@ -80,6 +80,9 @@ public class ADT_AreaExtended extends ADT_Area implements Cloneable {
         assert x >= 0 && y >= 0 && x < width && y < height;
 
         int i = getIndex(x, y);
+        if(i >= array.length) {
+            throw new IllegalArgumentException(Integer.toString(i) + " >= " + Integer.toString(array.length));
+        }
         return array[i] == EMPTY_INDEX;
     }
 

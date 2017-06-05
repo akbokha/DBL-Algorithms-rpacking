@@ -1,9 +1,6 @@
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 public class Strat_ORP_AnyTime extends Strat_AbstractStrat {
     
-    int STEPSIZE = 1;
+    int STEPSIZE = 5;
     
     public Strat_ORP_AnyTime(ADT_Area area) {
         super(area);
@@ -44,9 +41,9 @@ public class Strat_ORP_AnyTime extends Strat_AbstractStrat {
                     }
                     width += STEPSIZE;
                     height += 1;
-                } else {//If this area is not possible try a larger height but the same width as bestArea
+                } else {//If this area is not possible try one larger width
                     width += STEPSIZE;
-                    STEPSIZE = 1;
+                    STEPSIZE--;
                 }
             } else if(STEPSIZE == 1) {//If stepsize is 1 and cant be made smaller
                 break;
@@ -58,15 +55,17 @@ public class Strat_ORP_AnyTime extends Strat_AbstractStrat {
     }
     
     ADT_AreaExtended createNewSolution(int width, int height) {
-        // @todo move this clone-like function to the ADT_Area
-        ADT_Rectangle[] rectangles = new ADT_Rectangle[areaEx.getCount()];
-        ADT_Rectangle[] oldRectangles = areaEx.getRectangles();
-        for (int i = 0; i < oldRectangles.length; i++) {
-            rectangles[i] = oldRectangles[i].clone();
+        Strat_BT_PrunerInterface[] pruners = new Strat_BT_PrunerInterface[]{
+            new Strat_BT_PrunerEmptySpace()/*, new Strat_BT_PrunerPerfectRectangle(), new Strat_BT_Pruner_NarrowEmptyStrips()*/, new Strat_BT_Pruner_WS2()
+        };
+        ADT_AreaExtended newArea = area.toExtended(width, height);
+        
+        Strat_CP_BT backtracker = new Strat_CP_BT(newArea);
+        for(Strat_BT_PrunerInterface pruner : pruners) {
+            backtracker.addPruner(pruner);
         }
-
-        ADT_AreaExtended newArea = new ADT_AreaExtended(width, height, areaEx.canFlip(), rectangles);
-        newArea = (new Strat_CP_BT(newArea)).compute();
+        
+        newArea = backtracker.compute();
         return newArea;
     }
     

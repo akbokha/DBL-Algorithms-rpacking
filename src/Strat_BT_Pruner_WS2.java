@@ -34,14 +34,14 @@ public class Strat_BT_Pruner_WS2 implements Strat_BT_PrunerInterface {
           */
          rectanglesToBePlaced = new ArrayList<>();
          collectRectanglesToBePlaced(area); // add the rectangles that still neet to be placed to the collection
-         rectangleAreas = new int[maxAreaOfRectangles]; // initialize the described array
+         rectangleAreas = new int[maxAreaOfRectangles+1]; // initialize the described array
          fillRectangleAreaArray(); // fill the rectangle area array
          
          emptyCells = new ArrayList<>();
          findAndInitializeEmptyCells(area); // fill the collection with all the empty cells and 
          bins = new ArrayList<>();
          makeBins(); // fills the collection that will hold the bins
-         capacityBins = new int[maxCapacity];
+         capacityBins = new int[maxCapacity+1];
          fillCapacityBinsArray(); // fill the bin capacity array
          
          wastedSpace = 0;
@@ -98,7 +98,7 @@ public class Strat_BT_Pruner_WS2 implements Strat_BT_PrunerInterface {
     private void findAndInitializeEmptyCells(ADT_AreaExtended area) {
         int areaWidth = area.getWidth();
         int areaHeight = area.getHeight();
-        for (int i = 0; i <= areaWidth;  i++) {
+        for (int i = 0; i < areaWidth;  i++) {
             for (int j = 0; j < areaHeight; j++) {
                 ADT_Vector vector = new ADT_Vector (i, j);
                 if (! area.isOccupied(vector)) { // empty cell
@@ -115,7 +115,7 @@ public class Strat_BT_Pruner_WS2 implements Strat_BT_PrunerInterface {
     private int emptyHorizontalSpace (int x, int y, int maxWidth, ADT_AreaExtended area) {
         int emptyHorizontalSpace = 1; // the emptycell itself has a width of 1
         // go to the right
-        for (int i = x; i <= maxWidth && ! area.isOccupied(new ADT_Vector(i, y)); i++) {
+        for (int i = x; i < maxWidth && ! area.isOccupied(new ADT_Vector(i, y)); i++) {
             emptyHorizontalSpace++;
         }
         // go to the left
@@ -129,7 +129,7 @@ public class Strat_BT_Pruner_WS2 implements Strat_BT_PrunerInterface {
     private int emptyVerticalSpace (int x, int y, int maxHeight, ADT_AreaExtended area) {
         int emptyVerticalSpace = 1; // the emptycell itself has a height of 1
         // go up
-        for (int i = y; i <= maxHeight && ! area.isOccupied(new ADT_Vector(x, i)); i++) {
+        for (int i = y; i < maxHeight && ! area.isOccupied(new ADT_Vector(x, i)); i++) {
             emptyVerticalSpace++;
         }
         // go down
