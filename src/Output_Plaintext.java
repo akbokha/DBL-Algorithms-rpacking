@@ -38,7 +38,7 @@ public class Output_Plaintext extends Output_AbstractOutput {
         StringBuilder rectangleDimensions = new StringBuilder();
         StringBuilder rectangleLocations = new StringBuilder();
         for (ADT_Rectangle rectangle : i) {
-            rectangleDimensions.append(rectangle.getWidth()).append(" ").append(rectangle.getHeight()).append("\n");
+            rectangleDimensions.append(rectangle.width).append(" ").append(rectangle.height).append("\n");
 
             if (area.canFlip()) {
                 if (rectangle.getFlipped()) {
