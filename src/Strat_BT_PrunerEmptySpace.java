@@ -2,9 +2,6 @@ public class Strat_BT_PrunerEmptySpace implements Strat_BT_PrunerInterface {
     
     @Override
     public boolean reject(ADT_AreaExtended area, ADT_Rectangle last) {
-        if(last != null) { //If no rectangles are left to place
-            return false;
-        }
         int[] stripsEmptySpace; //Array which stores the strips of empty space
         int[] stripsRecsTBP; //Array which stores the strips of rectangles to be placed
         //true = horizontal strips
