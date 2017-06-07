@@ -288,66 +288,66 @@ public class Strat_ORP_BinaryTreePacker extends Strat_AbstractStrat {
         return (newWidthBoundingBox * newHeightBoundingBox);
     }
 
-        public void placeRectangle(ADT_Rectangle rec) {
-            bestNode.rec = rec;
-            ADT_Node TopLeftChildNode = new ADT_Node(rec.getX(), (rec.getY() + rec.getHeight()));
-            binaryTree.addNode(TopLeftChildNode);
-            ADT_Node BottomRightChildNode = new ADT_Node((rec.getX() + rec.getWidth()), rec.getY());
-            binaryTree.addNode(BottomRightChildNode);
-            
-            if(area.getWidth() < rec.getX()+rec.getWidth()){
-                area.setWidth(rec.getX()+rec.getWidth());
-            }
-            if(area.getHeight() < rec.getY()+rec.getHeight()){
-                area.setHeight(rec.getY()+rec.getHeight());
-            }
+    public void placeRectangle(ADT_Rectangle rec) {
+        bestNode.rec = rec;
+        ADT_Node TopLeftChildNode = new ADT_Node(rec.getX(), (rec.getY() + rec.getHeight()));
+        binaryTree.addNode(TopLeftChildNode);
+        ADT_Node BottomRightChildNode = new ADT_Node((rec.getX() + rec.getWidth()), rec.getY());
+        binaryTree.addNode(BottomRightChildNode);
 
-            binaryTree.points.get(bestNode.point.x).remove(bestNode);
-            checkNodes(rec);
+        if(area.getWidth() < rec.getX()+rec.getWidth()){
+            area.setWidth(rec.getX()+rec.getWidth());
         }
-        
-        /**
-         * Checks if a node should be removed from collection
-         * And terminates node (node.rec and node.point become null)
-         * @pre x and y of rec have to be set
-         * @param rec 
-         */
-        private void checkNodes(ADT_Rectangle rec) {
-            // Check left edge of rec
-            HashSet<ADT_Node> x_collection = binaryTree.points.get(rec.getX());
-            ArrayList<Integer> checkIfEmpty = new ArrayList<>(); // to track x coordinates of nodes that are removed
-            
-            for (Iterator<ADT_Node> nodeIterator = x_collection.iterator(); nodeIterator.hasNext();) {
-                ADT_Node node = nodeIterator.next();
-                if((node.point.y >= rec.getY() && 
-                        node.point.y < rec.getY()+rec.getHeight())){
-                    checkIfEmpty.add(node.point.x);
-                    node.point = null;
-                    nodeIterator.remove();
-                }
+        if(area.getHeight() < rec.getY()+rec.getHeight()){
+            area.setHeight(rec.getY()+rec.getHeight());
+        }
+
+        binaryTree.points.get(bestNode.point.x).remove(bestNode);
+        checkNodes(rec);
+    }
+
+    /**
+     * Checks if a node should be removed from collection
+     * And terminates node (node.rec and node.point become null)
+     * @pre x and y of rec have to be set
+     * @param rec 
+     */
+    private void checkNodes(ADT_Rectangle rec) {
+        // Check left edge of rec
+        HashSet<ADT_Node> x_collection = binaryTree.points.get(rec.getX());
+        ArrayList<Integer> checkIfEmpty = new ArrayList<>(); // to track x coordinates of nodes that are removed
+
+        for (Iterator<ADT_Node> nodeIterator = x_collection.iterator(); nodeIterator.hasNext();) {
+            ADT_Node node = nodeIterator.next();
+            if((node.point.y >= rec.getY() && 
+                    node.point.y < rec.getY()+rec.getHeight())){
+                checkIfEmpty.add(node.point.x);
+                node.point = null;
+                nodeIterator.remove();
             }
-            
-            // Check for bottom edge
-            for(int i = rec.getX(); i<rec.getX()+rec.getWidth(); ++i){
-                if(binaryTree.points.get(i) != null){
-                    x_collection = binaryTree.points.get(i);
-                    for (Iterator<ADT_Node> nodeIterator = x_collection.iterator(); nodeIterator.hasNext();) {
-                        ADT_Node node = nodeIterator.next();
-                        if(node.point.y == rec.getY()){
-                            checkIfEmpty.add(node.point.x);
-                            node.point = null;
-                            nodeIterator.remove();
-                        }
+        }
+
+        // Check for bottom edge
+        for(int i = rec.getX(); i<rec.getX()+rec.getWidth(); ++i){
+            if(binaryTree.points.get(i) != null){
+                x_collection = binaryTree.points.get(i);
+                for (Iterator<ADT_Node> nodeIterator = x_collection.iterator(); nodeIterator.hasNext();) {
+                    ADT_Node node = nodeIterator.next();
+                    if(node.point.y == rec.getY()){
+                        checkIfEmpty.add(node.point.x);
+                        node.point = null;
+                        nodeIterator.remove();
                     }
                 }
             }
-            // check if there are empty collections (and remove them)
-            for (Integer i : checkIfEmpty) {
-                if (binaryTree.points.get(i).isEmpty()) {
-                    binaryTree.points.remove(i);
-                }
+        }
+        // check if there are empty collections (and remove them)
+        for (Integer i : checkIfEmpty) {
+            if (binaryTree.points.get(i).isEmpty()) {
+                binaryTree.points.remove(i);
             }
         }
+    }
     
     
     private final class BinaryTree {
