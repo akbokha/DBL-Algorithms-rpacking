@@ -5,6 +5,7 @@
 class Strat_CP_BT extends Strat_BT_Template {
 
     private ADT_Rectangle[] rectangles;
+    private boolean[] initialFlipped;
     private int index = -1;
 
     Strat_CP_BT(ADT_AreaExtended areaEx) {
@@ -13,6 +14,23 @@ class Strat_CP_BT extends Strat_BT_Template {
         assert areaEx.getRectanglesToBePlaced().length == areaEx.getCount(); // Check that none of the rectangles are placed.
 
         rectangles = areaEx.getRectanglesToBePlaced();
+
+        // Only support flipping rectangles if it is required.
+        if (areaEx.canFlip()) {
+            // Store the initial flipped status.
+            initialFlipped = new boolean[rectangles.length];
+
+            for (int i = 0; i < rectangles.length; i++) {
+                ADT_Rectangle rectangle = rectangles[i];
+
+                if (rectangle.getHeight() > areaEx.getHeight() || rectangle.getHeight() == rectangle.getWidth()) {
+                    rectangle.flippable = false;
+                    rectangle.toggleFlipped();
+                }
+
+                initialFlipped[i] = rectangles[i].getFlipped();
+            }
+        }
     }
 
     @Override
@@ -45,6 +63,12 @@ class Strat_CP_BT extends Strat_BT_Template {
         ADT_Rectangle rectangle = rectangles[++index];
         int x = 0;
         int y = 0;
+
+        if (rectangle.getHeight() > areaEx.getHeight()) {
+            rectangle.toggleFlipped();
+
+            assert rectangle.getHeight() <= areaEx.getHeight();
+        }
 
         // Make distinction between the first rectangle and all others.
         if (index == 0) {
@@ -105,15 +129,13 @@ class Strat_CP_BT extends Strat_BT_Template {
                 if (y + rectangle.getHeight() > areaEx.getHeight()) {
 
                     // Rotate if the rectangle can flip.
-                    if (rectangle.canFlip() && !rectangle.getFlipped()) {
-                        throw new UnsupportedOperationException("Rotations currently do not work.");
+                    if (rectangle.canFlip() && rectangle.getFlipped() == initialFlipped[index] && rectangle.getWidth() <= areaEx.getHeight()) {
+                        //throw new UnsupportedOperationException("Rotations currently do not work.");
 
-                        /*rectangle.setFlipped(true);
+                        rectangle.toggleFlipped();
 
-                        // Check if the resulting areaEx is valid, if so compute this branch. Else leave it. (1)
-                        if (areaEx.isNewRectangleValid(rectangle)) {
-                            return first();
-                        }*/
+                        x = 0;
+                        y = 0;
                     } else {
                         return null;
                     }
@@ -137,6 +159,8 @@ class Strat_CP_BT extends Strat_BT_Template {
         if (areaEx.getRectangleIsPlaced(index)) {
             areaEx.remove(index);
         }
+
+        rectangles[index].setFlipped(initialFlipped[index]);
 
         index--;
     }

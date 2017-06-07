@@ -1,6 +1,6 @@
 public class Strat_ORP_AnyTime extends Strat_AbstractStrat {
     
-    int STEPSIZE = 5;
+    int stepsize = 5;
     
     public Strat_ORP_AnyTime(ADT_Area area) {
         super(area);
@@ -8,6 +8,8 @@ public class Strat_ORP_AnyTime extends Strat_AbstractStrat {
 
     @Override
     public ADT_Area compute() {
+        int optimalArea = area.getTotalAreaRectangles();
+
         //Used to initialize an average starting width and height
         ADT_Area bestArea = new Strat_DummyImplementation(area.clone()).compute();
         //Set initial width and height for a container to the getDimensions
@@ -19,9 +21,10 @@ public class Strat_ORP_AnyTime extends Strat_AbstractStrat {
         while(true) {
             //Make sure that the area gets smaller and smaller until the
             // minimal area is reached
-            if((width-STEPSIZE) * height >= areaEx.getTotalAreaRectanglesToBePlaced() && width-STEPSIZE >= areaEx.getRectanglesToBePlaced()[0].getWidth()) {
-                width -= STEPSIZE;
-                System.err.print("W:" + width + "\tH:" + height + "\tArea: " + (width * height) + "\t");
+            if((width- stepsize) * height >= areaEx.getTotalAreaRectanglesToBePlaced() && width - stepsize >= areaEx.getRectanglesToBePlaced()[0].getWidth()) {
+                width -= stepsize;
+                int areaSize = width * height;
+                System.err.print("W:" + width + "\tH:" + height + "\tArea: " + areaSize + "\tFR: " + ((float) optimalArea / (float) areaSize) + "\t");
 
                 //Get a solution with this width and height
                 ADT_AreaExtended newArea = createNewSolution(width, height);
@@ -35,20 +38,20 @@ public class Strat_ORP_AnyTime extends Strat_AbstractStrat {
                 //If a solution was set, use it as the new best solution
                 if(newArea != null) {
                     bestArea = newArea.clone().toArea();
-                } else if (STEPSIZE == 1) {//If stepsize == 1 and no solution is found, increase height
+                } else if (stepsize == 1) {//If stepsize == 1 and no solution is found, increase height
                     if(area.getHeight() != ADT_Area.INF/* || (height+1) * (width) >= bestArea.getWidth() * bestArea.getHeight()*/) {// but if the height was fixed, no better solution can be found
                         break;
                     }
-//                    width += STEPSIZE;
+//                    width += stepsize;
                     height += 1;
                 } else {//If this area is not possible try one larger width
-                    width += STEPSIZE;
-                    STEPSIZE = 1;
+                    width += stepsize;
+                    stepsize = 1;
                 }
-            } else if(STEPSIZE == 1) {//If stepsize is 1 and cant be made smaller
+            } else if(stepsize == 1) {//If stepsize is 1 and cant be made smaller
                 break;
             } else {
-                STEPSIZE--;
+                stepsize--;
             }
         }
         bestArea.setHeight(area.getHeight());
