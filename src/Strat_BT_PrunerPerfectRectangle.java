@@ -12,8 +12,7 @@ public class Strat_BT_PrunerPerfectRectangle implements Strat_BT_PrunerInterface
          * If there is a perfect rectangle under or to the left of the position
          * of the current rectangle, this position is dominated, hence reject.
          */
-        if(perfectRectBelow(area, last)) return true;
-        return perfectRectLeft(area, last);
+        return perfectRectBelow(area, last) || perfectRectLeft(area, last);
     }
     
     /**
@@ -24,7 +23,7 @@ public class Strat_BT_PrunerPerfectRectangle implements Strat_BT_PrunerInterface
      * @return true if there is such a rectangle
      */
     private boolean perfectRectBelow(ADT_AreaExtended area, ADT_Rectangle last){
-        int lowestPoint = Integer.MAX_VALUE; // lowest point of possible perfect rectangle
+        int lowestPoint = area.getHeight(); // lowest point of possible perfect rectangle
         int beginX = last.getX();
         int endX = last.getX()+last.getWidth();
         
@@ -33,7 +32,7 @@ public class Strat_BT_PrunerPerfectRectangle implements Strat_BT_PrunerInterface
         
         if(y==0) return false; // There is no dominance below possible
             
-        while(lowestPoint == Integer.MAX_VALUE){ // We haven't reached the bottom of the rectangle
+        while(lowestPoint == area.getHeight() && beginX > 0 && y > 0){ // We haven't reached the bottom of the rectangle
             y--;
             
             // First check right and left border
@@ -46,13 +45,13 @@ public class Strat_BT_PrunerPerfectRectangle implements Strat_BT_PrunerInterface
                 if(!area.isEmptyAt(x, y) && x == beginX){
                     // This possibly the beginning of a line of borders
                     lowestPoint = y;
-                }else if(!area.isEmptyAt(x, y) && lowestPoint == Integer.MAX_VALUE){
+                }else if(!area.isEmptyAt(x, y) && lowestPoint == area.getHeight()){
                     /*
                     We encountered a border halfway on the line, but this line hasn't
                     seen a border yet. This means the rectangle is not perfect.
                     */
                     return false;
-                }else if(area.isEmptyAt(x, y) && lowestPoint != Integer.MAX_VALUE){
+                }else if(area.isEmptyAt(x, y) && lowestPoint != area.getHeight()){
                     /*
                     We found no border at this point, because we did already find
                     border on this line, the rectangle is not perfect.
@@ -77,7 +76,7 @@ public class Strat_BT_PrunerPerfectRectangle implements Strat_BT_PrunerInterface
      * @return true if there is such a rectangle
      */
     private boolean perfectRectLeft(ADT_AreaExtended area, ADT_Rectangle last){
-        int leftMostPoint = Integer.MAX_VALUE; // lowest point of possible perfect rectangle
+        int leftMostPoint = area.getWidth(); // lowest point of possible perfect rectangle
         int beginY = last.getY();
         int endY = last.getY()+last.getHeight();
         
@@ -85,7 +84,7 @@ public class Strat_BT_PrunerPerfectRectangle implements Strat_BT_PrunerInterface
         int x = last.getX();
         if(x==0) return false;
         
-        while(leftMostPoint == Integer.MAX_VALUE){
+        while(leftMostPoint == area.getWidth() && beginY > 0 && beginY + endY < area.getHeight() && x > 0){
             x--;
             
             // First check upper and lower border
@@ -98,13 +97,13 @@ public class Strat_BT_PrunerPerfectRectangle implements Strat_BT_PrunerInterface
                 if(!area.isEmptyAt(x, y) && y == beginY){
                     // This possibly the beginning of a row of borders
                     leftMostPoint = x;
-                }else if(!area.isEmptyAt(x, y) && leftMostPoint == Integer.MAX_VALUE){
+                }else if(!area.isEmptyAt(x, y) && leftMostPoint == area.getWidth()){
                     /*
                     We encountered a border halfway on the line, but this line hasn't
                     seen a border yet. This means the rectangle is not perfect.
                     */
                     return false;
-                }else if(area.isEmptyAt(x, y) && leftMostPoint != Integer.MAX_VALUE){
+                }else if(area.isEmptyAt(x, y) && leftMostPoint != area.getWidth()){
                     /*
                     We found no border at this point, because we did already find
                     border on this line, the rectangle is not perfect.

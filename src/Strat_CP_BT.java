@@ -1,6 +1,7 @@
 /**
  * A solver of the containment problem. Requires that the height and width of the area are finite.
  * @pre None of the rectangles should be already placed.
+ * @modifies Does not maintain the order of the rectangles.
  */
 class Strat_CP_BT extends Strat_BT_Template {
 

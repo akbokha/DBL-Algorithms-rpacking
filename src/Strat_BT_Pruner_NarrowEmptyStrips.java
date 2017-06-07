@@ -88,7 +88,7 @@ public class Strat_BT_Pruner_NarrowEmptyStrips implements Strat_BT_PrunerInterfa
             }
             // Place rectangles in area
             ADT_Area stripArea = new ADT_Area(last.getWidth(), stripHeight, 
-                    area.canFlip(), (ADT_Rectangle[]) fittingRecs.toArray());
+                    area.canFlip(), fittingRecs.toArray(new ADT_Rectangle[fittingRecs.size()]));
             
             // First check if they might fit by comparing size
             int fillRate = stripArea.getTotalAreaRectangles()/(stripArea.getWidth()*stripArea.getHeight());
@@ -110,7 +110,8 @@ public class Strat_BT_Pruner_NarrowEmptyStrips implements Strat_BT_PrunerInterfa
     
     private boolean hasSolidBottom(ADT_Rectangle last){
         int stripY = last.getY()-1;
-        while(area.isEmptyAt(last.getX(), stripY)) stripY--; // Determine height of strip
+        if(stripY < 1) return false;
+        while(area.isEmptyAt(last.getX(), stripY) && stripY > 0) stripY--; // Determine height of strip
         if(stripY+1 == last.getY()) return false; // There is no space
         
         // Check that whole strip is empty
@@ -129,7 +130,8 @@ public class Strat_BT_Pruner_NarrowEmptyStrips implements Strat_BT_PrunerInterfa
     
     private boolean hasSolidLeft(ADT_Rectangle last){
         int stripX = last.getX()-1;
-        while(area.isEmptyAt(stripX, last.getY())) stripX--; // Determine width of strip
+        if(stripX < 1) return false;
+        while(area.isEmptyAt(stripX, last.getY()) && stripX > 0) stripX--; // Determine width of strip
         if(stripX+1 == last.getX()) return false; // There is no space
         
         for(int i=last.getY()+1; i<last.getY()+last.getHeight(); ++i){
