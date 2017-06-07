@@ -23,17 +23,17 @@ public class PrunerDataMining implements Strat_BT_PrunerInterface{
     
     @Override
     public boolean reject(ADT_AreaExtended area, ADT_Rectangle last) {
-        int depth = area.getCount();
-        float frWhenCalled = area.getFillRate();
-        long time = System.currentTimeMillis();
-        float expectedFR = area.getTotalAreaRectangles()/(area.getHeight()*area.getWidth());
+        int depth = area.getCount() - area.getRectanglesToBePlaced().length;
+        float frWhenCalled = 100*area.getFillRate();
+        long startTime = System.nanoTime();
+        float expectedFR = 100f*(float)area.getTotalAreaRectangles()/(float)(area.getHeight()*area.getWidth());
         
         boolean prune = pruner.reject(area, last);
-        time -= System.currentTimeMillis();
-        
+        long endTime = System.nanoTime();
+        int time = (int)(endTime - startTime);
         if(prune) {
             System.err.println("pruned");
-            Tuple tuple = new Tuple(depth, frWhenCalled, (int) time, expectedFR);
+            Tuple tuple = new Tuple(depth, frWhenCalled, time, expectedFR);
             dataSet.add(tuple);
         }
         return prune;
