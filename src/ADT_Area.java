@@ -8,8 +8,6 @@ public class ADT_Area extends ADT_Rectangle implements Cloneable {
     public ADT_Area(int width, int height, boolean flippable, ADT_Rectangle[] rectangles) {
         super(width, height, 0, 0, flippable);
         shapes = rectangles;
-        // Arrays.sort(shapes, new ADT_SortOnArea());
-        // Sorting is moved to local strategies
     }
     
     
@@ -49,7 +47,7 @@ public class ADT_Area extends ADT_Rectangle implements Cloneable {
     }
     
     public ADT_AreaExtended toExtended(int width, int height) {
-        return new ADT_AreaExtended(width, height, canFlip(), shapes);
+        return new ADT_AreaExtended(width, height, canFlip(), shapes.clone());
     }
     
     @Override
@@ -269,5 +267,34 @@ public class ADT_Area extends ADT_Rectangle implements Cloneable {
              totalArea += (rec.getWidth() * rec.getHeight());   
          }
         return totalArea;
+    }
+
+    /**
+     * Sorts the rectangles in this array in the same manner as a given rectangle.
+     * @param rectangles The order of the rectangles which should be copied.
+     */
+    void sortAs(ADT_Rectangle[] rectangles) {
+        assert shapes.length == rectangles.length;
+
+        ADT_Rectangle[] newOrdering = new ADT_Rectangle[shapes.length];
+        for (int i = 0; i < rectangles.length; i++) {
+            ADT_Rectangle rec1 = rectangles[i];
+
+            // Find the currently evaluated rectangle in the array of original rectangles.
+            for (ADT_Rectangle rec2 : shapes) {
+                // Check if the rectangle was already placed. If so skip it.
+                if (rec2 == null) {
+                    continue;
+                }
+
+                // Check if both rectangles are equal.
+                if (rec1.width == rec2.width && rec1.height == rec2.height) {
+                    newOrdering[i] = rec2;
+                    rectangles[i] = null;
+                }
+            }
+        }
+
+        shapes = newOrdering;
     }
 }

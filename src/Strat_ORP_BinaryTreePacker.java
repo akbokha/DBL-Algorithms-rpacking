@@ -15,9 +15,10 @@ public class Strat_ORP_BinaryTreePacker extends Strat_AbstractStrat {
     
     BinaryTree binaryTree;
     int recIndex; // the ith rectangle that is currently being placed
+    int heightResult = 0;
     
     // These variables are reset for each rectangle
-    Node bestNode = new Node(-1, -1); // Best node to place rec
+    ADT_Node bestNode = new ADT_Node(-1, -1); // Best node to place rec
     boolean isFlipped = false; // Is the best rectangle flipped
     int greatestPaste = -1; // Number of sides of rec at bestNode where other rectangles are pasted
     int leastArea = Integer.MAX_VALUE; // Size of bounding box when rec is at bestNode
@@ -49,12 +50,15 @@ public class Strat_ORP_BinaryTreePacker extends Strat_AbstractStrat {
             }
             rec.setX(bestNode.point.x);
             rec.setY(bestNode.point.y);
-            bestNode.placeRectangle(rec); // place the rectangle on the bestNode
+            placeRectangle(rec); // place the rectangle on the bestNode
             
             leastArea = Integer.MAX_VALUE;
             greatestPaste = -1;
         }
-        if(!fixedHeight) area.setHeight(-1); // For proper output
+        heightResult = area.getHeight();
+        if (!fixedHeight) {
+            area.setHeight(-1);
+        } // For proper output
         return area;
     }
     
@@ -66,8 +70,8 @@ public class Strat_ORP_BinaryTreePacker extends Strat_AbstractStrat {
      */
     private void getBestPlacement(ADT_Rectangle rec) {
         for(Integer i : binaryTree.points.keySet()){
-            HashSet<Node> set = binaryTree.points.get(i);
-            for (Node node : set) {
+            HashSet<ADT_Node> set = binaryTree.points.get(i);
+            for (ADT_Node node : set) {
                 // Use a dummyRectangle to check overlap
                 // we do not want to set x and y coordinates, because it is unsure whether this is the bestnode
                 ADT_Rectangle dummyRec = dummyRectangle(rec, node);
@@ -150,7 +154,7 @@ public class Strat_ORP_BinaryTreePacker extends Strat_AbstractStrat {
      * @return a rectangle that is placed at node.point.x and node.point.y with
      * the same dimensions as {@code rec}
      */
-    private ADT_Rectangle dummyRectangle (ADT_Rectangle rec, Node node) {
+    private ADT_Rectangle dummyRectangle (ADT_Rectangle rec, ADT_Node node) {
         int x = node.point.x;
         int y = node.point.y;
         int width = rec.getWidth();
@@ -167,7 +171,7 @@ public class Strat_ORP_BinaryTreePacker extends Strat_AbstractStrat {
      * @param rec
      * @return if node is a better choice for rec than bestNode
      */
-    private boolean isLocationBetter(Node node, ADT_Rectangle rec){
+    private boolean isLocationBetter(ADT_Node node, ADT_Rectangle rec){
         // check if placement of rectangle @ node results in overlap
         if (isValidPlacement(node, rec)) {
             // if greatest paste == 4
@@ -207,7 +211,7 @@ public class Strat_ORP_BinaryTreePacker extends Strat_AbstractStrat {
      * @param node is needed for the x and y coordinates
      * @param rec that is considered (dummyRectangle)
      */
-    private boolean isValidPlacement (Node node, ADT_Rectangle rec){
+    private boolean isValidPlacement (ADT_Node node, ADT_Rectangle rec){
         if (fixedHeight) {
             // Check if fixed height is exceeded
             boolean exceedsBound = node.point.y + rec.getHeight() > fixedHeightValue;
@@ -229,7 +233,7 @@ public class Strat_ORP_BinaryTreePacker extends Strat_AbstractStrat {
     }
     
     // compute number of sides that are occupied by a rectangle
-    private int computePaste (Node node, ADT_Rectangle rec) {
+    private int computePaste (ADT_Node node, ADT_Rectangle rec) {
         int paste = 0;
         int x = node.point.x;
         int y = node.point.y;
@@ -267,7 +271,7 @@ public class Strat_ORP_BinaryTreePacker extends Strat_AbstractStrat {
      * @return the resulting area when you place rectangle at
      * (node.point.x, node.point.y)
      */
-    private int computeResultingArea (Node node, ADT_Rectangle rec) {
+    private int computeResultingArea (ADT_Node node, ADT_Rectangle rec) {
         int currentWidthBoundingBox = area.getWidth();
         int currentHeightBoundingBox = area.getHeight();
         int newWidthBoundingBox;
@@ -287,116 +291,89 @@ public class Strat_ORP_BinaryTreePacker extends Strat_AbstractStrat {
         }
         return (newWidthBoundingBox * newHeightBoundingBox);
     }
-        
-    private class Node {
-        ADT_Rectangle rec = null;
-        ADT_Vector point = new ADT_Vector(-1, -1);
-        /**
-         * @pre no rectangle at x,y
-         * @param x 
-         * @param y 
-         */
-        public Node (int x, int y) {
-            this.point = new ADT_Vector(x, y);
-        }
-        
-        public void placeRectangle(ADT_Rectangle rec) {
-            this.rec = rec;
-            Node TopLeftChildNode = new Node(rec.getX(), (rec.getY() + rec.getHeight()));
-            binaryTree.addNode(TopLeftChildNode);
-            Node BottomRightChildNode = new Node((rec.getX() + rec.getWidth()), rec.getY());
-            binaryTree.addNode(BottomRightChildNode);
-            
-            if(area.getWidth() < rec.getX()+rec.getWidth()){
-                area.setWidth(rec.getX()+rec.getWidth());
-            }
-            if(area.getHeight() < rec.getY()+rec.getHeight()){
-                area.setHeight(rec.getY()+rec.getHeight());
-            }
 
-            binaryTree.points.get(bestNode.point.x).remove(bestNode);
-            checkNodes(rec);
+    public void placeRectangle(ADT_Rectangle rec) {
+        bestNode.rec = rec;
+        ADT_Node TopLeftChildNode = new ADT_Node(rec.getX(), (rec.getY() + rec.getHeight()));
+        binaryTree.addNode(TopLeftChildNode);
+        ADT_Node BottomRightChildNode = new ADT_Node((rec.getX() + rec.getWidth()), rec.getY());
+        binaryTree.addNode(BottomRightChildNode);
+
+        if(area.getWidth() < rec.getX()+rec.getWidth()){
+            area.setWidth(rec.getX()+rec.getWidth());
         }
-        
-        /**
-         * Checks if a node should be removed from collection
-         * And terminates node (node.rec and node.point become null)
-         * @pre x and y of rec have to be set
-         * @param rec 
-         */
-        private void checkNodes(ADT_Rectangle rec) {
-            // Check left edge of rec
-            HashSet<Node> x_collection = binaryTree.points.get(rec.getX());
-            ArrayList<Integer> checkIfEmpty = new ArrayList<>(); // to track x coordinates of nodes that are removed
-            
-            for (Iterator<Node> nodeIterator = x_collection.iterator(); nodeIterator.hasNext();) {
-                Node node = nodeIterator.next();
-                if((node.point.y >= rec.getY() && 
-                        node.point.y < rec.getY()+rec.getHeight())){
-                    checkIfEmpty.add(node.point.x);
-                    node.point = null;
-                    nodeIterator.remove();
-                }
+        if(area.getHeight() < rec.getY()+rec.getHeight()){
+            area.setHeight(rec.getY()+rec.getHeight());
+        }
+
+        binaryTree.points.get(bestNode.point.x).remove(bestNode);
+        checkNodes(rec);
+    }
+
+    /**
+     * Checks if a node should be removed from collection
+     * And terminates node (node.rec and node.point become null)
+     * @pre x and y of rec have to be set
+     * @param rec 
+     */
+    private void checkNodes(ADT_Rectangle rec) {
+        // Check left edge of rec
+        HashSet<ADT_Node> x_collection = binaryTree.points.get(rec.getX());
+        ArrayList<Integer> checkIfEmpty = new ArrayList<>(); // to track x coordinates of nodes that are removed
+
+        for (Iterator<ADT_Node> nodeIterator = x_collection.iterator(); nodeIterator.hasNext();) {
+            ADT_Node node = nodeIterator.next();
+            if((node.point.y >= rec.getY() && 
+                    node.point.y < rec.getY()+rec.getHeight())){
+                checkIfEmpty.add(node.point.x);
+                node.point = null;
+                nodeIterator.remove();
             }
-            
-            // Check for bottom edge
-            for(int i = rec.getX(); i<rec.getX()+rec.getWidth(); ++i){
-                if(binaryTree.points.get(i) != null){
-                    x_collection = binaryTree.points.get(i);
-                    for (Iterator<Node> nodeIterator = x_collection.iterator(); nodeIterator.hasNext();) {
-                        Node node = nodeIterator.next();
-                        if(node.point.y == rec.getY()){
-                            checkIfEmpty.add(node.point.x);
-                            node.point = null;
-                            nodeIterator.remove();
-                        }
+        }
+
+        // Check for bottom edge
+        for(int i = rec.getX(); i<rec.getX()+rec.getWidth(); ++i){
+            if(binaryTree.points.get(i) != null){
+                x_collection = binaryTree.points.get(i);
+                for (Iterator<ADT_Node> nodeIterator = x_collection.iterator(); nodeIterator.hasNext();) {
+                    ADT_Node node = nodeIterator.next();
+                    if(node.point.y == rec.getY()){
+                        checkIfEmpty.add(node.point.x);
+                        node.point = null;
+                        nodeIterator.remove();
                     }
                 }
             }
-            // check if there are empty collections (and remove them)
-            for (Integer i : checkIfEmpty) {
-                if (binaryTree.points.get(i).isEmpty()) {
-                    binaryTree.points.remove(i);
-                }
-            }
         }
-        
-        @Override
-        public String toString(){
-            String result = new String();
-            if(rec != null && point != null){
-                result = "ERROR - BOTH POINT AND REC WERE FILLED";
-            }else if(rec == null && point != null){
-                result = "(" + point.x + ", " + point.y + ")";
-            }else if(rec != null && point == null){
-                result = rec.toString();
-            }else{
-                result = "Terminating node";
+        // check if there are empty collections (and remove them)
+        for (Integer i : checkIfEmpty) {
+            if (binaryTree.points.get(i).isEmpty()) {
+                binaryTree.points.remove(i);
             }
-            return result;
         }
     }
     
+    
     private final class BinaryTree {
-        Node root; 
-        private HashMap<Integer, HashSet<Node>> points;
+        ADT_Node root; 
+        private HashMap<Integer, HashSet<ADT_Node>> points;
         
         public BinaryTree() {
-            root = new Node(0, 0);
+            root = new ADT_Node(0, 0);
             bestNode = root;
             points = new HashMap<>();
             this.addNode(root);
         }
         
-        public void addNode(Node node){
+        public void addNode(ADT_Node node){
             int x = node.point.x;
             if (points.get(x) == null) {
                // Add collection
-               HashSet <Node> collection = new HashSet<>(); 
+               HashSet <ADT_Node> collection = new HashSet<>(); 
                collection.add(node);
                points.put(x, collection);
             } else { // add to collection of key = x
-                HashSet<Node> collection = points.get(x);
+                HashSet<ADT_Node> collection = points.get(x);
                 collection.add(node);
             }
         }
