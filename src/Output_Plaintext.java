@@ -7,7 +7,7 @@ public class Output_Plaintext extends Output_AbstractOutput {
     @Override
     public void draw() {
         // Check if the response is valid
-        if (false && ! area.isValid()) {
+        if (! area.isValid()) {
             System.err.println("Invalid output detected");
         }
 

@@ -7,7 +7,7 @@ public class ADT_Rectangle implements Comparable<ADT_Rectangle> {
     private int x;
     private int y;
     private boolean flipped = false;
-    protected boolean flippable;
+    boolean flippable;
 
     public ADT_Rectangle(int width, int height, int x, int y, boolean flippable) {
         assert height == INF || height > 0;
@@ -64,13 +64,11 @@ public class ADT_Rectangle implements Comparable<ADT_Rectangle> {
     }
 
     public void setFlipped(boolean flipped) {
-        assert !this.flipped || ! canFlip();
-
         this.flipped = flipped;
     }
 
     public void toggleFlipped() {
-        assert ! canFlip();
+        assert canFlip();
 
         this.flipped = !this.flipped;
     }
@@ -107,10 +105,6 @@ public class ADT_Rectangle implements Comparable<ADT_Rectangle> {
         }
     }
 
-    public boolean hasValidPlacement() {
-        return x >= 0 && y >= 0;
-    }
-    
     @Override
     public String toString(){
         return "(" + x + ", " + y + ") " + "width = " + getWidth() + 
