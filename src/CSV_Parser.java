@@ -7,7 +7,8 @@ public class CSV_Parser {
 
     public void parse(String path, DataMining dataSet) {
 
-        String newFileName = path + "/Test.csv";
+        String newFileName = path + "Test.csv";
+        System.out.println(newFileName);
         File newFile = new File(newFileName);
         try {
             BufferedWriter writer = new BufferedWriter(new FileWriter(newFile));

@@ -70,6 +70,9 @@ public class Strat_ORP_AnyTime extends Strat_AbstractStrat {
             }
         }
         bestArea.setHeight(area.getHeight());
+
+        CSV_Parser parser = new CSV_Parser();
+        parser.parse(".\\", data);
         return bestArea;
     }
     
