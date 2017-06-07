@@ -1,6 +1,5 @@
 
 import java.util.ArrayList;
-import java.util.List;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -20,6 +19,14 @@ public class DataMining {
     public DataMining(Strat_BT_PrunerInterface[] pruners) {
         this.dataSet = new ArrayList<>();
         this.pruners = pruners;
+    }
+
+    public Tuple get(int i) {
+        return dataSet.get(i);
+    }
+
+    public int size() {
+        return dataSet.size();
     }
     
     public void callPruner(Strat_BT_PrunerInterface pruner) {
