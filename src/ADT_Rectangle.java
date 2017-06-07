@@ -68,7 +68,7 @@ public class ADT_Rectangle implements Comparable<ADT_Rectangle> {
     }
 
     public void toggleFlipped() {
-        assert ! canFlip();
+        assert canFlip();
 
         this.flipped = !this.flipped;
     }

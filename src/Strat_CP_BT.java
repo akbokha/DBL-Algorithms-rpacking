@@ -23,7 +23,9 @@ class Strat_CP_BT extends Strat_BT_Template {
             for (int i = 0; i < rectangles.length; i++) {
                 ADT_Rectangle rectangle = rectangles[i];
 
-                if (rectangle.getHeight() > areaEx.getHeight() || rectangle.getHeight() == rectangle.getWidth()) {
+                if (rectangle.getWidth() > areaEx.getHeight()) {
+                    rectangle.flippable = false;
+                } else if (rectangle.getHeight() > areaEx.getHeight() || rectangle.getHeight() == rectangle.getWidth()) {
                     rectangle.flippable = false;
                     rectangle.toggleFlipped();
                 }
@@ -129,13 +131,13 @@ class Strat_CP_BT extends Strat_BT_Template {
                 if (y + rectangle.getHeight() > areaEx.getHeight()) {
 
                     // Rotate if the rectangle can flip.
-                    if (rectangle.canFlip() && rectangle.getFlipped() == initialFlipped[index] && rectangle.getWidth() <= areaEx.getHeight()) {
-                        //throw new UnsupportedOperationException("Rotations currently do not work.");
+                    if (rectangle.canFlip() && rectangle.getFlipped() == initialFlipped[index]) {
 
-                        rectangle.toggleFlipped();
+//                        rectangle.toggleFlipped();
 
-                        x = 0;
-                        y = 0;
+                        rectangle.setFlipped(!initialFlipped[index]);
+
+                        return findNextPosition(rectangle, 0, 0);
                     } else {
                         return null;
                     }
@@ -160,7 +162,9 @@ class Strat_CP_BT extends Strat_BT_Template {
             areaEx.remove(index);
         }
 
-        rectangles[index].setFlipped(initialFlipped[index]);
+        if (initialFlipped!=null) {
+            rectangles[index].setFlipped(initialFlipped[index]);
+        }
 
         index--;
     }
