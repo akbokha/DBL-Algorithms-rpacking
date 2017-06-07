@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -31,6 +32,18 @@ public class Strat_ORP_BinaryTreePacker extends Strat_AbstractStrat {
         super(area);
         sortedRectangles = area.getRectangles().clone();
         Arrays.sort(sortedRectangles, new ADT_SortOnArea()); // sort on area
+        this.binaryTree = new BinaryTree();
+        fixedHeight = area.getHeight() != -1;
+        if (fixedHeight) {
+            fixedHeightValue = area.getHeight();
+            area.setWidth(0);
+        }
+    }
+    
+    public Strat_ORP_BinaryTreePacker (ADT_Area area, Comparator<ADT_Rectangle> version) { // version = sort method
+        super(area);
+        sortedRectangles = area.getRectangles().clone();
+        Arrays.sort(sortedRectangles, version); // sort on width
         this.binaryTree = new BinaryTree();
         fixedHeight = area.getHeight() != -1;
         if (fixedHeight) {
