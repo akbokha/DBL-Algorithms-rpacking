@@ -32,6 +32,7 @@ public class PrunerDataMining implements Strat_BT_PrunerInterface{
         time -= System.currentTimeMillis();
         
         if(prune) {
+            System.err.println("pruned");
             Tuple tuple = new Tuple(depth, frWhenCalled, (int) time, expectedFR);
             dataSet.add(tuple);
         }
