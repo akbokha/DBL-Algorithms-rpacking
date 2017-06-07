@@ -13,11 +13,11 @@ public abstract class Strat_AbstractStrat {
      * Concrete strategies should call super() in constructor
      */
     public Strat_AbstractStrat(ADT_Area area) {
-        this.area = area;
+        this.area = area.clone();
     }
     
     public Strat_AbstractStrat(ADT_AreaExtended area) {
-        this.areaEx = area;
+        this.areaEx = area.clone();
     }
     
     /**

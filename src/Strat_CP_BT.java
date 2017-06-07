@@ -12,9 +12,9 @@ class Strat_CP_BT extends Strat_BT_Template {
     Strat_CP_BT(ADT_AreaExtended areaEx) {
         super(areaEx);
 
-        assert areaEx.getRectanglesToBePlaced().length == areaEx.getCount(); // Check that none of the rectangles are placed.
+        assert this.areaEx.getRectanglesToBePlaced().length == this.areaEx.getCount(); // Check that none of the rectangles are placed.
 
-        rectangles = areaEx.getRectanglesToBePlaced();
+        rectangles = this.areaEx.getRectanglesToBePlaced();
 
         // Only support flipping rectangles if it is required.
         if (areaEx.canFlip()) {
@@ -24,9 +24,9 @@ class Strat_CP_BT extends Strat_BT_Template {
             for (int i = 0; i < rectangles.length; i++) {
                 ADT_Rectangle rectangle = rectangles[i];
 
-                if (rectangle.getWidth() > areaEx.getHeight()) {
+                if (rectangle.getWidth() > this.areaEx.getHeight()) {
                     rectangle.flippable = false;
-                } else if (rectangle.getHeight() > areaEx.getHeight() || rectangle.getHeight() == rectangle.getWidth()) {
+                } else if (rectangle.getHeight() > this.areaEx.getHeight() || rectangle.getHeight() == rectangle.getWidth()) {
                     rectangle.flippable = false;
                     rectangle.toggleFlipped();
                 }
