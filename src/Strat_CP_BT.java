@@ -133,9 +133,9 @@ class Strat_CP_BT extends Strat_BT_Template {
                     // Rotate if the rectangle can flip.
                     if (rectangle.canFlip() && rectangle.getFlipped() == initialFlipped[index]) {
 
-//                        rectangle.toggleFlipped();
+                        rectangle.toggleFlipped();
 
-                        rectangle.setFlipped(!initialFlipped[index]);
+//                        rectangle.setFlipped(!initialFlipped[index]);
 
                         return findNextPosition(rectangle, 0, 0);
                     } else {
@@ -162,6 +162,7 @@ class Strat_CP_BT extends Strat_BT_Template {
             areaEx.remove(index);
         }
 
+        // Check if rotation is currently used.
         if (initialFlipped!=null) {
             rectangles[index].setFlipped(initialFlipped[index]);
         }
