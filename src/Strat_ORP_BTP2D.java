@@ -7,8 +7,8 @@ import java.util.BitSet;
  */
 public class Strat_ORP_BTP2D extends Strat_ORP_BinaryTreePacker {
     // Settings for BitSet
-    static final int INITIALWIDTH = 1000;
-    static final int INITIALHEIGHT = 1000;
+    static final int INITIALWIDTH = 10000;
+    static final int INITIALHEIGHT = 10000;
     static final double UPDATEFACTOR = 1.2;
     
     int bitSetHeight;
@@ -46,6 +46,11 @@ public class Strat_ORP_BTP2D extends Strat_ORP_BinaryTreePacker {
         int oldHeight = bitSetHeight;
         int oldWidth = bitSetWidth;
         
+        /*
+        TODO
+        Create better method to determine new size of BitSet
+        */
+        
         // create new bitset
         if(fixedHeight){
             double enlarge = UPDATEFACTOR*10000/recIndex;
@@ -67,13 +72,13 @@ public class Strat_ORP_BTP2D extends Strat_ORP_BinaryTreePacker {
     }
     
     private boolean getBitSet(int x, int y){
-        if(x<0 || y<0) throw new IllegalArgumentException("GET - Too small x,y");
-        if(x>=bitSetWidth || y>=bitSetHeight) throw new IllegalArgumentException("GET - Too large x,y");
+        assert x>=0 && y>=0;
+        assert x<bitSetWidth && y<bitSetHeight;
         return array2d.get(y*bitSetWidth+x);
     }
     
     private void setBitSet(int x, int y){
-        if(x<0 || y<0) throw new IllegalArgumentException("SET - Too small x,y");
+        assert x>=0 && y>=0;
         if(x>=bitSetWidth || y>=bitSetHeight) throw new IllegalArgumentException("SET - Too large x,y");
         array2d.set(y*bitSetWidth+x);
     }
