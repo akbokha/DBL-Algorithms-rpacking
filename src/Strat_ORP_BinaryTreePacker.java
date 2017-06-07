@@ -15,6 +15,7 @@ public class Strat_ORP_BinaryTreePacker extends Strat_AbstractStrat {
     
     BinaryTree binaryTree;
     int recIndex; // the ith rectangle that is currently being placed
+    int heightResult = 0;
     
     // These variables are reset for each rectangle
     ADT_Node bestNode = new ADT_Node(-1, -1); // Best node to place rec
@@ -54,7 +55,10 @@ public class Strat_ORP_BinaryTreePacker extends Strat_AbstractStrat {
             leastArea = Integer.MAX_VALUE;
             greatestPaste = -1;
         }
-        if(!fixedHeight) area.setHeight(-1); // For proper output
+        heightResult = area.getHeight();
+        if (!fixedHeight) {
+            area.setHeight(-1);
+        } // For proper output
         return area;
     }
     
