@@ -31,7 +31,7 @@ public class Strat_ORP_BinaryTreePacker extends Strat_AbstractStrat {
     public Strat_ORP_BinaryTreePacker (ADT_Area area) {
         super(area);
         sortedRectangles = this.area.getRectangles().clone();
-        Arrays.sort(sortedRectangles, new ADT_SortOnArea()); // sort on area
+        Arrays.sort(sortedRectangles, new ADT_SortRecOnArea()); // sort on area
         this.binaryTree = new BinaryTree();
         fixedHeight = this.area.getHeight() != -1;
         if (fixedHeight) {
