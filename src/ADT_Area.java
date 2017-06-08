@@ -69,6 +69,16 @@ public class ADT_Area extends ADT_Rectangle implements Cloneable {
 
         return new ADT_Vector(maxWidth, maxHeight);
     }
+
+    /**
+     * Computes the actual area from its dimensions.
+     * @return The area of this shape.
+     */
+    public int getArea() {
+        ADT_Vector dimensions = this.getDimensions();
+
+        return dimensions.x * dimensions.y;
+    }
     
     private ADT_Vector getMinimalDimensions() {
         ADT_Rectangle[] i = getRectangles();
@@ -271,22 +281,24 @@ public class ADT_Area extends ADT_Rectangle implements Cloneable {
      */
     void sortAs(ADT_Rectangle[] rectangles) {
         assert shapes.length == rectangles.length;
-
+        
         ADT_Rectangle[] newOrdering = new ADT_Rectangle[shapes.length];
         for (int i = 0; i < rectangles.length; i++) {
             ADT_Rectangle rec1 = rectangles[i];
 
             // Find the currently evaluated rectangle in the array of original rectangles.
-            for (ADT_Rectangle rec2 : shapes) {
+            for (int j = 0; j < shapes.length; j++) {
+                ADT_Rectangle rec2 = shapes[j];
                 // Check if the rectangle was already placed. If so skip it.
                 if (rec2 == null) {
                     continue;
                 }
 
-                // Check if both rectangles are equal.
+                // Check if both rectangles are equal, if so map it to the right position and make it unavailable for later iterations.
                 if (rec1.width == rec2.width && rec1.height == rec2.height) {
                     newOrdering[i] = rec2;
-                    rectangles[i] = null;
+                    shapes[j] = null;
+                    break;
                 }
             }
         }

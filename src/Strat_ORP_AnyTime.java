@@ -16,7 +16,6 @@ public class Strat_ORP_AnyTime extends Strat_AbstractStrat {
     }
 
     Strat_ORP_AnyTime(ADT_Area area, Strat_BT_PrunerInterface[] pruners, ADT_Area previousResult) {
-
         super(area);
 
         bestResult = previousResult;
@@ -31,7 +30,7 @@ public class Strat_ORP_AnyTime extends Strat_AbstractStrat {
         int rectanglesArea = area.getTotalAreaRectangles();
 
         //Used to initialize an average starting width and height
-        ADT_Area horizontalStripResult = new Strat_DummyImplementation(area.clone()).compute();
+        ADT_Area horizontalStripResult = new Strat_HorizontalStrip(area.clone()).compute();
         //Set initial width and height for a container to the getDimensions
         // of the bottom-left algorithm
         ADT_Vector dimension = horizontalStripResult.getDimensions();
@@ -58,11 +57,9 @@ public class Strat_ORP_AnyTime extends Strat_AbstractStrat {
                 }
 
                 //If a solution was set, use it as the new best solution
-                if(newArea != null) {
+                if(newArea != null && newArea.getArea() < bestArea) {
                     bestResult = newArea.clone().toArea();
-                    
-                    ADT_Vector vec = bestResult.getDimensions();
-                    bestArea = vec.x * vec.y;
+                    bestArea = newArea.getArea();
                 } else if (stepsize == 1) {//If stepsize == 1 and no solution is found, increase height
                     if(area.getHeight() != ADT_Area.INF/* || (height+1) * (width) >= bestResult.getWidth() * bestResult.getHeight()*/) {// but if the height was fixed, no better solution can be found
                         break;
@@ -79,6 +76,7 @@ public class Strat_ORP_AnyTime extends Strat_AbstractStrat {
             }
         }
 
+        // If the backtracker didn't find any better solution, use the result from the horizontal strip strategy.
         if (bestResult == null) {
             bestResult = horizontalStripResult;
         }

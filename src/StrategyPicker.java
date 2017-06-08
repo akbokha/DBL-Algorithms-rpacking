@@ -18,11 +18,6 @@ public class StrategyPicker {
             return new Strat_ORP_BinaryTreePacker(area);
         } else { // 3, 5 and 10
             ADT_Area approximation = new Strat_ORP_BinaryTreePacker(area).compute();
-
-            new Output_Plaintext(approximation).draw();
-
-            System.err.println(approximation.isValid());
-
             return new Strat_ORP_AnyTime(area, null, approximation);
         }
     }

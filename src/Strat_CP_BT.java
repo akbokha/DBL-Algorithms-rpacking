@@ -136,8 +136,6 @@ class Strat_CP_BT extends Strat_BT_Template {
 
                         rectangle.toggleFlipped();
 
-//                        rectangle.setFlipped(!initialFlipped[index]);
-
                         return findNextPosition(rectangle, 0, 0);
                     } else {
                         return null;

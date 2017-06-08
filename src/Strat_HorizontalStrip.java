@@ -1,6 +1,6 @@
-public class Strat_DummyImplementation extends Strat_AbstractStrat {
+public class Strat_HorizontalStrip extends Strat_AbstractStrat {
     
-    public Strat_DummyImplementation(ADT_Area area) {
+    public Strat_HorizontalStrip(ADT_Area area) {
         super(area);
     }
     
