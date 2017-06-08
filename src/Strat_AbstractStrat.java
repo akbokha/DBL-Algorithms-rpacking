@@ -26,5 +26,9 @@ public abstract class Strat_AbstractStrat {
      * @return an area such that isValid(), or null if one wasn't found.
      */
     public abstract ADT_Area compute();
-    
+
+    @Override
+    public String toString() {
+        return getClass().toString();
+    }
 }

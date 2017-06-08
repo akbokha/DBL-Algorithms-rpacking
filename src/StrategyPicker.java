@@ -24,13 +24,16 @@ public class StrategyPicker {
 
             // Load the magazine
             magazine.add(new Strat_ORP_BinaryTreePacker(area));
-            magazine.add(new Strat_ORP_BinaryTreePacker(area));
+            magazine.add(new Strat_ORP_BinaryTreePacker(area, new ADT_SortRecOnArea()));
+            magazine.add(new Strat_ORP_BinaryTreePacker(area, new ADT_SortRecOnHeight()));
+            magazine.add(new Strat_ORP_BinaryTreePacker(area, new ADT_SortRecOnWidth()));
+//            magazine.add(new Strat_ORP_BinaryTreePacker(area, new ADT_SortRecRandom())); // WARNING: Using this might result in non-deterministic behaviour.
 
             // Forge a new shotgun, load it, and hand it over.
             strategy = new Strat_ORP_Shotgun(area, magazine);
         } else { // 3, 5 and 10
             ADT_Area approximation = new Strat_ORP_BinaryTreePacker(area).compute();
-            strategy = new Strat_ORP_AnyTime(area, null);
+            strategy = new Strat_ORP_AnyTime(area, null, approximation);
         }
 
         return strategy;

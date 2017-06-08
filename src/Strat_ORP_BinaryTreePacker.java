@@ -17,6 +17,8 @@ public class Strat_ORP_BinaryTreePacker extends Strat_AbstractStrat {
     BinaryTree binaryTree;
     int recIndex; // the ith rectangle that is currently being placed
     int heightResult = 0;
+
+    Comparator<ADT_Rectangle> version;
     
     // These variables are reset for each rectangle
     ADT_Node bestNode = new ADT_Node(-1, -1); // Best node to place rec
@@ -42,12 +44,13 @@ public class Strat_ORP_BinaryTreePacker extends Strat_AbstractStrat {
     
     public Strat_ORP_BinaryTreePacker (ADT_Area area, Comparator<ADT_Rectangle> version) { // version = sort method
         super(area);
-        sortedRectangles = area.getRectangles().clone();
+        this.version = version;
+        sortedRectangles = this.area.getRectangles().clone();
         Arrays.sort(sortedRectangles, version); // sort on width
         this.binaryTree = new BinaryTree();
-        fixedHeight = area.getHeight() != -1;
+        fixedHeight = this.area.getHeight() != -1;
         if (fixedHeight) {
-            fixedHeightValue = area.getHeight();
+            fixedHeightValue = this.area.getHeight();
             area.setWidth(0);
         }
     }
@@ -389,6 +392,15 @@ public class Strat_ORP_BinaryTreePacker extends Strat_AbstractStrat {
                 HashSet<ADT_Node> collection = points.get(x);
                 collection.add(node);
             }
+        }
+    }
+
+    @Override
+    public String toString() {
+        if (version==null) {
+            return super.toString();
+        } else {
+            return super.toString() + "{" + version.getClass().toString() + "}";
         }
     }
 }
