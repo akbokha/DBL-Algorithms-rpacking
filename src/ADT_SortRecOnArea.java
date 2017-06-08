@@ -1,6 +1,6 @@
 import java.util.Comparator;
 
-public class ADT_SortOnArea implements Comparator<ADT_Rectangle> {
+public class ADT_SortRecOnArea implements Comparator<ADT_Rectangle> {
     // Sort rectangles based on their area's (in non-increasing order)
 
     @Override
