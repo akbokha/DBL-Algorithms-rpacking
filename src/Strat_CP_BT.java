@@ -1,7 +1,6 @@
 /**
  * A solver of the containment problem. Requires that the height and width of the area are finite.
  * @pre None of the rectangles should be already placed.
- * @pre Assumes that all rectangles fit - if required with rotating - in the area.
  * @modifies Does not maintain the order of the rectangles.
  */
 class Strat_CP_BT extends Strat_BT_Template {
@@ -22,21 +21,38 @@ class Strat_CP_BT extends Strat_BT_Template {
             // Store the initial flipped status.
             initialFlipped = new boolean[rectangles.length];
 
+            int areaHeight = this.areaEx.getHeight();
+            int areaWidth = this.areaEx.getWidth();
+
             for (int i = 0; i < rectangles.length; i++) {
                 ADT_Rectangle rectangle = rectangles[i];
 
-                if (rectangle.getWidth() > this.areaEx.getHeight()) {
-                    rectangle.flippable = false;
-                } else if (rectangle.getHeight() > this.areaEx.getHeight() || rectangle.getHeight() == rectangle.getWidth()) {
+                // Check if it is required to rotate in either one of the directions.
+                if (rectangle.getHeight() > areaHeight || rectangle.getWidth() > areaWidth) {
                     rectangle.toggleFlipped();
+                    rectangle.flippable = false;
+                } else if (rectangle.getWidth() > areaHeight || rectangle.getHeight() > areaWidth || rectangle.getHeight() == rectangle.getWidth()) {
                     rectangle.flippable = false;
                 }
 
-                // Check the @pre which states that the rectangle should fit within the area.
-                assert rectangle.getWidth() <= this.areaEx.getWidth(); // Ensure that the rectangle does fit after rotating.
+                // If one of the rectangles still doesn't fit, then this containment problem cannot be solved.
+                if (rectangle.getHeight() <= areaHeight && rectangle.getWidth() <= areaWidth) {
+                    rectangles = null;
+                    return;
+                }
 
                 initialFlipped[i] = rectangles[i].getFlipped();
             }
+        }
+    }
+
+    @Override
+    public ADT_AreaExtended compute() {
+        // Rectangles will be set to null in the constructor if one of the rectangles doesn't fit within the area.
+        if (rectangles == null) {
+            return null;
+        } else {
+            return super.compute();
         }
     }
 

@@ -29,22 +29,6 @@ public class Strat_ORP_AnyTime extends Strat_AbstractStrat {
     public ADT_Area compute() {
         int rectanglesArea = area.getTotalAreaRectangles();
 
-        // Find the minimal width the area could have, which is the maximum minimum width any rectangle might require.
-        int minWidth = 0;
-        for (ADT_Rectangle rec : area.getRectangles()) {
-            int smallestDimension;
-            // Check if our current width is smaller than any found before.
-            if (rec.canFlip()) {
-                smallestDimension = Math.min(rec.getWidth(), rec.getHeight());
-            } else {
-                smallestDimension = rec.getWidth();
-            }
-
-            if (smallestDimension > minWidth) {
-                minWidth = smallestDimension;
-            }
-        }
-
         //Used to initialize an average starting width and height
         ADT_Area horizontalStripResult = new Strat_HorizontalStrip(area.clone()).compute();
         //Set initial width and height for a container to the getDimensions
@@ -59,9 +43,6 @@ public class Strat_ORP_AnyTime extends Strat_AbstractStrat {
                 width -= stepsize;
                 if(width * height >= bestArea) {
                     continue;
-                }
-                if (width < minWidth) {
-                    break;
                 }
 
                 int areaSize = width * height;
