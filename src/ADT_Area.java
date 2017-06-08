@@ -227,11 +227,7 @@ public class ADT_Area extends ADT_Rectangle implements Cloneable {
 
         if (l1.getX() >= r2.getX() || l2.getX() >= r1.getX()) { // Check if one rectangle is on the left side of the other rectangle.
             return false;
-        } else if (l1.getY() <= r2.getY() || l2.getY() <= r1.getY()) { // Check if one rectangle is above the other rectangle.
-            return false;
-        } else {
-            return true;
-        }
+        } else return !(l1.getY() <= r2.getY() || l2.getY() <= r1.getY()); // Check if one rectangle is above the other rectangle.
     }
 
     private class Point {

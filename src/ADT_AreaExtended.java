@@ -267,10 +267,14 @@ public class ADT_AreaExtended extends ADT_Area implements Cloneable {
             vals = new int[getWidth()+1];
             int stripLength = 0;
             for (int y = 0; y < getHeight(); y++) {
+                if(stripLength > 0) {
+                    vals[stripLength]++;
+                    stripLength = 0;
+                }
                 for(int x = 0; x < getWidth(); x++) {
                     if(isEmptyAt(x, y)) {
                         stripLength++;
-                    } else {
+                    } else if(stripLength > 0){
                         vals[stripLength]++;
                         stripLength = 0;
                         x += rectangles[array[getIndex(x, y)]].getWidth();
@@ -281,14 +285,17 @@ public class ADT_AreaExtended extends ADT_Area implements Cloneable {
             vals = new int[getHeight()+1];
             int stripLength = 0;
             for (int x = 0; x < getWidth(); x++) {
+                if(stripLength > 0) {
+                    vals[stripLength]++;
+                    stripLength = 0;
+                }
                 for(int y = 0; y < getHeight(); y++) {
                     if(isEmptyAt(x, y)) {
                         stripLength++;
-                    } else {
+                    } else if(stripLength > 0){
                         vals[stripLength]++;
                         stripLength = 0;
-                        x += rectangles[array[getIndex(x, y)]].getHeight();
-                        
+                        y += rectangles[array[getIndex(x, y)]].getHeight();
                     }
                 }
             }
@@ -312,7 +319,13 @@ public class ADT_AreaExtended extends ADT_Area implements Cloneable {
                 vals[rec.getWidth()] = rec.getHeight();
             }
         } else {
-            vals = new int[toBePlacedRectangles[0].getHeight()+1];
+            int maxHeight = 0;
+            
+            for(ADT_Rectangle rec : rectangles) {
+                if(maxHeight < height) maxHeight = height;
+            }
+            
+            vals = new int[maxHeight+1];
             for(ADT_Rectangle rec : toBePlacedRectangles) {
                 vals[rec.getHeight()] = rec.getWidth();
             }
@@ -355,13 +368,22 @@ public class ADT_AreaExtended extends ADT_Area implements Cloneable {
         return total;
     }
     
+    float getFillRate() {
+        float total = 0;
+        for(int i = 0; i < rectangles.length; i++){
+            if(placedRectangles[i]) {
+                total += rectangles[i].getHeight() * rectangles[i].getHeight();
+            }
+        }
+        return total/(width*height);
+    }
+    
     @Override
     public int getTotalAreaRectangles(){
         int total = 0;
         for(ADT_Rectangle rec : rectangles){
             total += rec.getHeight() * rec.getHeight();
         }
-        total += getTotalAreaRectanglesToBePlaced();
         return total;
     }
 
