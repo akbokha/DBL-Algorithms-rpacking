@@ -82,8 +82,7 @@ public class Strat_ORP_AnyTime extends Strat_AbstractStrat {
         }
 
         bestResult.setHeight(area.getHeight());
-
-        bestResult.sortAs(area.getRectangles());
+        bestResult.sortAs(area.getRectangles()); // Sort the area in the same manner as it originally was.
 
         return bestResult;
     }

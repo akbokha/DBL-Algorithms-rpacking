@@ -281,7 +281,7 @@ public class ADT_Area extends ADT_Rectangle implements Cloneable {
      */
     void sortAs(ADT_Rectangle[] rectangles) {
         assert shapes.length == rectangles.length;
-        
+
         ADT_Rectangle[] newOrdering = new ADT_Rectangle[shapes.length];
         for (int i = 0; i < rectangles.length; i++) {
             ADT_Rectangle rec1 = rectangles[i];
