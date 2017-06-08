@@ -1,6 +1,7 @@
 /**
  * A solver of the containment problem. Requires that the height and width of the area are finite.
  * @pre None of the rectangles should be already placed.
+ * @pre Assumes that all rectangles fit - if required with rotating - in the area.
  * @modifies Does not maintain the order of the rectangles.
  */
 class Strat_CP_BT extends Strat_BT_Template {
@@ -30,6 +31,9 @@ class Strat_CP_BT extends Strat_BT_Template {
                     rectangle.toggleFlipped();
                     rectangle.flippable = false;
                 }
+
+                // Check the @pre which states that the rectangle should fit within the area.
+                assert rectangle.getWidth() <= areaEx.getWidth(); // Ensure that the rectangle does fit after rotating.
 
                 initialFlipped[i] = rectangles[i].getFlipped();
             }
