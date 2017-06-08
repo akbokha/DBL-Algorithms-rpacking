@@ -18,7 +18,7 @@ public class StrategyPicker {
     static Strat_AbstractStrat pickStrategy() {
         Strat_AbstractStrat strategy;
 
-        if (area.getCount() >= 25) { // i.e. versions 25 and 10000
+        if (area.getCount() >= 25) { // i.e. versions 25
             // Create a new magazine for the shotgun.
             ArrayList<Strat_AbstractStrat> magazine = new ArrayList<>();
 
@@ -31,6 +31,8 @@ public class StrategyPicker {
 
             // Forge a new shotgun, load it, and hand it over.
             strategy = new Strat_ORP_Shotgun(area, magazine);
+        } else if (area.getCount() == 10000){ // 10000
+            return new Strat_ORP_BTP2D(area);
         } else { // 3, 5 and 10
             ADT_Area approximation = new Strat_ORP_BinaryTreePacker(area).compute();
             strategy = new Strat_ORP_AnyTime(area, null, approximation);
