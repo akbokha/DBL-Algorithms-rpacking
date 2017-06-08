@@ -24,7 +24,7 @@ class Strat_CP_BT extends Strat_BT_Template {
             for (int i = 0; i < rectangles.length; i++) {
                 ADT_Rectangle rectangle = rectangles[i];
 
-                if (rectangle.getWidth() > thi1s.areaEx.getHeight()) {
+                if (rectangle.getWidth() > this.areaEx.getHeight()) {
                     rectangle.flippable = false;
                 } else if (rectangle.getHeight() > this.areaEx.getHeight() || rectangle.getHeight() == rectangle.getWidth()) {
                     rectangle.toggleFlipped();
