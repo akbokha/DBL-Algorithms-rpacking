@@ -18,7 +18,7 @@ class Strat_CP_BT extends Strat_BT_Template {
         rectangles = this.areaEx.getRectanglesToBePlaced();
 
         // Only support flipping rectangles if it is required.
-        if (areaEx.canFlip()) {
+        if (this.areaEx.canFlip()) {
             // Store the initial flipped status.
             initialFlipped = new boolean[rectangles.length];
 
@@ -33,7 +33,7 @@ class Strat_CP_BT extends Strat_BT_Template {
                 }
 
                 // Check the @pre which states that the rectangle should fit within the area.
-                assert rectangle.getWidth() <= areaEx.getWidth(); // Ensure that the rectangle does fit after rotating.
+                assert rectangle.getWidth() <= this.areaEx.getWidth(); // Ensure that the rectangle does fit after rotating.
 
                 initialFlipped[i] = rectangles[i].getFlipped();
             }
