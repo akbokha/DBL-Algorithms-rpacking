@@ -30,7 +30,7 @@ public class StrategyPicker {
             strategy = new Strat_ORP_Shotgun(area, magazine);
         } else { // 3, 5 and 10
             ADT_Area approximation = new Strat_ORP_BinaryTreePacker(area).compute();
-            strategy = new Strat_ORP_AnyTime(area, null, approximation);
+            strategy = new Strat_ORP_AnyTime(area, null);
         }
 
         return strategy;

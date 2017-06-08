@@ -30,7 +30,7 @@ public class Strat_ORP_AnyTime extends Strat_AbstractStrat {
         int rectanglesArea = area.getTotalAreaRectangles();
 
         // Find the minimal width the area could have, which is the maximum minimum width any rectangle might require.
-        int minWidth = Integer.MAX_VALUE;
+        int minWidth = 0;
         for (ADT_Rectangle rec : area.getRectangles()) {
             int smallestDimension;
             // Check if our current width is smaller than any found before.
