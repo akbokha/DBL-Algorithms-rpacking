@@ -16,6 +16,7 @@ public class Strat_ORP_AnyTime extends Strat_AbstractStrat {
     }
 
     Strat_ORP_AnyTime(ADT_Area area, Strat_BT_PrunerInterface[] pruners, ADT_Area previousResult) {
+
         super(area);
 
         bestResult = previousResult;
