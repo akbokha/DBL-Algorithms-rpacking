@@ -1,8 +1,6 @@
 import javax.swing.*;
 import java.awt.*;
 import java.text.DecimalFormat;
-import java.util.Iterator;
-import java.util.Random;
 
 public class Output_GraphicalOutput extends Output_AbstractOutput {
 
@@ -49,9 +47,9 @@ public class Output_GraphicalOutput extends Output_AbstractOutput {
             graphics.setColor(Color.darkGray);
             graphics.drawRect(border - 1, border - 1, (int) (rectWidth * scale) + 2, (int) (rectHeight * scale) + 2);
 
-            Iterator<ADT_Rectangle> i = area.getRectangleIterator();
-            while (i.hasNext()) {
-                ADT_Rectangle rect = i.next();
+            ADT_Rectangle[] recs = area.getRectangles();
+            for(int i = 0; i < recs.length && recs[i].getX() != ADT_Rectangle.NOTSET; i++) {
+                ADT_Rectangle rect = recs[i];
                 int w = (int) Math.floor(rect.getWidth() * scale);
                 int h = (int) Math.floor(rect.getHeight() * scale);
                 int x = (int) Math.floor(rect.getX() * scale) + border;

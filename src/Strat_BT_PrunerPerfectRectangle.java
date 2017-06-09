@@ -24,48 +24,41 @@ public class Strat_BT_PrunerPerfectRectangle implements Strat_BT_PrunerInterface
      * @return true if there is such a rectangle
      */
     private boolean perfectRectBelow(ADT_AreaExtended area, ADT_Rectangle last){
-        int lowestPoint = area.getHeight(); // lowest point of possible perfect rectangle
-        int beginX = last.getX();
-        int endX = last.getX()+last.getWidth();
+        int x = last.getX();
+        int y = last.getY() - 1;
+        int possibleY = y;
+        int maxX = last.getX() + last.getWidth() - 1;
+        int minY = 0;
         
-        // Scan horizontally to find bottom of a possibly perfect rectangle
-        int y = last.getY();
-        
-        if(y==0) return false; // There is no dominance below possible
-            
-        while(lowestPoint == area.getHeight() && beginX > 0 && y > 0){ // We haven't reached the bottom of the rectangle
-            y--;
-            
-            // First check right and left border
-            if(!(area.isEmptyAt(beginX-1, y) && area.isEmptyAt(beginX+endX, y))){
-                // This must be the lowest level, otherwise it is not valid  (missing side border)
-                lowestPoint = y;
-            }
-            
-            for(int x = beginX; x < endX; ++x){
-                if(!area.isEmptyAt(x, y) && x == beginX){
-                    // This possibly the beginning of a line of borders
-                    lowestPoint = y;
-                }else if(!area.isEmptyAt(x, y) && lowestPoint == area.getHeight()){
-                    /*
-                    We encountered a border halfway on the line, but this line hasn't
-                    seen a border yet. This means the rectangle is not perfect.
-                    */
-                    return false;
-                }else if(area.isEmptyAt(x, y) && lowestPoint != area.getHeight()){
-                    /*
-                    We found no border at this point, because we did already find
-                    border on this line, the rectangle is not perfect.
-                    */
+        //Check if it is even possible to have an open space beneath the last rectangle
+        if(y < 0 || !area.isEmptyAt(x, y)) return false;
+        //Set a possible y coordinate for the open space rectangle
+        // from the lower border of the last rectangle to the nearest lowest rectangle or border
+        while(possibleY > minY && area.isEmptyAt(x, possibleY)) possibleY--;
+        //Check if the the space given by (x,y) -> (maxX, possibleY -1) is empty
+        for(x = last.getX(); x <= maxX; x++) {
+            for(y = last.getY() - 1; y > possibleY; y--) {
+                if(!area.isEmptyAt(x, y)) {
                     return false;
                 }
             }
-            
-            // The bottom of the bounding rectangle is a good bottom
-            if(y-1 == 0) lowestPoint = y;
         }
-
-        // All checks passed, so we found a perfect rectangle
+        
+        //Check that the borders are enclosing
+        x = last.getX() - 1;
+        for(y = last.getY() - 1; y > possibleY; y--) {
+            if(x >= 0) {
+                if(area.isEmptyAt(x, y)) return false;
+            }
+            if(maxX + 1 > area.getWidth() - 1) {
+                if(area.isEmptyAt(maxX + 1, y)) return false;
+            }
+        }
+        y = possibleY + 1;
+        for(x = last.getX(); x <= maxX; x++) {
+            if(area.isEmptyAt(x, y)) return false;
+        }
+        
         return true;
     }
     
@@ -77,47 +70,41 @@ public class Strat_BT_PrunerPerfectRectangle implements Strat_BT_PrunerInterface
      * @return true if there is such a rectangle
      */
     private boolean perfectRectLeft(ADT_AreaExtended area, ADT_Rectangle last){
-        int leftMostPoint = area.getWidth(); // lowest point of possible perfect rectangle
-        int beginY = last.getY();
-        int endY = last.getY()+last.getHeight();
+        int x = last.getX() - 1;
+        int y = last.getY();
+        int possibleX = x;
+        int minX = 0;
+        int maxY = y + last.getHeight() - 1;
         
-        // Scan vertically to find bottom of a possibly perfect rectangle
-        int x = last.getX();
-        if(x==0) return false;
-        
-        while(leftMostPoint == area.getWidth() && beginY > 0 && beginY + endY < area.getHeight() && x > 0){
-            x--;
-            
-            // First check upper and lower border
-            if(!(area.isEmptyAt(x, beginY-1) && area.isEmptyAt(x, beginY+endY))){
-                // This must be the lowest level, otherwise it is not valid (missing side border)
-                leftMostPoint = x;
-            }
-            
-            for(int y = beginY; y < endY; ++y){
-                if(!area.isEmptyAt(x, y) && y == beginY){
-                    // This possibly the beginning of a row of borders
-                    leftMostPoint = x;
-                }else if(!area.isEmptyAt(x, y) && leftMostPoint == area.getWidth()){
-                    /*
-                    We encountered a border halfway on the line, but this line hasn't
-                    seen a border yet. This means the rectangle is not perfect.
-                    */
-                    return false;
-                }else if(area.isEmptyAt(x, y) && leftMostPoint != area.getWidth()){
-                    /*
-                    We found no border at this point, because we did already find
-                    border on this line, the rectangle is not perfect.
-                    */
+        //Check if it is even possible to have an open space beneath the last rectangle
+        if(x < 0 || !area.isEmptyAt(x, y)) return false;
+        //Set a possible y coordinate for the open space rectangle
+        // from the left border of the last rectangle to the nearest left rectangle or border
+        while(possibleX > minX && area.isEmptyAt(possibleX, y)) possibleX--;
+        //Check if the the space given by (x,y) -> (possibleX - 1, possibleY -1) is empty
+        for(x = last.getX() - 1; x > possibleX; x--) {
+            for(y = last.getY(); y <= maxY; y++) {
+                if(!area.isEmptyAt(x, y)) {
                     return false;
                 }
             }
-            
-            // The left side of the bounding rectangle is a good leftmost point
-            if(x-1 == 0) leftMostPoint = x;
         }
         
-        // All checks passed, so we found a perfect rectangle
+        //Check that the borders are enclosing
+        x = possibleX + 1;
+        for(y = last.getY(); y <= maxY; y++) {
+            if(area.isEmptyAt(x, y)) return false;
+        }
+        y = last.getY() - 1;
+        for(x = last.getX(); x > possibleX; x--) {
+            if(y >= 0) {
+                if(area.isEmptyAt(x, y)) return false;
+            }
+            if(maxY < area.getHeight()-1) {
+                if(area.isEmptyAt(x, maxY + 1)) return false;
+            }
+        }
+        
         return true;
     }
     
