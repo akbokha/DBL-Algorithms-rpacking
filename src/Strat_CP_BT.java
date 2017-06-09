@@ -36,7 +36,7 @@ class Strat_CP_BT extends Strat_BT_Template {
                 }
 
                 // If one of the rectangles still doesn't fit, then this containment problem cannot be solved.
-                if (rectangle.getHeight() <= areaHeight && rectangle.getWidth() <= areaWidth) {
+                if (rectangle.getHeight() > areaHeight || rectangle.getWidth() > areaWidth) {
                     rectangles = null;
                     return;
                 }
