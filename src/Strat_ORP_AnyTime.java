@@ -1,6 +1,6 @@
 public class Strat_ORP_AnyTime extends Strat_AbstractStrat {
     
-    int stepsize = 5;
+    int stepsize = 1;
     Strat_BT_PrunerInterface[] pruners;
     DataMining data;
     
@@ -8,7 +8,7 @@ public class Strat_ORP_AnyTime extends Strat_AbstractStrat {
         super(area);
         data = new DataMining(pruners);
         /*new Strat_BT_PrunerEmptySpace(), new Strat_BT_Pruner_WS2(), new Strat_BT_PrunerPerfectRectangle(), new Strat_BT_Pruner_NarrowEmptyStrips()*/
-        Strat_BT_PrunerInterface pruner = new PrunerDataMining(new Strat_BT_Pruner_WS2(), data.dataSet);
+        Strat_BT_PrunerInterface pruner = new PrunerDataMining(new Strat_BT_Pruner_NarrowEmptyStrips(), data.dataSet);
         pruners = new Strat_BT_PrunerInterface[]{pruner};
     }
 

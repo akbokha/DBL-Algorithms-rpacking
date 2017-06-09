@@ -49,7 +49,7 @@ public class Strat_BT_Pruner_NarrowEmptyStrips implements Strat_BT_PrunerInterfa
             }
             // Place rectangles in area
             ADT_Area stripArea = new ADT_Area(stripWidth, last.getHeight(), 
-                    area.canFlip(), (ADT_Rectangle[]) fittingRecs.toArray());
+                    area.canFlip(), fittingRecs.toArray(new ADT_Rectangle[fittingRecs.size()]));
             
             // First check if they might fit by comparing size
             int fillRate = stripArea.getTotalAreaRectangles()/(stripArea.getWidth()*stripArea.getHeight());
