@@ -35,7 +35,7 @@ public class StrategyPicker {
             return new Strat_ORP_BTP2D(area);
         } else { // 3, 5 and 10
             ADT_Area approximation = new Strat_ORP_BinaryTreePacker(area).compute();
-            strategy = new Strat_ORP_AnyTime(area, null, approximation);
+            strategy = new Strat_ORP_AnyTime(area, new Strat_BT_PrunerInterface[]{new Strat_BT_PrunerPerfectRectangle(), new Strat_BT_Pruner_NarrowEmptyStrips()}, approximation);
         }
 
         return strategy;

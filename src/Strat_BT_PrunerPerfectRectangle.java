@@ -50,7 +50,7 @@ public class Strat_BT_PrunerPerfectRectangle implements Strat_BT_PrunerInterface
             if(x >= 0) {
                 if(area.isEmptyAt(x, y)) return false;
             }
-            if(maxX + 1 > area.getWidth() - 1) {
+            if(maxX + 1 < area.getWidth() - 1) {
                 if(area.isEmptyAt(maxX + 1, y)) return false;
             }
         }
