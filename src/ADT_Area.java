@@ -14,6 +14,7 @@ public class ADT_Area extends ADT_Rectangle implements Cloneable {
     
     @Override
     public ADT_Area clone() {
+        super.clone();
         ADT_Rectangle[] newShapes = new ADT_Rectangle[shapes.length];
         
         for(int i = 0; i < shapes.length; i++) {

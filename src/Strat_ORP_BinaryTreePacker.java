@@ -51,7 +51,7 @@ public class Strat_ORP_BinaryTreePacker extends Strat_AbstractStrat {
         fixedHeight = this.area.getHeight() != -1;
         if (fixedHeight) {
             fixedHeightValue = this.area.getHeight();
-            area.setWidth(0);
+            this.area.setWidth(0);
         }
     }
     
