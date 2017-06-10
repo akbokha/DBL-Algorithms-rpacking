@@ -1,6 +1,7 @@
 /**
  * A solver of the containment problem. Requires that the height and width of the area are finite.
  * @pre None of the rectangles should be already placed.
+ * @modifies Does not maintain the order of the rectangles.
  */
 class Strat_CP_BT extends Strat_BT_Template {
 
@@ -11,23 +12,33 @@ class Strat_CP_BT extends Strat_BT_Template {
     Strat_CP_BT(ADT_AreaExtended areaEx) {
         super(areaEx);
 
-        assert areaEx.getRectanglesToBePlaced().length == areaEx.getCount(); // Check that none of the rectangles are placed.
+        assert this.areaEx.getRectanglesToBePlaced().length == this.areaEx.getCount(); // Check that none of the rectangles are placed.
 
-        rectangles = areaEx.getRectanglesToBePlaced();
+        rectangles = this.areaEx.getRectanglesToBePlaced();
 
         // Only support flipping rectangles if it is required.
-        if (areaEx.canFlip()) {
+        if (this.areaEx.canFlip()) {
             // Store the initial flipped status.
             initialFlipped = new boolean[rectangles.length];
+
+            int areaHeight = this.areaEx.getHeight();
+            int areaWidth = this.areaEx.getWidth();
 
             for (int i = 0; i < rectangles.length; i++) {
                 ADT_Rectangle rectangle = rectangles[i];
 
-                if (rectangle.getWidth() > areaEx.getHeight()) {
-                    rectangle.flippable = false;
-                } else if (rectangle.getHeight() > areaEx.getHeight() || rectangle.getHeight() == rectangle.getWidth()) {
-                    rectangle.flippable = false;
+                // Check if it is required to rotate in either one of the directions.
+                if (rectangle.getHeight() > areaHeight || rectangle.getWidth() > areaWidth) {
                     rectangle.toggleFlipped();
+                    rectangle.flippable = false;
+                } else if (rectangle.getWidth() > areaHeight || rectangle.getHeight() > areaWidth || rectangle.getHeight() == rectangle.getWidth()) {
+                    rectangle.flippable = false;
+                }
+
+                // If one of the rectangles still doesn't fit, then this containment problem cannot be solved.
+                if (rectangle.getHeight() > areaHeight || rectangle.getWidth() > areaWidth) {
+                    rectangles = null;
+                    return;
                 }
 
                 initialFlipped[i] = rectangles[i].getFlipped();
@@ -36,10 +47,20 @@ class Strat_CP_BT extends Strat_BT_Template {
     }
 
     @Override
+    public ADT_AreaExtended compute() {
+        // Rectangles will be set to null in the constructor if one of the rectangles doesn't fit within the area.
+        if (rectangles == null) {
+            return null;
+        } else {
+            return super.compute();
+        }
+    }
+
+    @Override
     protected boolean reject(ADT_Rectangle last) {
         // Consult all pruners but not earlier than depth 6
         if(index > 0 && index < 9) {
-        return super.reject(last);
+            return super.reject(last);
         } else {
             return false;
         }
@@ -63,6 +84,7 @@ class Strat_CP_BT extends Strat_BT_Template {
     boolean first() {
         // Step one level down into the branch and retrieve a pointer to the first rectangle.
         ADT_Rectangle rectangle = rectangles[++index];
+        
         int x = 0;
         int y = 0;
 
@@ -70,13 +92,6 @@ class Strat_CP_BT extends Strat_BT_Template {
             rectangle.toggleFlipped();
 
             assert rectangle.getHeight() <= areaEx.getHeight();
-        }
-
-        // Make distinction between the first rectangle and all others.
-        if (index == 0) {
-            // Let the first rectangle start with its center in the center such that it will only evaluate the top right corner.
-            x = Math.max(0, (int) Math.ceil((areaEx.getWidth() - rectangle.getWidth()) / 2));
-            y = Math.max(0, (int) Math.ceil((areaEx.getHeight() - rectangle.getHeight()) / 2));
         }
 
         ADT_Vector next = findNextPosition(rectangle, x, y);
@@ -100,7 +115,7 @@ class Strat_CP_BT extends Strat_BT_Template {
 
         // Remove it
         areaEx.remove(index);
-
+        
         ADT_Vector next = findNextPosition(rectangle, x + 1, y);
 
         if (next != null) {
@@ -113,29 +128,24 @@ class Strat_CP_BT extends Strat_BT_Template {
     }
 
     private ADT_Vector findNextPosition(ADT_Rectangle rectangle, int x, int y) {
+        int maxX = (index != 0) ? areaEx.getWidth() : (int) Math.ceil((areaEx.getWidth() + rectangle.getWidth()) / 2f);
+        int maxY = (index != 0) ? areaEx.getHeight() : (int) Math.ceil((areaEx.getHeight() + rectangle.getHeight()) / 2f);
+        
         while (true) {
-            // Increment x and check if this coordinate is valid.
-
             // Check if the x-coordinate is still a valid starting coordinate
-            if (x + rectangle.getWidth() > areaEx.getWidth()) {
+            if (x + rectangle.getWidth() > maxX) {
                 // Reset x, make distinction between the first rectangle and all others.
-                if (index == 0) {
-                    x = Math.max(0, (int) Math.ceil((areaEx.getWidth() - rectangle.getWidth()) / 2f));
-                } else {
-                    x = 0;
-                }
-
+                x = 0;
+                
                 y++;
 
                 // Check if the y-coordinate is still a valid starting coordinate
-                if (y + rectangle.getHeight() > areaEx.getHeight()) {
+                if (y + rectangle.getHeight() > maxY) {
 
                     // Rotate if the rectangle can flip.
                     if (rectangle.canFlip() && rectangle.getFlipped() == initialFlipped[index]) {
 
                         rectangle.toggleFlipped();
-
-//                        rectangle.setFlipped(!initialFlipped[index]);
 
                         return findNextPosition(rectangle, 0, 0);
                     } else {
@@ -143,7 +153,7 @@ class Strat_CP_BT extends Strat_BT_Template {
                     }
                 }
             }
-
+            
             int res = areaEx.checkIntersection(x, y, rectangle.getWidth(), rectangle.getHeight());
             if (res == 0) {
                 break;
@@ -151,7 +161,6 @@ class Strat_CP_BT extends Strat_BT_Template {
                 x = res;
             }
         }
-
         return new ADT_Vector(x, y);
     }
 
