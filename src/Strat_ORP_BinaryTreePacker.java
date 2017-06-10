@@ -46,7 +46,7 @@ public class Strat_ORP_BinaryTreePacker extends Strat_AbstractStrat {
         super(area);
         this.version = version;
         sortedRectangles = this.area.getRectangles().clone();
-        Arrays.sort(sortedRectangles, version); // sort on width
+        Arrays.sort(sortedRectangles, version); // sort as specified
         this.binaryTree = new BinaryTree();
         fixedHeight = this.area.getHeight() != -1;
         if (fixedHeight) {
