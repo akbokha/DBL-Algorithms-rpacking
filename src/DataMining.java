@@ -16,9 +16,8 @@ public class DataMining {
     ArrayList<Tuple> dataSet;
     Strat_BT_PrunerInterface[] pruners;
     
-    public DataMining(Strat_BT_PrunerInterface[] pruners) {
+    public DataMining() {
         this.dataSet = new ArrayList<>();
-        this.pruners = pruners;
     }
 
     public Tuple get(int i) {
@@ -27,9 +26,5 @@ public class DataMining {
 
     public int size() {
         return dataSet.size();
-    }
-    
-    public void callPruner(Strat_BT_PrunerInterface pruner) {
-        
     }
 }
