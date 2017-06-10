@@ -22,6 +22,8 @@ public class PackingSolver {
                     if (args.length >= index + 2) {
                         String filePath = args[++index];
                         input = new Input_File(filePath);
+
+                        System.err.println("Input file used: '" + filePath + "'");
                     } else {
                         input = new Input_FileFromSystemIn();
                     }

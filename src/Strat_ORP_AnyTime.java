@@ -1,42 +1,59 @@
 public class Strat_ORP_AnyTime extends Strat_AbstractStrat {
     
-    int stepsize = 1;
-    Strat_BT_PrunerInterface[] pruners;
+    private int stepsize = 1;
+    private int bestArea = Integer.MAX_VALUE;
+    private Strat_BT_PrunerInterface[] pruners;
+    private ADT_Area bestResult;
     DataMining data;
-    
-    public Strat_ORP_AnyTime(ADT_Area area) {
+
+    Strat_ORP_AnyTime(ADT_Area area) {
         super(area);
-        data = new DataMining(pruners);
+    }
+
+    Strat_ORP_AnyTime(ADT_Area area, Strat_BT_PrunerInterface[] pruners) {
+        super(area);
+
+        this.pruners = pruners;
+    }
+
+    Strat_ORP_AnyTime(ADT_Area area, Strat_BT_PrunerInterface[] pruners, ADT_Area previousResult) {
+        super(area);
+        
         /*new Strat_BT_PrunerEmptySpace(), new Strat_BT_Pruner_WS2(), new Strat_BT_PrunerPerfectRectangle(), new Strat_BT_Pruner_NarrowEmptyStrips()*/
-        Strat_BT_PrunerInterface pruner = new PrunerDataMining(new Strat_BT_Pruner_NarrowEmptyStrips(), data.dataSet);
-        pruners = new Strat_BT_PrunerInterface[]{pruner};
+        pruners = new Strat_BT_PrunerInterface[]{
+            new PrunerDataMining(new Strat_BT_PrunerPerfectRectangle(), data.dataSet)
+        };
+        data = new DataMining(pruners);
+        bestResult = previousResult;
+        
+        this.pruners = pruners;
+
+        ADT_Vector dimensions = previousResult.getDimensions();
+        bestArea = dimensions.x * dimensions.y;
     }
 
     @Override
     public ADT_Area compute() {
-        int optimalArea = area.getTotalAreaRectangles();
-        ADT_Area bestArea = new Strat_ORP_BinaryTreePacker(area.clone()).compute();
-        ADT_Vector dim = bestArea.getDimensions();
-        int bestDimensens = dim.x * dim.y;
+        int rectanglesArea = area.getTotalAreaRectangles();
 
         //Used to initialize an average starting width and height
-        ADT_Area testArea = new Strat_DummyImplementation(area.clone()).compute();
+        ADT_Area horizontalStripResult = new Strat_HorizontalStrip(area.clone()).compute();
         //Set initial width and height for a container to the getDimensions
         // of the bottom-left algorithm
-        ADT_Vector dimension = testArea.getDimensions();
+        ADT_Vector dimension = horizontalStripResult.getDimensions();
         int width = dimension.x;
         int height = dimension.y;
         areaEx = area.toExtended(width, height);
         while(true) {
-            //Make sure that the area gets smaller and smaller until the
-            // minimal area is reached
-            if((width-stepsize) * height >= optimalArea && width - stepsize >= areaEx.getRectanglesToBePlaced()[0].getWidth()) {
+            //Make sure that the area gets smaller and smaller until the minimal area is reached.
+            if((width-stepsize) * height >= rectanglesArea && width - stepsize >= areaEx.getRectanglesToBePlaced()[0].getWidth()) {
                 width -= stepsize;
-                if(width * height >= bestDimensens) {
+                if(width * height >= bestArea) {
                     continue;
                 }
+
                 int areaSize = width * height;
-                System.err.print("W:" + width + "\tH:" + height + "\tArea: " + areaSize + "\tFR: " + ((float) optimalArea / (float) areaSize) + "\t");
+                System.err.print("W:" + width + "\tH:" + height + "\tArea: " + areaSize + "\tFR: " + ((float) rectanglesArea / (float) areaSize) + "\t");
 
                 //Get a solution with this width and height
                 ADT_AreaExtended newArea = createNewSolution(width, height);
@@ -48,16 +65,13 @@ public class Strat_ORP_AnyTime extends Strat_AbstractStrat {
                 }
 
                 //If a solution was set, use it as the new best solution
-                if(newArea != null) {
-                    bestArea = newArea.clone().toArea();
-                    
-                    ADT_Vector vec = bestArea.getDimensions();
-                    bestDimensens = vec.x * vec.y;
+                if(newArea != null && newArea.getArea() < bestArea) {
+                    bestResult = newArea.clone().toArea();
+                    bestArea = newArea.getArea();
                 } else if (stepsize == 1) {//If stepsize == 1 and no solution is found, increase height
-                    if(area.getHeight() != ADT_Area.INF/* || (height+1) * (width) >= bestArea.getWidth() * bestArea.getHeight()*/) {// but if the height was fixed, no better solution can be found
+                    if(area.getHeight() != ADT_Area.INF/* || (height+1) * (width) >= bestResult.getWidth() * bestResult.getHeight()*/) {// but if the height was fixed, no better solution can be found
                         break;
                     }
-//                    width += stepsize;
                     height += 1;
                 } else {//If this area is not possible try one larger width
                     width += stepsize;
@@ -69,19 +83,30 @@ public class Strat_ORP_AnyTime extends Strat_AbstractStrat {
                 stepsize--;
             }
         }
-        bestArea.setHeight(area.getHeight());
 
+        // If the backtracker didn't find any better solution, use the result from the horizontal strip strategy.
+        if (bestResult == null) {
+            bestResult = horizontalStripResult;
+        }
+
+        bestResult.setHeight(area.getHeight());
+        bestResult.sortAs(area.getRectangles()); // Sort the area in the same manner as it originally was.
+        
         CSV_Parser parser = new CSV_Parser();
         parser.parse(".\\", data);
-        return bestArea;
+
+        return bestResult;
     }
     
-    ADT_AreaExtended createNewSolution(int width, int height) {
+    private ADT_AreaExtended createNewSolution(int width, int height) {
         ADT_AreaExtended newArea = area.toExtended(width, height);
         
         Strat_CP_BT backtracker = new Strat_CP_BT(newArea);
-        for(Strat_BT_PrunerInterface pruner : pruners) {
-            backtracker.addPruner(pruner);
+
+        if (pruners != null) {
+            for (Strat_BT_PrunerInterface pruner : pruners) {
+                backtracker.addPruner(pruner);
+            }
         }
         
         newArea = backtracker.compute();

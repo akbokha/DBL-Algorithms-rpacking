@@ -292,7 +292,7 @@ public class ADT_AreaExtended extends ADT_Area implements Cloneable {
                 for(int y = 0; y < getHeight(); y++) {
                     if(isEmptyAt(x, y)) {
                         stripLength++;
-                    } else {
+                    } else if(stripLength > 0){
                         vals[stripLength]++;
                         stripLength = 0;
                         y += rectangles[array[getIndex(x, y)]].getHeight();
