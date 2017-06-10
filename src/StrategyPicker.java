@@ -18,7 +18,7 @@ public class StrategyPicker {
     static Strat_AbstractStrat pickStrategy() {
         Strat_AbstractStrat strategy;
 
-        if (area.getCount() >= 25) { // i.e. versions 25
+        if (area.getCount() == 25) { // i.e. versions 25
             // Create a new magazine for the shotgun.
             ArrayList<Strat_AbstractStrat> magazine = new ArrayList<>();
 
