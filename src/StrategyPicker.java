@@ -16,32 +16,49 @@ public class StrategyPicker {
     }
     
     static Strat_AbstractStrat pickStrategy() {
-        Strat_AbstractStrat strategy;
+        Strat_AbstractStrat strategy = null;
 
-        if (area.getCount() == 25) { // i.e. versions 25
-            // Create a new magazine for the shotgun.
-            ArrayList<Strat_AbstractStrat> magazine = new ArrayList<>();
+        switch(area.getCount()){
+            case 3:
+                strategy = BT_generator();
+                break;
+            case 5:
+                strategy = BT_generator();
+                break;
+            case 10:
+                strategy = BT_generator();
+                break;
+            case 25:
+                // Create a new magazine for the shotgun.
+                ArrayList<Strat_AbstractStrat> magazine = new ArrayList<>();
 
-            // Load the magazine
-            magazine.add(new Strat_ORP_BinaryTreePacker(area));
-            magazine.add(new Strat_ORP_BinaryTreePacker(area, new ADT_SortRecOnArea()));
-            magazine.add(new Strat_ORP_BinaryTreePacker(area, new ADT_SortRecOnHeight()));
-            magazine.add(new Strat_ORP_BinaryTreePacker(area, new ADT_SortRecOnWidth()));
-//            magazine.add(new Strat_ORP_BinaryTreePacker(area, new ADT_SortRecRandom())); // WARNING: Using this might result in non-deterministic behaviour.
+                // Load the magazine
+                magazine.add(new Strat_ORP_BinaryTreePacker(area));
+                magazine.add(new Strat_ORP_BinaryTreePacker(area, new ADT_SortRecOnArea()));
+                magazine.add(new Strat_ORP_BinaryTreePacker(area, new ADT_SortRecOnHeight()));
+                magazine.add(new Strat_ORP_BinaryTreePacker(area, new ADT_SortRecOnWidth()));
+//                magazine.add(new Strat_ORP_BinaryTreePacker(area, new ADT_SortRecRandom())); // WARNING: Using this might result in non-deterministic behaviour.
 
-            // Forge a new shotgun, load it, and hand it over.
-            strategy = new Strat_ORP_Shotgun(area, magazine);
-        } else if (area.getCount() == 10000){ // 10000
-            return new Strat_ORP_BTP2D(area);
-        } else { // 3, 5 and 10
-            ADT_Area approximation = new Strat_ORP_BinaryTreePacker(area).compute();
-            Strat_BT_PrunerInterface[] pruners = new Strat_BT_PrunerInterface[]{
-                new Strat_BT_PrunerPerfectRectangle(), new Strat_BT_Pruner_NarrowEmptyStrips()
-            };
-            strategy = new Strat_ORP_AnyTime(area, pruners, approximation);
+                // Forge a new shotgun, load it, and hand it over.
+                strategy = new Strat_ORP_Shotgun(area, magazine);
+                break;
+            case 10000:
+                strategy = new Strat_ORP_BTP2D(area);
+                break;
+            default:
+                // This should be able to solve any input
+                strategy = new Strat_ORP_BTP2D(area);
+                break;
         }
-
         return strategy;
+    }
+    
+    static private Strat_AbstractStrat BT_generator(){
+        ADT_Area approximation = new Strat_ORP_BinaryTreePacker(area).compute();
+        Strat_BT_PrunerInterface[] pruners = new Strat_BT_PrunerInterface[]{
+            new Strat_BT_PrunerPerfectRectangle(), new Strat_BT_Pruner_NarrowEmptyStrips()
+        };
+        return new Strat_ORP_AnyTime(area, pruners, approximation);         
     }
     
 }
