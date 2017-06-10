@@ -84,6 +84,7 @@ class Strat_CP_BT extends Strat_BT_Template {
     boolean first() {
         // Step one level down into the branch and retrieve a pointer to the first rectangle.
         ADT_Rectangle rectangle = rectangles[++index];
+        
         int x = 0;
         int y = 0;
 
@@ -91,13 +92,6 @@ class Strat_CP_BT extends Strat_BT_Template {
             rectangle.toggleFlipped();
 
             assert rectangle.getHeight() <= areaEx.getHeight();
-        }
-
-        // Make distinction between the first rectangle and all others.
-        if (index == 0) {
-            // Let the first rectangle start with its center in the center such that it will only evaluate the top right corner.
-            x = Math.max(0, (int) Math.ceil((areaEx.getWidth() - rectangle.getWidth()) / 2));
-            y = Math.max(0, (int) Math.ceil((areaEx.getHeight() - rectangle.getHeight()) / 2));
         }
 
         ADT_Vector next = findNextPosition(rectangle, x, y);
@@ -121,7 +115,7 @@ class Strat_CP_BT extends Strat_BT_Template {
 
         // Remove it
         areaEx.remove(index);
-
+        
         ADT_Vector next = findNextPosition(rectangle, x + 1, y);
 
         if (next != null) {
@@ -134,22 +128,19 @@ class Strat_CP_BT extends Strat_BT_Template {
     }
 
     private ADT_Vector findNextPosition(ADT_Rectangle rectangle, int x, int y) {
+        int maxX = (index != 0) ? areaEx.getWidth() : (int) Math.ceil((areaEx.getWidth() + rectangle.getWidth()) / 2f);
+        int maxY = (index != 0) ? areaEx.getHeight() : (int) Math.ceil((areaEx.getHeight() + rectangle.getHeight()) / 2f);
+        
         while (true) {
-            // Increment x and check if this coordinate is valid.
-
             // Check if the x-coordinate is still a valid starting coordinate
-            if (x + rectangle.getWidth() > areaEx.getWidth()) {
+            if (x + rectangle.getWidth() > maxX) {
                 // Reset x, make distinction between the first rectangle and all others.
-                if (index == 0) {
-                    x = Math.max(0, (int) Math.ceil((areaEx.getWidth() - rectangle.getWidth()) / 2f));
-                } else {
-                    x = 0;
-                }
-
+                x = 0;
+                
                 y++;
 
                 // Check if the y-coordinate is still a valid starting coordinate
-                if (y + rectangle.getHeight() > areaEx.getHeight()) {
+                if (y + rectangle.getHeight() > maxY) {
 
                     // Rotate if the rectangle can flip.
                     if (rectangle.canFlip() && rectangle.getFlipped() == initialFlipped[index]) {
@@ -162,7 +153,7 @@ class Strat_CP_BT extends Strat_BT_Template {
                     }
                 }
             }
-
+            
             int res = areaEx.checkIntersection(x, y, rectangle.getWidth(), rectangle.getHeight());
             if (res == 0) {
                 break;
@@ -170,7 +161,6 @@ class Strat_CP_BT extends Strat_BT_Template {
                 x = res;
             }
         }
-
         return new ADT_Vector(x, y);
     }
 
