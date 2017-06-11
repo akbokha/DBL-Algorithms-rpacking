@@ -1,6 +1,4 @@
-import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.HashSet;
 
 public class Strat_ORP_BTP_SmartNodes extends Strat_ORP_BinaryTreePacker {
@@ -9,11 +7,17 @@ public class Strat_ORP_BTP_SmartNodes extends Strat_ORP_BinaryTreePacker {
     
     public Strat_ORP_BTP_SmartNodes(ADT_Area area) {
         super(area);
-        fillSet();
+        smartNodeInit();
     }
     
     public Strat_ORP_BTP_SmartNodes(ADT_Area area, Comparator<ADT_Rectangle> version) { // for other sorting methods
         super(area);
+        smartNodeInit();
+    }
+    
+    private void smartNodeInit () {
+        nodeTrackerX = new HashSet<>();
+        nodeTrackerY = new HashSet<>();
         fillSet();
     }
     
@@ -32,12 +36,16 @@ public class Strat_ORP_BTP_SmartNodes extends Strat_ORP_BinaryTreePacker {
         int topRightX = rec.getX() + rec.getWidth();
         int topRightY = rec.getY() + rec.getHeight();
         for (Integer dimension : nodeTrackerX) {
-            ADT_Node node = new ADT_Node(topRightX = dimension, (rec.getY() + rec.getHeight()));
-            binaryTree.addNode(node);
+            if (topRightX - dimension >= 0) {
+                ADT_Node node = new ADT_Node(topRightX - dimension, (rec.getY() + rec.getHeight()));
+                binaryTree.addNode(node);
+            }
         }
         for (Integer dimension : nodeTrackerY) {
-            ADT_Node node = new ADT_Node((rec.getX() + rec.getWidth()), topRightY - dimension);
-            binaryTree.addNode(node);
+            if (topRightY - dimension >= 0) {
+                ADT_Node node = new ADT_Node((rec.getX() + rec.getWidth()), topRightY - dimension);
+                binaryTree.addNode(node);  
+            }
         }
         
     }
