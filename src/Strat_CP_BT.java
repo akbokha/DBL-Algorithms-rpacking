@@ -87,6 +87,14 @@ class Strat_CP_BT extends Strat_BT_Template {
         
         int x = 0;
         int y = 0;
+        
+        if(index > 0) {
+            ADT_Rectangle previousRectangle = rectangles[index-1];
+            if((rectangle.compareTo(previousRectangle) == 0)) {
+                x = previousRectangle.getX() + previousRectangle.getWidth();
+                y = previousRectangle.getY();
+            }
+        }
 
         if (rectangle.getHeight() > areaEx.getHeight()) {
             rectangle.toggleFlipped();
