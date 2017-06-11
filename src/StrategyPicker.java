@@ -43,7 +43,16 @@ public class StrategyPicker {
                 strategy = new Strat_ORP_Shotgun(area, magazine);
                 break;
             case 10000:
-                strategy = new Strat_ORP_BTP2D(area);
+                // Create a new magazine for the shotgun.
+                ArrayList<Strat_AbstractStrat> magazine10k = new ArrayList<>();
+                
+                magazine10k.add(new Strat_ORP_BTP2D(area, new ADT_SortRecOnArea()));
+                magazine10k.add(new Strat_ORP_BTP2D(area, new ADT_SortRecOnWidth()));
+                magazine10k.add(new Strat_ORP_BTP2D(area, new ADT_SortRecOnHeight()));        
+//                magazine10k.add(new Strat_ORP_BTP2D(area, new ADT_SortRecRandom())); // Repeat until 4:30-ish
+
+                // Forge a new shotgun, load it, and hand it over.
+                strategy = new Strat_ORP_Shotgun(area, magazine10k);
                 break;
             default:
                 // This should be able to solve any input
