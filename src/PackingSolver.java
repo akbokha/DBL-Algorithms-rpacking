@@ -11,7 +11,6 @@ public class PackingSolver {
      */
     public static void main(String[] args) throws Exception {
         curTime = System.currentTimeMillis(); // to check running time
-        System.err.println(curTime);
         
         Input_Scanner input = null;
         boolean graphical = false;

@@ -38,7 +38,7 @@ public class Strat_ORP_AnyTime extends Strat_AbstractStrat {
         thread.start();
 
         try {
-            Thread.sleep(TIME_LIMIT_MS-(PackingSolver.getStartTime() - System.currentTimeMillis()));
+            Thread.sleep(TIME_LIMIT_MS-(System.currentTimeMillis() - PackingSolver.getStartTime()));
             thread.interrupt();
         } catch (InterruptedException e) {
             e.printStackTrace();
