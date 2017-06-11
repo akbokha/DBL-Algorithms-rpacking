@@ -71,10 +71,8 @@ public class Strat_ORP_BTP2D extends Strat_ORP_BinaryTreePacker {
             if(heightFits()<0){ // If we ran out of height
                 bitSetHeight -= heightFits()*enlarge;
             }
-            System.err.println("Doing this");
             // Make sure we stay within integer bounds
             if(bitSetHeight*bitSetWidth < 0){
-                System.err.println("Doing that");
                 if(widthFits()<0) bitSetHeight = oldHeight - heightFits();
                 if(heightFits()<0) bitSetWidth = oldWidth - widthFits();
             }
