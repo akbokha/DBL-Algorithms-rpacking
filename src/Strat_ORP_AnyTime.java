@@ -5,6 +5,8 @@ public class Strat_ORP_AnyTime extends Strat_AbstractStrat {
     private Strat_BT_PrunerInterface[] pruners;
     private ADT_Area bestResult;
 
+    final int MAX_COMPUTE_TIME_MS = 270000;
+
     Strat_ORP_AnyTime(ADT_Area area) {
         super(area);
     }
@@ -27,6 +29,27 @@ public class Strat_ORP_AnyTime extends Strat_AbstractStrat {
 
     @Override
     public ADT_Area compute() {
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                bestResult = computeLoop();
+            }
+        });
+        thread.start();
+
+        try {
+            Thread.sleep(MAX_COMPUTE_TIME_MS);
+            thread.interrupt();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        finally {
+            return bestResult;
+        }
+    }
+
+    public ADT_Area computeLoop() {
+
         int rectanglesArea = area.getTotalAreaRectangles();
 
         //Used to initialize an average starting width and height
