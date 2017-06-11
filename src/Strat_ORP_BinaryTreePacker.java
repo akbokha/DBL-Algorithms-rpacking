@@ -182,7 +182,7 @@ public class Strat_ORP_BinaryTreePacker extends Strat_AbstractStrat {
      * Determines if node is a better location for rec. 
      * A node with paste 4 is always the best (if multiple are available, choose
      * the bottom-leftmost). Otherwise, select the node sorted lexicographically
-     * by leastArea, paste
+     * by leastArea, paste and lowest (x,y)
      * @param node
      * @param rec
      * @return if node is a better choice for rec than bestNode
@@ -190,19 +190,34 @@ public class Strat_ORP_BinaryTreePacker extends Strat_AbstractStrat {
     private boolean isLocationBetter(ADT_Node node, ADT_Rectangle rec){
         // check if placement of rectangle @ node results in overlap
         if (isValidPlacement(node, rec)) {
-            // if greatest paste == 4
-            /*
-            if (greatestPaste == 4){ // there is already a node that has the best checkable result for this re 
-                return false;
-            }*/
             int paste = computePaste(node, rec);
+            
+            // CASE: paste = 4
             if (paste == 4){
-                greatestPaste = 4;
-                bestNode = node;
-                // area remains the same
-                return true;
+                if(greatestPaste == 4){
+                    // Determine best by position
+                    if(node.point.x<bestNode.point.x || 
+                            (node.point.x==bestNode.point.x && 
+                            node.point.y<bestNode.point.y)){ 
+                        // Replace bestNode
+                        greatestPaste = 4;
+                        bestNode = node;
+                        // area remains the same
+                        return true;
+                    }
+                }else{
+                    // Replace bestNode
+                    greatestPaste = 4;
+                    bestNode = node;
+                    // area remains the same
+                    return true;
+                }
+                return false;
             }
+            
             int resulting_area = computeResultingArea(node, rec);
+            
+            // CASE: added area is less
             if (resulting_area < leastArea) { // better resulting area than current best node
                 greatestPaste = paste;
                 leastArea = resulting_area;
@@ -210,11 +225,25 @@ public class Strat_ORP_BinaryTreePacker extends Strat_AbstractStrat {
                 return true;
             }
           
+            // CASE: added area is equal
             if(resulting_area == leastArea){ // same resulting area as current best node
+                // Choose by paste
                 if (paste > greatestPaste){ // if the placement is better
                     greatestPaste = paste;
                     bestNode = node;
                     return true;
+                }
+                if (paste == greatestPaste){
+                    // Choose by location
+                    if(node.point.x<bestNode.point.x || 
+                            (node.point.x==bestNode.point.x && 
+                            node.point.y<bestNode.point.y)){ 
+                        // Replace bestNode
+                        greatestPaste = paste;
+                        bestNode = node;
+                        leastArea = resulting_area;
+                        return true;
+                    }
                 }
             }   
         }
