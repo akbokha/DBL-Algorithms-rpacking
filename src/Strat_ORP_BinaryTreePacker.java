@@ -14,7 +14,7 @@ import java.util.Iterator;
 public class Strat_ORP_BinaryTreePacker extends Strat_AbstractStrat {
     static final int NOTSET = -2;
     
-    BinaryTree binaryTree;
+    protected BinaryTree binaryTree;
     int recIndex; // the ith rectangle that is currently being placed
     int heightResult = 0;
 
@@ -361,7 +361,7 @@ public class Strat_ORP_BinaryTreePacker extends Strat_AbstractStrat {
      * @pre x and y of rec have to be set
      * @param rec 
      */
-    private void checkNodes(ADT_Rectangle rec) {
+    public void checkNodes(ADT_Rectangle rec) {
         // Check left edge of rec
         HashSet<ADT_Node> x_collection = binaryTree.points.get(rec.getX());
         ArrayList<Integer> checkIfEmpty = new ArrayList<>(); // to track x coordinates of nodes that are removed
@@ -399,9 +399,9 @@ public class Strat_ORP_BinaryTreePacker extends Strat_AbstractStrat {
     }
     
     
-    private final class BinaryTree {
+    protected final class BinaryTree {
         ADT_Node root; 
-        private HashMap<Integer, HashSet<ADT_Node>> points;
+        protected HashMap<Integer, HashSet<ADT_Node>> points;
         
         public BinaryTree() {
             root = new ADT_Node(0, 0);
