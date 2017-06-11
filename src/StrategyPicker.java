@@ -34,7 +34,6 @@ public class StrategyPicker {
 
                 // Load the magazine
                 magazine.add(new Strat_ORP_BinaryTreePacker(area));
-                magazine.add(new Strat_ORP_BinaryTreePacker(area, new ADT_SortRecOnArea()));
                 magazine.add(new Strat_ORP_BinaryTreePacker(area, new ADT_SortRecOnHeight()));
                 magazine.add(new Strat_ORP_BinaryTreePacker(area, new ADT_SortRecOnWidth()));
 //                magazine.add(new Strat_ORP_BinaryTreePacker(area, new ADT_SortRecRandom())); // WARNING: Using this might result in non-deterministic behaviour.

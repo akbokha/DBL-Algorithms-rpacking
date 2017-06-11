@@ -11,7 +11,7 @@ public class Strat_ORP_BTP_SmartNodes extends Strat_ORP_BinaryTreePacker {
     }
     
     public Strat_ORP_BTP_SmartNodes(ADT_Area area, Comparator<ADT_Rectangle> version) { // for other sorting methods
-        super(area);
+        super(area, version);
         smartNodeInit();
     }
     
