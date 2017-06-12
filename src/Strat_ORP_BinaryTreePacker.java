@@ -5,6 +5,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 
 /**
  * This greedy algorithm places a new rectangle next to another top-left or
@@ -47,12 +48,12 @@ public class Strat_ORP_BinaryTreePacker extends Strat_AbstractStrat {
         super(area);
         this.version = version;
         sortedRectangles = this.area.getRectangles().clone();
-        if (version != ADT_SortRecRandom) {
+        if (version.isInstance(ADT_SortRecRandom)) {
              Arrays.sort(sortedRectangles, version); // sort as specified
         } else { // sort random
             List<ADT_Rectangle> rectangleList = Arrays.asList(sortedRectangles);
-            Collections.shuffle(rectangleList, rnd);
-            sortedRectangles = list.toArray(rectangleList);
+            Collections.shuffle(rectangleList);
+            rectangleList.toArray(sortedRectangles);
         }
         this.binaryTree = new BinaryTree();
         fixedHeight = this.area.getHeight() != -1;
