@@ -1,9 +1,11 @@
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 
 /**
  * This greedy algorithm places a new rectangle next to another top-left or
@@ -14,7 +16,7 @@ import java.util.Iterator;
 public class Strat_ORP_BinaryTreePacker extends Strat_AbstractStrat {
     static final int NOTSET = -2;
     
-    BinaryTree binaryTree;
+    protected BinaryTree binaryTree;
     int recIndex; // the ith rectangle that is currently being placed
     int heightResult = 0;
 
@@ -46,7 +48,13 @@ public class Strat_ORP_BinaryTreePacker extends Strat_AbstractStrat {
         super(area);
         this.version = version;
         sortedRectangles = this.area.getRectangles().clone();
-        Arrays.sort(sortedRectangles, version); // sort on width
+        if (version != null) {
+             Arrays.sort(sortedRectangles, version); // sort as specified
+        } else { // sort random
+            List<ADT_Rectangle> rectangleList = Arrays.asList(sortedRectangles);
+            Collections.shuffle(rectangleList);
+            rectangleList.toArray(sortedRectangles);
+        }
         this.binaryTree = new BinaryTree();
         fixedHeight = this.area.getHeight() != -1;
         if (fixedHeight) {
@@ -182,7 +190,7 @@ public class Strat_ORP_BinaryTreePacker extends Strat_AbstractStrat {
      * Determines if node is a better location for rec. 
      * A node with paste 4 is always the best (if multiple are available, choose
      * the bottom-leftmost). Otherwise, select the node sorted lexicographically
-     * by leastArea, paste
+     * by leastArea, paste and lowest (x,y)
      * @param node
      * @param rec
      * @return if node is a better choice for rec than bestNode
@@ -190,19 +198,34 @@ public class Strat_ORP_BinaryTreePacker extends Strat_AbstractStrat {
     private boolean isLocationBetter(ADT_Node node, ADT_Rectangle rec){
         // check if placement of rectangle @ node results in overlap
         if (isValidPlacement(node, rec)) {
-            // if greatest paste == 4
-            /*
-            if (greatestPaste == 4){ // there is already a node that has the best checkable result for this re 
-                return false;
-            }*/
             int paste = computePaste(node, rec);
+            
+            // CASE: paste = 4
             if (paste == 4){
-                greatestPaste = 4;
-                bestNode = node;
-                // area remains the same
-                return true;
+                if(greatestPaste == 4){
+                    // Determine best by position
+                    if(node.point.x<bestNode.point.x || 
+                            (node.point.x==bestNode.point.x && 
+                            node.point.y<bestNode.point.y)){ 
+                        // Replace bestNode
+                        greatestPaste = 4;
+                        bestNode = node;
+                        // area remains the same
+                        return true;
+                    }
+                }else{
+                    // Replace bestNode
+                    greatestPaste = 4;
+                    bestNode = node;
+                    // area remains the same
+                    return true;
+                }
+                return false;
             }
+            
             int resulting_area = computeResultingArea(node, rec);
+            
+            // CASE: added area is less
             if (resulting_area < leastArea) { // better resulting area than current best node
                 greatestPaste = paste;
                 leastArea = resulting_area;
@@ -210,11 +233,25 @@ public class Strat_ORP_BinaryTreePacker extends Strat_AbstractStrat {
                 return true;
             }
           
+            // CASE: added area is equal
             if(resulting_area == leastArea){ // same resulting area as current best node
+                // Choose by paste
                 if (paste > greatestPaste){ // if the placement is better
                     greatestPaste = paste;
                     bestNode = node;
                     return true;
+                }
+                if (paste == greatestPaste){
+                    // Choose by location
+                    if(node.point.x<bestNode.point.x || 
+                            (node.point.x==bestNode.point.x && 
+                            node.point.y<bestNode.point.y)){ 
+                        // Replace bestNode
+                        greatestPaste = paste;
+                        bestNode = node;
+                        leastArea = resulting_area;
+                        return true;
+                    }
                 }
             }   
         }
@@ -249,7 +286,7 @@ public class Strat_ORP_BinaryTreePacker extends Strat_AbstractStrat {
     }
     
     // compute number of sides that are occupied by a rectangle
-    private int computePaste (ADT_Node node, ADT_Rectangle rec) {
+    protected int computePaste (ADT_Node node, ADT_Rectangle rec) {
         int paste = 0;
         int x = node.point.x;
         int y = node.point.y;
@@ -257,14 +294,14 @@ public class Strat_ORP_BinaryTreePacker extends Strat_AbstractStrat {
         int y_rec_topLeft = node.point.y + rec.getHeight();
         // check left side of possible placement rectangle
         for (int i = y; i <= y_rec_topLeft; i++) {
-            if (isRectangleAt(x-1, i, recIndex)) {
+            if (isRectangleAt((x - 1), i, recIndex)) {
                 paste++;
                 break;
             } 
         }
         // check bottom side of possible placement rectangle
         for (int i = x; i <= x_rec_bottomRight; i++) {
-            if (isRectangleAt(i, y-1, recIndex)) {
+            if (isRectangleAt(i, (y - 1), recIndex)) {
                 paste++;
                 break;
             } 
@@ -332,7 +369,7 @@ public class Strat_ORP_BinaryTreePacker extends Strat_AbstractStrat {
      * @pre x and y of rec have to be set
      * @param rec 
      */
-    private void checkNodes(ADT_Rectangle rec) {
+    public void checkNodes(ADT_Rectangle rec) {
         // Check left edge of rec
         HashSet<ADT_Node> x_collection = binaryTree.points.get(rec.getX());
         ArrayList<Integer> checkIfEmpty = new ArrayList<>(); // to track x coordinates of nodes that are removed
@@ -370,9 +407,9 @@ public class Strat_ORP_BinaryTreePacker extends Strat_AbstractStrat {
     }
     
     
-    private final class BinaryTree {
+    protected final class BinaryTree {
         ADT_Node root; 
-        private HashMap<Integer, HashSet<ADT_Node>> points;
+        protected HashMap<Integer, HashSet<ADT_Node>> points;
         
         public BinaryTree() {
             root = new ADT_Node(0, 0);

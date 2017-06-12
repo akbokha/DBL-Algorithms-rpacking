@@ -4,13 +4,14 @@
  */
 
 public class PackingSolver {
-
+    private static long curTime;
+    
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) throws Exception {
-        long curTime = System.currentTimeMillis(); // to check running time
-
+        curTime = System.currentTimeMillis(); // to check running time
+        
         Input_Scanner input = null;
         boolean graphical = false;
 
@@ -69,6 +70,13 @@ public class PackingSolver {
         
         long endTime = System.currentTimeMillis(); // end time
         System.err.println((endTime - curTime) + "ms");
+    }
+    
+    /**
+     * Returns time at which process started.
+     */
+    public static long getStartTime(){
+        return curTime;
     }
     
 }

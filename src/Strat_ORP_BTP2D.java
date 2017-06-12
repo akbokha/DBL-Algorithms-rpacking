@@ -8,9 +8,8 @@ import java.util.Comparator;
  */
 public class Strat_ORP_BTP2D extends Strat_ORP_BinaryTreePacker {
     // Settings for BitSet
-    static final int INITIALWIDTH = 10000;
-    static final int INITIALHEIGHT = 10000;
-    static final double UPDATEFACTOR = 1.2;
+    static final int INITIALWIDTH = 1000;
+    static final int INITIALHEIGHT = 1000;
     
     int bitSetHeight;
     int bitSetWidth;
@@ -48,24 +47,37 @@ public class Strat_ORP_BTP2D extends Strat_ORP_BinaryTreePacker {
      * Copies old BitSet and enlarges current
      */
     private void updateBitSet(){
+        /*
+        Does the following mapping:
+        (0, 10]% -> 10
+        (10-20]% -> 9
+        ...
+        (90-100)% -> 1
+        */
+        int enlarge = (int)(10-(recIndex/1000)) + 1;
         int oldHeight = bitSetHeight;
         int oldWidth = bitSetWidth;
-        
-        /*
-        TODO
-        Create better method to determine new size of BitSet
-        */
-        
+        ADT_Rectangle rec = sortedRectangles[recIndex];
+
         // create new bitset
         if(fixedHeight){
-            double enlarge = UPDATEFACTOR*10000/recIndex;
-            // BitSetHeight has already been set
-            bitSetWidth *= enlarge;
+            bitSetWidth -= widthFits()*enlarge;
+            // Make sure we stay within integer bounds
+            if(bitSetHeight*bitSetWidth < 0) bitSetWidth = oldWidth-widthFits();
         }else{
-            double enlarge = UPDATEFACTOR*10000/recIndex;
-            bitSetHeight *= enlarge;
-            bitSetWidth *= enlarge;
+            if(widthFits()<0){ // If we ran out of width
+                bitSetWidth -= widthFits()*enlarge;
+            }
+            if(heightFits()<0){ // If we ran out of height
+                bitSetHeight -= heightFits()*enlarge;
+            }
+            // Make sure we stay within integer bounds
+            if(bitSetHeight*bitSetWidth < 0){
+                if(widthFits()<0) bitSetHeight = oldHeight - heightFits();
+                if(heightFits()<0) bitSetWidth = oldWidth - widthFits();
+            }
         }
+        
         BitSet newSet = new BitSet(bitSetHeight*bitSetWidth);
         
         // copy all data
@@ -74,6 +86,26 @@ public class Strat_ORP_BTP2D extends Strat_ORP_BinaryTreePacker {
                 newSet.set(y*bitSetWidth+x, array2d.get(y*oldWidth+x));
             }
         }
+        
+        array2d = newSet;
+    }
+    
+    /**
+     * Auxiliary method for updateBitSet.
+     * Returns the lacking size in width to fit latest rectangle.
+     */
+    private int widthFits(){
+        ADT_Rectangle rec = sortedRectangles[recIndex];
+        return bitSetWidth - (rec.getX()+rec.getWidth());
+    }
+    
+    /**
+     * Auxiliary method for updateBitSet.
+     * Returns the lacking size in width to fit latest rectangle.
+     */
+    private int heightFits(){
+        ADT_Rectangle rec = sortedRectangles[recIndex];
+        return bitSetHeight - (rec.getY()+rec.getHeight());
     }
     
     private boolean getBitSet(int x, int y){
@@ -81,10 +113,10 @@ public class Strat_ORP_BTP2D extends Strat_ORP_BinaryTreePacker {
         assert x<bitSetWidth && y<bitSetHeight;
         return array2d.get(y*bitSetWidth+x);
     }
-    
+     
     private void setBitSet(int x, int y){
         assert x>=0 && y>=0;
-        if(x>=bitSetWidth || y>=bitSetHeight) throw new IllegalArgumentException("SET - Too large x,y");
+        if(x>=bitSetWidth || y>=bitSetHeight) updateBitSet();
         array2d.set(y*bitSetWidth+x);
     }
     
@@ -105,12 +137,7 @@ public class Strat_ORP_BTP2D extends Strat_ORP_BinaryTreePacker {
     @Override
     public void placeRectangle(ADT_Rectangle rec){
         super.placeRectangle(rec);
-        try { // TODO do not use 
-            setBitRec(rec);
-        }catch(IllegalArgumentException e){
-            System.err.println("Enlarging BitSet");
-            updateBitSet();
-        }
+        setBitRec(rec);
     }
     
     @Override

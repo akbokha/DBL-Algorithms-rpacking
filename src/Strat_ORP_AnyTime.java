@@ -6,6 +6,8 @@ public class Strat_ORP_AnyTime extends Strat_AbstractStrat {
     private ADT_Area bestResult;
     DataMining data;
 
+    final int TIME_LIMIT_MS = 270000; // Time from start when to stop algorithm
+
     Strat_ORP_AnyTime(ADT_Area area) {
         super(area);
     }
@@ -35,6 +37,31 @@ public class Strat_ORP_AnyTime extends Strat_AbstractStrat {
 
     @Override
     public ADT_Area compute() {
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                bestResult = computeLoop();
+            }
+        });
+        thread.start();
+
+        long msToWait = TIME_LIMIT_MS-(System.currentTimeMillis() - PackingSolver.getStartTime());
+
+        try {
+            thread.join(msToWait);
+            if(thread.isAlive()) {
+                thread.interrupt();
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        finally {
+            return bestResult;
+        }
+    }
+
+    public ADT_Area computeLoop() {
+
         int rectanglesArea = area.getTotalAreaRectangles();
 
         //Used to initialize an average starting width and height
