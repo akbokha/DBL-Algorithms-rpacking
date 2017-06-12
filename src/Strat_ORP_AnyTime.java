@@ -22,7 +22,7 @@ public class Strat_ORP_AnyTime extends Strat_AbstractStrat {
         
         /*new Strat_BT_PrunerEmptySpace(), new Strat_BT_Pruner_WS2(), new Strat_BT_PrunerPerfectRectangle(), new Strat_BT_Pruner_NarrowEmptyStrips()*/
         pruners = new Strat_BT_PrunerInterface[]{
-            new PrunerDataMining(new Strat_BT_PrunerPerfectRectangle(), data.dataSet)
+            new PrunerDataMining(new Strat_BT_Pruner_NarrowEmptyStrips(), data.dataSet)
         };
         
         bestResult = previousResult;
@@ -94,7 +94,7 @@ public class Strat_ORP_AnyTime extends Strat_AbstractStrat {
         bestResult.sortAs(area.getRectangles()); // Sort the area in the same manner as it originally was.
         
         CSV_Parser parser = new CSV_Parser();
-        parser.parse(".\\", data);
+        parser.parse(".\\" + area.getRectangles().length + "_h" + area.getHeight() + "_r" + area.canFlip(), data);
 
         return bestResult;
     }

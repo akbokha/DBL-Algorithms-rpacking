@@ -146,19 +146,19 @@ class Strat_CP_BT extends Strat_BT_Template {
                 x = 0;
                 
                 y++;
+            }
+            
+            // Check if the y-coordinate is still a valid starting coordinate
+            if (y + rectangle.getHeight() > maxY) {
 
-                // Check if the y-coordinate is still a valid starting coordinate
-                if (y + rectangle.getHeight() > maxY) {
+                // Rotate if the rectangle can flip.
+                if (rectangle.canFlip() && rectangle.getFlipped() == initialFlipped[index]) {
 
-                    // Rotate if the rectangle can flip.
-                    if (rectangle.canFlip() && rectangle.getFlipped() == initialFlipped[index]) {
+                    rectangle.toggleFlipped();
 
-                        rectangle.toggleFlipped();
-
-                        return findNextPosition(rectangle, 0, 0);
-                    } else {
-                        return null;
-                    }
+                    return findNextPosition(rectangle, 0, 0);
+                } else {
+                    return null;
                 }
             }
             
