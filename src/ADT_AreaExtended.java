@@ -315,7 +315,13 @@ public class ADT_AreaExtended extends ADT_Area implements Cloneable {
         if(toBePlacedRectangles.length == 0) return new int[]{0};
         int[] vals;
         if(horizontal) {
-            vals = new int[toBePlacedRectangles[0].getWidth()+1];
+            int maxWidth = 0;
+            
+            for(ADT_Rectangle rec : rectangles) {
+                if(maxWidth < rec.getWidth()) maxWidth = rec.getWidth();
+            }
+            
+            vals = new int[maxWidth + 1];
             for(ADT_Rectangle rec : toBePlacedRectangles) {
                 vals[rec.getWidth()] = rec.getHeight();
             }
@@ -323,7 +329,7 @@ public class ADT_AreaExtended extends ADT_Area implements Cloneable {
             int maxHeight = 0;
             
             for(ADT_Rectangle rec : rectangles) {
-                if(maxHeight < height) maxHeight = height;
+                if(maxHeight < rec.getHeight()) maxHeight = rec.getHeight();
             }
             
             vals = new int[maxHeight+1];
