@@ -25,7 +25,7 @@ public class Strat_ORP_Repeater extends Strat_AbstractStrat {
         int leastArea = Integer.MAX_VALUE;
         while(System.currentTimeMillis()-startTime < timeLimit && 
                 leastArea > desiredArea){
-            strategy = new Strat_ORP_BTP2D(area.clone(), new ADT_SortRecRandom());
+            strategy = new Strat_ORP_BTP2D(area.clone(), null);
             System.err.println("Repeater result: " + area + " with " + strategy);            
             ADT_Area result = strategy.compute();
             int area = result.getArea();
