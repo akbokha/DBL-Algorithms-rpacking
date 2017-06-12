@@ -48,7 +48,7 @@ public class Strat_ORP_BinaryTreePacker extends Strat_AbstractStrat {
         super(area);
         this.version = version;
         sortedRectangles = this.area.getRectangles().clone();
-        if (version.isInstance(ADT_SortRecRandom)) {
+        if (version != null) {
              Arrays.sort(sortedRectangles, version); // sort as specified
         } else { // sort random
             List<ADT_Rectangle> rectangleList = Arrays.asList(sortedRectangles);
