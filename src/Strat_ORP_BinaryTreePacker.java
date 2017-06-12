@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -46,7 +47,13 @@ public class Strat_ORP_BinaryTreePacker extends Strat_AbstractStrat {
         super(area);
         this.version = version;
         sortedRectangles = this.area.getRectangles().clone();
-        Arrays.sort(sortedRectangles, version); // sort as specified
+        if (version != ADT_SortRecRandom) {
+             Arrays.sort(sortedRectangles, version); // sort as specified
+        } else { // sort random
+            List<ADT_Rectangle> rectangleList = Arrays.asList(sortedRectangles);
+            Collections.shuffle(rectangleList, rnd);
+            sortedRectangles = list.toArray(rectangleList);
+        }
         this.binaryTree = new BinaryTree();
         fixedHeight = this.area.getHeight() != -1;
         if (fixedHeight) {
