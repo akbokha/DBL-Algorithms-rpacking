@@ -34,7 +34,7 @@ public class Strat_BT_PrunerPerfectRectangle implements Strat_BT_PrunerInterface
         //Set a possible y coordinate for the open space rectangle
         // from the lower border of the last rectangle to the nearest lowest rectangle or border
         while(possibleY > minY && area.isEmptyAt(x, possibleY)) possibleY--;
-        //Check if the the space given by (x,y) -> (maxX, possibleY -1) is empty
+        //Check if the the space given by (x+1,y) -> (maxX, possibleY -1) is empty
         for(x = last.getX()+1; x <= maxX; x++) {
             for(y = last.getY() - 1; y > possibleY; y--) {
                 if(!area.isEmptyAt(x, y)) {
@@ -80,7 +80,7 @@ public class Strat_BT_PrunerPerfectRectangle implements Strat_BT_PrunerInterface
         //Set a possible y coordinate for the open space rectangle
         // from the left border of the last rectangle to the nearest left rectangle or border
         while(possibleX > minX && area.isEmptyAt(possibleX, y)) possibleX--;
-        //Check if the the space given by (x,y) -> (possibleX - 1, possibleY -1) is empty
+        //Check if the the space given by (x,y+1) -> (possibleX - 1, possibleY - 1) is empty
         for(x = last.getX() - 1; x > possibleX; x--) {
             for(y = last.getY()+1; y <= maxY; y++) {
                 if(!area.isEmptyAt(x, y)) {
