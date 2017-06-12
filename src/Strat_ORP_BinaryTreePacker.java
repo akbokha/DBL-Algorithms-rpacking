@@ -14,7 +14,7 @@ import java.util.Iterator;
 public class Strat_ORP_BinaryTreePacker extends Strat_AbstractStrat {
     static final int NOTSET = -2;
     
-    BinaryTree binaryTree;
+    protected BinaryTree binaryTree;
     int recIndex; // the ith rectangle that is currently being placed
     int heightResult = 0;
 
@@ -278,7 +278,7 @@ public class Strat_ORP_BinaryTreePacker extends Strat_AbstractStrat {
     }
     
     // compute number of sides that are occupied by a rectangle
-    private int computePaste (ADT_Node node, ADT_Rectangle rec) {
+    protected int computePaste (ADT_Node node, ADT_Rectangle rec) {
         int paste = 0;
         int x = node.point.x;
         int y = node.point.y;
@@ -286,14 +286,14 @@ public class Strat_ORP_BinaryTreePacker extends Strat_AbstractStrat {
         int y_rec_topLeft = node.point.y + rec.getHeight();
         // check left side of possible placement rectangle
         for (int i = y; i <= y_rec_topLeft; i++) {
-            if (isRectangleAt(x-1, i, recIndex)) {
+            if (isRectangleAt((x - 1), i, recIndex)) {
                 paste++;
                 break;
             } 
         }
         // check bottom side of possible placement rectangle
         for (int i = x; i <= x_rec_bottomRight; i++) {
-            if (isRectangleAt(i, y-1, recIndex)) {
+            if (isRectangleAt(i, (y - 1), recIndex)) {
                 paste++;
                 break;
             } 
@@ -361,7 +361,7 @@ public class Strat_ORP_BinaryTreePacker extends Strat_AbstractStrat {
      * @pre x and y of rec have to be set
      * @param rec 
      */
-    private void checkNodes(ADT_Rectangle rec) {
+    public void checkNodes(ADT_Rectangle rec) {
         // Check left edge of rec
         HashSet<ADT_Node> x_collection = binaryTree.points.get(rec.getX());
         ArrayList<Integer> checkIfEmpty = new ArrayList<>(); // to track x coordinates of nodes that are removed
@@ -399,9 +399,9 @@ public class Strat_ORP_BinaryTreePacker extends Strat_AbstractStrat {
     }
     
     
-    private final class BinaryTree {
+    protected final class BinaryTree {
         ADT_Node root; 
-        private HashMap<Integer, HashSet<ADT_Node>> points;
+        protected HashMap<Integer, HashSet<ADT_Node>> points;
         
         public BinaryTree() {
             root = new ADT_Node(0, 0);
