@@ -70,4 +70,42 @@ public class Strat_ORP_BTP_SmartNodes extends Strat_ORP_BinaryTreePacker {
         binaryTree.points.get(bestNode.point.x).remove(bestNode);
         checkNodes(rec);
     }  
+    
+    @Override
+    protected int computePaste (ADT_Node node, ADT_Rectangle rec) {
+        int paste = 0;
+        int x = node.point.x;
+        int y = node.point.y;
+        int x_rec_bottomRight = node.point.x + rec.getWidth();
+        int y_rec_topLeft = node.point.y + rec.getHeight();
+        // check left side of possible placement rectangle
+        for (int i = y; i <= y_rec_topLeft; i++) {
+            if (isRectangleAt((x - 1), i, recIndex)) {
+                paste++;
+                break;
+            } 
+        }
+        // check bottom side of possible placement rectangle
+        for (int i = x; i <= x_rec_bottomRight; i++) {
+            if (isRectangleAt(i, (y - 1), recIndex)) {
+                paste++;
+                break;
+            } 
+        }
+        // check right side of possible placement rectangle
+        for (int i = y; i <= y_rec_topLeft; i++) {
+            if (isRectangleAt(x_rec_bottomRight, i, recIndex)) {
+                paste++;
+                break;
+            } 
+        }
+        // check top side of possible placement rectangle
+        for (int i = x; i <= x_rec_bottomRight; i++) {
+            if (isRectangleAt(i, y_rec_topLeft, recIndex)) {
+                paste++;
+                break;
+            } 
+        }
+        return paste;
+    }
 }

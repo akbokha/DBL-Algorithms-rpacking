@@ -278,7 +278,7 @@ public class Strat_ORP_BinaryTreePacker extends Strat_AbstractStrat {
     }
     
     // compute number of sides that are occupied by a rectangle
-    private int computePaste (ADT_Node node, ADT_Rectangle rec) {
+    protected int computePaste (ADT_Node node, ADT_Rectangle rec) {
         int paste = 0;
         int x = node.point.x;
         int y = node.point.y;
@@ -286,14 +286,14 @@ public class Strat_ORP_BinaryTreePacker extends Strat_AbstractStrat {
         int y_rec_topLeft = node.point.y + rec.getHeight();
         // check left side of possible placement rectangle
         for (int i = y; i <= y_rec_topLeft; i++) {
-            if (isRectangleAt(x-1, i, recIndex)) {
+            if (isRectangleAt((x - 1), i, recIndex)) {
                 paste++;
                 break;
             } 
         }
         // check bottom side of possible placement rectangle
         for (int i = x; i <= x_rec_bottomRight; i++) {
-            if (isRectangleAt(i, y-1, recIndex)) {
+            if (isRectangleAt(i, (y - 1), recIndex)) {
                 paste++;
                 break;
             } 
@@ -392,7 +392,7 @@ public class Strat_ORP_BinaryTreePacker extends Strat_AbstractStrat {
         }
         // check if there are empty collections (and remove them)
         for (Integer i : checkIfEmpty) {
-            if (binaryTree.points.get(i).isEmpty()) {
+            if (binaryTree.points.get(i).isEmpty() || binaryTree.points.get(i) == null) {
                 binaryTree.points.remove(i);
             }
         }
