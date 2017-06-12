@@ -86,7 +86,15 @@ class Strat_CP_BT extends Strat_BT_Template {
         ADT_Rectangle rectangle = rectangles[++index];
         
         int x = 0;
-        int y = 0;
+        int y = 0;        
+                
+        if(index > 0) {
+            ADT_Rectangle previousRectangle = rectangles[index-1];
+            if((rectangle.compareTo(previousRectangle) == 0)) {
+                x = previousRectangle.getX() + previousRectangle.getWidth();
+                y = previousRectangle.getY();
+            }
+        }
 
         if (rectangle.getHeight() > areaEx.getHeight()) {
             rectangle.toggleFlipped();
@@ -136,21 +144,20 @@ class Strat_CP_BT extends Strat_BT_Template {
             if (x + rectangle.getWidth() > maxX) {
                 // Reset x, make distinction between the first rectangle and all others.
                 x = 0;
-                
                 y++;
+            }
+            
+            // Check if the y-coordinate is still a valid starting coordinate
+            if (y + rectangle.getHeight() > maxY) {
 
-                // Check if the y-coordinate is still a valid starting coordinate
-                if (y + rectangle.getHeight() > maxY) {
+                // Rotate if the rectangle can flip.
+                if (rectangle.canFlip() && rectangle.getFlipped() == initialFlipped[index]) {
 
-                    // Rotate if the rectangle can flip.
-                    if (rectangle.canFlip() && rectangle.getFlipped() == initialFlipped[index]) {
+                    rectangle.toggleFlipped();
 
-                        rectangle.toggleFlipped();
-
-                        return findNextPosition(rectangle, 0, 0);
-                    } else {
-                        return null;
-                    }
+                    return findNextPosition(rectangle, 0, 0);
+                } else {
+                    return null;
                 }
             }
             
