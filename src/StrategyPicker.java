@@ -30,7 +30,7 @@ public class StrategyPicker {
             magazine.add(new Strat_ORP_BinaryTreePacker(area, new ADT_SortRecOnHeight()));
             magazine.add(new Strat_ORP_BinaryTreePacker(area, new ADT_SortRecOnWidth()));
             magazine.add(new Strat_ORP_BTP_SmartNodes(area));
-//            magazine.add(new Strat_ORP_BTP_SmartNodes(area, new ADT_SortRecOnHeight()));
+            magazine.add(new Strat_ORP_BTP_SmartNodes(area, new ADT_SortRecOnHeight()));
             magazine.add(new Strat_ORP_BTP_SmartNodes(area, new ADT_SortRecOnWidth()));
 //            magazine.add(new Strat_ORP_BinaryTreePacker(area, new ADT_SortRecRandom())); // WARNING: Using this might result in non-deterministic behaviour.
         } else {
