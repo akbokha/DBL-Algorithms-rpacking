@@ -34,34 +34,13 @@ public class Strat_ORP_AnyTime extends Strat_AbstractStrat {
         ADT_Vector dimensions = previousResult.getDimensions();
         bestArea = dimensions.x * dimensions.y;
     }
-
+    
+    public Strat_BT_PrunerInterface[] getPruners() {
+        return this.pruners;
+    }
+    
     @Override
     public ADT_Area compute() {
-//        Thread thread = new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-                bestResult = computeLoop();
-//            }
-//        });
-//        thread.start();
-//
-//        long msToWait = TIME_LIMIT_MS-(System.currentTimeMillis() - PackingSolver.getStartTime());
-//
-//        try {
-//            thread.join(msToWait);
-//            if(thread.isAlive()) {
-//                thread.interrupt();
-//            }
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        }
-//        finally {
-            return bestResult;
-//        }
-    }
-
-    public ADT_Area computeLoop() {
-
         long rectanglesArea = area.getTotalAreaRectangles();
 
         //Used to initialize an average starting width and height
@@ -81,16 +60,16 @@ public class Strat_ORP_AnyTime extends Strat_AbstractStrat {
                 }
 
                 int areaSize = width * height;
-                System.err.print("W:" + width + "\tH:" + height + "\tArea: " + areaSize + "\tFR: " + ((float) rectanglesArea / (float) areaSize) + "\t");
+//                System.err.print("W:" + width + "\tH:" + height + "\tArea: " + areaSize + "\tFR: " + ((float) rectanglesArea / (float) areaSize) + "\t");
 
                 //Get a solution with this width and height
                 ADT_AreaExtended newArea = createNewSolution(width, height);
 
-                if (newArea == null) {
-                    System.err.println("Failed");
-                } else {
-                    System.err.println("Success");
-                }
+//                if (newArea == null) {
+//                    System.err.println("Failed");
+//                } else {
+//                    System.err.println("Success");
+//                }
 
                 //If a solution was set, use it as the new best solution
                 if(newArea != null && newArea.getArea() < bestArea) {
@@ -141,4 +120,13 @@ public class Strat_ORP_AnyTime extends Strat_AbstractStrat {
         return newArea;
     }
     
+    public ADT_Area getArea() {
+        return this.area;
+    }
+
+    @Override
+    public ADT_Area getIntermediateResult() {
+        return bestResult;
+    }
+
 }
