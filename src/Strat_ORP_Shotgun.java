@@ -13,6 +13,12 @@ public class Strat_ORP_Shotgun extends Strat_AbstractStrat {
         ADT_Area bestArea = null;
         int minimumArea = Integer.MAX_VALUE;
         for (Strat_AbstractStrat strategy : strategies) {
+            // Add the best area to the Anytime strategy.
+            if (strategy.getClass().equals(Strat_ORP_AnyTime.class)) {
+                Strat_ORP_AnyTime original = (Strat_ORP_AnyTime) strategy;
+                strategy = new Strat_ORP_AnyTime(original.getArea(), original.getPruners(), bestArea);
+            }
+
             ADT_Area result = strategy.compute();
             int area = result.getArea();
 

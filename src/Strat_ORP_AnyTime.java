@@ -20,11 +20,19 @@ public class Strat_ORP_AnyTime extends Strat_AbstractStrat {
     Strat_ORP_AnyTime(ADT_Area area, Strat_BT_PrunerInterface[] pruners, ADT_Area previousResult) {
         super(area);
 
-        bestResult = previousResult;
+        bestResult = previousResult.clone();
         this.pruners = pruners;
 
         ADT_Vector dimensions = previousResult.getDimensions();
         bestArea = dimensions.x * dimensions.y;
+    }
+
+    public ADT_Area getArea() {
+        return this.area;
+    }
+
+    public Strat_BT_PrunerInterface[] getPruners() {
+        return this.pruners;
     }
 
     @Override
@@ -46,14 +54,12 @@ public class Strat_ORP_AnyTime extends Strat_AbstractStrat {
             }
         } catch (InterruptedException e) {
             e.printStackTrace();
-        }
-        finally {
+        } finally {
             return bestResult;
         }
     }
 
     public ADT_Area computeLoop() {
-
         long rectanglesArea = area.getTotalAreaRectangles();
 
         //Used to initialize an average starting width and height
@@ -129,5 +135,4 @@ public class Strat_ORP_AnyTime extends Strat_AbstractStrat {
         newArea = backtracker.compute();
         return newArea;
     }
-    
 }
