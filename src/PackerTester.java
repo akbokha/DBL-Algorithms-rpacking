@@ -3,7 +3,6 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Random;
 
 /**
@@ -13,8 +12,8 @@ public class PackerTester {
     private static long curTime;
 
     private static final int NUMBER_OF_TESTS = 1;
-    private static final int NUMBER_OF_PERMUTATIONS = 300;
-    private static final int NUMBER_OF_RECTANGLES = 10000;
+    private static final int NUMBER_OF_PERMUTATIONS = 100;
+    private static final int NUMBER_OF_RECTANGLES = 1000;
 
     private Random sortRandom = new Random();
 
@@ -48,7 +47,7 @@ public class PackerTester {
         ADT_Area bestArea = null;
 
         for(int p = 0; p < NUMBER_OF_PERMUTATIONS; p++) {
-            Arrays.sort(area.getRectangles(), (o1, o2) -> sortRandom.nextBoolean() ? -1 : 1);
+            shuffleArray(area.getRectangles());
             long startTime = System.currentTimeMillis();
             ADT_Area result = runTest(area);
 
@@ -65,6 +64,21 @@ public class PackerTester {
             TestRunTuple tuple = calculateTuple(run, p, result, compTime);
             tuples.add(tuple);
         }
+    }
+
+    private void shuffleArray(ADT_Rectangle[] array) {
+            int index;
+            Random random = new Random();
+            for (int i = array.length - 1; i > 0; i--)
+            {
+                index = random.nextInt(i + 1);
+                if (index != i)
+                {
+                    ADT_Rectangle temp = array[index];
+                    array[index] = array[i];
+                    array[i] = temp;
+                }
+            }
     }
 
     private void generateCSV(ArrayList<TestRunTuple> tuples, String path) {
@@ -97,7 +111,7 @@ public class PackerTester {
     }
 
     private ADT_Area runTest(ADT_Area area) {
-        return new Strat_ORP_BTP2D(area,(o1, o2) -> sortRandom.nextInt(area.getCount()) ).compute();
+        return new Strat_ORP_BTP2D(area,new ADT_SortRecOnArea() ).compute();
     }
 
     private ADT_Rectangle[] generateInput() {
