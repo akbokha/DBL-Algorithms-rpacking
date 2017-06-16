@@ -45,7 +45,7 @@ public class StrategyPicker {
 //            Strat_BT_PrunerInterface[] pruners = new Strat_BT_PrunerInterface[]{
 //                    new Strat_BT_PrunerPerfectRectangle(), new Strat_BT_Pruner_NarrowEmptyStrips()
 //            };
-            magazine.add(new Strat_ORP_AnyTime(area, null));
+            magazine.add(new Strat_ORP_AnyTime(area));
         }
 
         // Forge a new shotgun, load it, and hand it over.
