@@ -54,7 +54,7 @@ public class Strat_ORP_AnyTime extends Strat_AbstractStrat {
 
     public ADT_Area computeLoop() {
 
-        int rectanglesArea = area.getTotalAreaRectangles();
+        long rectanglesArea = area.getTotalAreaRectangles();
 
         //Used to initialize an average starting width and height
         ADT_Area horizontalStripResult = new Strat_HorizontalStrip(area.clone()).compute();

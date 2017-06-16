@@ -67,8 +67,8 @@ public class Output_GraphicalOutput extends Output_AbstractOutput {
 
     private void setTitle() {
         // Print fillrate such that it can only be printed out of Momotor (-g)
-        double surface = area.getDimensions().x*area.getDimensions().y;
-        double fillRate = ((double) area.getTotalAreaRectangles() / surface) * 100;
+        long surface = area.getDimensions().x*area.getDimensions().y;
+        double fillRate = (area.getTotalAreaRectangles() / surface) * 100;
         DecimalFormat df = new DecimalFormat("#0.0000");
 
         window.setTitle("Width: " + rectWidth + " Height: " + rectHeight + " Area: " + rectWidth * rectHeight

@@ -386,8 +386,8 @@ public class ADT_AreaExtended extends ADT_Area implements Cloneable {
     }
     
     @Override
-    public int getTotalAreaRectangles(){
-        int total = 0;
+    public long getTotalAreaRectangles(){
+        long total = 0;
         for(ADT_Rectangle rec : rectangles){
             total += rec.getHeight() * rec.getHeight();
         }
