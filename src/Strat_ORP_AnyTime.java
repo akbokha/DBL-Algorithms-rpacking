@@ -5,8 +5,6 @@ public class Strat_ORP_AnyTime extends Strat_AbstractStrat {
     private Strat_BT_PrunerInterface[] pruners;
     private ADT_Area bestResult;
 
-    final int TIME_LIMIT_MS = 270000; // Time from start when to stop algorithm
-
     Strat_ORP_AnyTime(ADT_Area area) {
         super(area);
     }
@@ -20,40 +18,23 @@ public class Strat_ORP_AnyTime extends Strat_AbstractStrat {
     Strat_ORP_AnyTime(ADT_Area area, Strat_BT_PrunerInterface[] pruners, ADT_Area previousResult) {
         super(area);
 
-        bestResult = previousResult;
+        bestResult = previousResult.clone();
         this.pruners = pruners;
 
         ADT_Vector dimensions = previousResult.getDimensions();
         bestArea = dimensions.x * dimensions.y;
     }
 
-    @Override
-    public ADT_Area compute() {
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                bestResult = computeLoop();
-            }
-        });
-        thread.start();
-
-        long msToWait = TIME_LIMIT_MS-(System.currentTimeMillis() - PackingSolver.getStartTime());
-
-        try {
-            thread.join(msToWait);
-            if(thread.isAlive()) {
-                thread.interrupt();
-            }
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        finally {
-            return bestResult;
-        }
+    public ADT_Area getArea() {
+        return this.area;
     }
 
-    public ADT_Area computeLoop() {
+    public Strat_BT_PrunerInterface[] getPruners() {
+        return this.pruners;
+    }
 
+    @Override
+    public ADT_Area compute() {
         long rectanglesArea = area.getTotalAreaRectangles();
 
         //Used to initialize an average starting width and height
@@ -114,7 +95,12 @@ public class Strat_ORP_AnyTime extends Strat_AbstractStrat {
 
         return bestResult;
     }
-    
+
+    @Override
+    public ADT_Area getIntermediateResult() {
+        return bestResult;
+    }
+
     private ADT_AreaExtended createNewSolution(int width, int height) {
         ADT_AreaExtended newArea = area.toExtended(width, height);
         
@@ -129,5 +115,4 @@ public class Strat_ORP_AnyTime extends Strat_AbstractStrat {
         newArea = backtracker.compute();
         return newArea;
     }
-    
 }
