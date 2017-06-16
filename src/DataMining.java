@@ -13,7 +13,7 @@ import java.util.ArrayList;
  */
 public class DataMining {
 
-    ArrayList<Tuple> dataSet;
+    static ArrayList<Tuple> dataSet;
     Strat_BT_PrunerInterface[] pruners;
     
     public DataMining() {

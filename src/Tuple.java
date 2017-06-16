@@ -13,11 +13,22 @@ public class Tuple {
     float frWhenCalled;
     int compTime;
     float expectedFR;
+    int endTimePruner;
+    boolean pruned;
 
     public Tuple(int depth, float frWhenCalled, int compTime, float expectedFR) {
         this.depth = depth;
         this.frWhenCalled = frWhenCalled;
         this.compTime = compTime;
         this.expectedFR = expectedFR;
+    }
+
+    Tuple(int depth, float frWhenCalled, int compTime, float expectedFR, int endTimePruner, boolean pruned) {
+        this.depth = depth;
+        this.frWhenCalled = frWhenCalled;
+        this.compTime = compTime;
+        this.expectedFR = expectedFR;
+        this.endTimePruner = endTimePruner;
+        this.pruned = pruned;
     }
 }

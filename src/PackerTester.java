@@ -12,8 +12,8 @@ import java.util.Random;
 public class PackerTester {
     private static long curTime;
 
-    private static final int NUMBER_OF_TESTS = 10;
-    private static final int STARTING_TEST = 0;
+    private static final int NUMBER_OF_TESTS = 1;
+    private static final int STARTING_TEST = 4;
     private static final int NUMBER_OF_PERMUTATIONS = 1;
     private static final int NUMBER_OF_RECTANGLES = 10;
 

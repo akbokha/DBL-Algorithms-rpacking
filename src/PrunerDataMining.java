@@ -36,6 +36,6 @@ public class PrunerDataMining implements Strat_BT_PrunerInterface{
             Tuple tuple = new Tuple(depth, frWhenCalled, time, expectedFR);
             dataSet.add(tuple);
         }
-        return prune;
+        return false;
     }
 }

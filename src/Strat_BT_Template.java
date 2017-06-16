@@ -42,21 +42,23 @@ abstract public class Strat_BT_Template extends Strat_AbstractStrat {
      * @return a valid solution if it exists, else null.
      */
     private boolean computeBranch() {
-        ADT_Rectangle last = last();
-
-        // Check if this iteration can be pruned.
-        if (reject(last)) {
-            return false;
-        }
-
-        // Check if this is a valid solution.
-        if (accept(last)) {
-            return true;
-        }
-
+        long time = System.nanoTime();
+        int endTimePruner = 0;
+        boolean pruned = false;
         // Dispatch all other calls.
         boolean hasNext = first(); // Select the first branch.
         while (hasNext) {
+            ADT_Rectangle last = last();
+            long timePruner = System.nanoTime();
+            // Check if this iteration can be pruned.
+            pruned = reject(last);
+                
+            endTimePruner = (int)(System.nanoTime()- timePruner);
+
+            // Check if this is a valid solution.
+            if (accept(last)) {
+                return true;
+            }
             // Compute the next result and check if it is valid.
             if (computeBranch()) {
                 return true;
@@ -64,9 +66,11 @@ abstract public class Strat_BT_Template extends Strat_AbstractStrat {
 
             hasNext = next(); // Compute the next branch, if there is one.
         }
-
         revert();
-
+        int endTime = (int)(System.nanoTime()- time);
+        
+        DataMining.dataSet.add(new Tuple(areaEx.getCount()-areaEx.getRectanglesToBePlaced().length, 100f*areaEx.getFillRate(), endTime, 100f*areaEx.getTotalAreaRectangles()/(areaEx.getHeight()*areaEx.getWidth()), endTimePruner, pruned));
+        
         return false;
     }
 
