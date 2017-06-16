@@ -12,9 +12,10 @@ import java.util.Random;
 public class PackerTester {
     private static long curTime;
 
-    private static final int NUMBER_OF_TESTS = 1;
-    private static final int NUMBER_OF_PERMUTATIONS = 300;
-    private static final int NUMBER_OF_RECTANGLES = 10000;
+    private static final int NUMBER_OF_TESTS = 10;
+    private static final int STARTING_TEST = 0;
+    private static final int NUMBER_OF_PERMUTATIONS = 1;
+    private static final int NUMBER_OF_RECTANGLES = 10;
 
     private Random sortRandom = new Random();
 
@@ -31,15 +32,41 @@ public class PackerTester {
 
         for (int i = 0; i < NUMBER_OF_TESTS; i++) {
             ADT_Rectangle[] rects = generateInput();
-
-            makeSingleTest(tuples, rects, true, i);
+            
+//            makeSingleTest(tuples, rects, true, i);
             //makeSingleTest(tuples, rects, false, i);
         }
+        readTests(tuples);
 
-        generateCSV(tuples, ".//test_run_" + NUMBER_OF_RECTANGLES);
+        generateCSV(tuples, ".//test_sortOnDim_run_" + NUMBER_OF_RECTANGLES);
 
         long endTime = System.currentTimeMillis(); // end time
         System.err.println((endTime - curTime) + "ms");
+    }
+    
+    private void readTests(ArrayList<TestRunTuple> tuples) {
+        for(int i = STARTING_TEST; i < NUMBER_OF_TESTS + STARTING_TEST; i++) {
+            String file = ".\\test\\custom\\10_0_hf_rn_min1_max10_" + Integer.toString(i) + ".txt";
+//            file = ".\\test\\10_01_h11_rn.txt";
+            
+            Input_Scanner input = new Input_File(file);
+            
+            ADT_Area area = input.read();
+            
+            StrategyPicker.area = area;
+            
+            long time = System.currentTimeMillis();
+            
+            ADT_Area result = StrategyPicker.pickStrategy().compute();
+            
+            int endTime = (int)(System.currentTimeMillis() - time);
+            
+            TestRunTuple tuple = calculateTuple(i, 0, result, endTime);
+            tuples.add(tuple);
+            
+            new Output_GraphicalOutput(result).draw();
+            System.err.println("next");
+        }
     }
 
     private void makeSingleTest(ArrayList<TestRunTuple> tuples, ADT_Rectangle[] rects, boolean allowRotation, int run) {
@@ -97,7 +124,7 @@ public class PackerTester {
     }
 
     private ADT_Area runTest(ADT_Area area) {
-        return new Strat_ORP_BTP2D(area,(o1, o2) -> sortRandom.nextInt(area.getCount()) ).compute();
+        return new StrategyPicker(area).pickStrategy().compute();
     }
 
     private ADT_Rectangle[] generateInput() {

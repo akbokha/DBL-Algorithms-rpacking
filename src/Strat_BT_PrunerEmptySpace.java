@@ -12,7 +12,7 @@ public class Strat_BT_PrunerEmptySpace implements Strat_BT_PrunerInterface {
         stripsEmptySpace = area.getEmptySpaceStrips(false);
         stripsRecsTBP = area.getRectangleStrips(false);
         //When both are true, the strips will NOT fit in both ways (horizontal and vertical)
-        return testStrips(stripsEmptySpace, stripsRecsTBP) && horizontalTest;
+        return testStrips(stripsEmptySpace, stripsRecsTBP) || horizontalTest;
     }
     /**
      * Computes if the strips of the to be placed rectangles fit into the strips

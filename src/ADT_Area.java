@@ -306,4 +306,8 @@ public class ADT_Area extends ADT_Rectangle implements Cloneable {
 
         shapes = newOrdering;
     }
+    
+    void sortAs(ADT_Rectangle[] rectangles, Comparator<ADT_Rectangle> com) {
+        Arrays.sort(rectangles, com);
+    }
 }

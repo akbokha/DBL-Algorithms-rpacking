@@ -23,9 +23,9 @@ public class Strat_ORP_AnyTime extends Strat_AbstractStrat {
         data = new DataMining();
         
         /*new Strat_BT_PrunerEmptySpace(), new Strat_BT_Pruner_WS2(), new Strat_BT_PrunerPerfectRectangle(), new Strat_BT_Pruner_NarrowEmptyStrips()*/
-        pruners = new Strat_BT_PrunerInterface[]{
-            new PrunerDataMining(new Strat_BT_Pruner_NarrowEmptyStrips(), data.dataSet)
-        };
+//        pruners = new Strat_BT_PrunerInterface[]{
+//            new PrunerDataMining(new Strat_BT_PrunerPerfectRectangle(), data.dataSet)
+//        };
         
         bestResult = previousResult;
         
@@ -37,27 +37,27 @@ public class Strat_ORP_AnyTime extends Strat_AbstractStrat {
 
     @Override
     public ADT_Area compute() {
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
+//        Thread thread = new Thread(new Runnable() {
+//            @Override
+//            public void run() {
                 bestResult = computeLoop();
-            }
-        });
-        thread.start();
-
-        long msToWait = TIME_LIMIT_MS-(System.currentTimeMillis() - PackingSolver.getStartTime());
-
-        try {
-            thread.join(msToWait);
-            if(thread.isAlive()) {
-                thread.interrupt();
-            }
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        finally {
+//            }
+//        });
+//        thread.start();
+//
+//        long msToWait = TIME_LIMIT_MS-(System.currentTimeMillis() - PackingSolver.getStartTime());
+//
+//        try {
+//            thread.join(msToWait);
+//            if(thread.isAlive()) {
+//                thread.interrupt();
+//            }
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
+//        finally {
             return bestResult;
-        }
+//        }
     }
 
     public ADT_Area computeLoop() {

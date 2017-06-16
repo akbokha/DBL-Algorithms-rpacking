@@ -115,10 +115,10 @@ public class Strat_BT_Pruner_NarrowEmptyStrips implements Strat_BT_PrunerInterfa
         if(stripY+1 == last.getY()) return false; // There is no space
         
         // Check that whole strip is empty
-        for(int i=last.getX()+1; i<last.getX()+last.getWidth(); ++i){
+        for(int i=last.getX()+1; i<last.getX()+last.getWidth(); i++){
             int j;
-            for(j = last.getY()-1; j>stripY; --j){
-                if(!area.isEmptyAt(i, stripY)) return false;
+            for(j = last.getY()-1; j>stripY; j--){
+                if(!area.isEmptyAt(i, j)) return false;
                 // There are points within the strip
             }
             if(area.isEmptyAt(i, stripY)) return false;
@@ -134,9 +134,9 @@ public class Strat_BT_Pruner_NarrowEmptyStrips implements Strat_BT_PrunerInterfa
         while(area.isEmptyAt(stripX, last.getY()) && stripX > 0) stripX--; // Determine width of strip
         if(stripX+1 == last.getX()) return false; // There is no space
         
-        for(int i=last.getY()+1; i<last.getY()+last.getHeight(); ++i){
+        for(int i=last.getY()+1; i<last.getY()+last.getHeight(); i++){
             int j;
-            for(j = last.getX()-1; j>stripX; --j){
+            for(j = last.getX()-1; j>stripX; j--){
                 if(!area.isEmptyAt(j, i)) return false;
                 // There are points within the strip
             }

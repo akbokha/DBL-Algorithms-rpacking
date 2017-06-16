@@ -6,8 +6,8 @@ public class Output_GraphicalOutput extends Output_AbstractOutput {
 
     private int rectWidth;
     private int rectHeight;
-    private int maxWindowWidth = 1500;
-    private int maxWindowHeight = 500;
+    private int maxWindowWidth = 1900;
+    private int maxWindowHeight = 800;
     private int border = 20;
     private float scale;
     private JFrame window;

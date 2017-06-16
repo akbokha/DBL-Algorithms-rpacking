@@ -13,7 +13,7 @@ class Strat_CP_BT extends Strat_BT_Template {
         super(areaEx);
 
         assert this.areaEx.getRectanglesToBePlaced().length == this.areaEx.getCount(); // Check that none of the rectangles are placed.
-
+        
         rectangles = this.areaEx.getRectanglesToBePlaced();
 
         // Only support flipping rectangles if it is required.
@@ -59,7 +59,7 @@ class Strat_CP_BT extends Strat_BT_Template {
     @Override
     protected boolean reject(ADT_Rectangle last) {
         // Consult all pruners but not earlier than depth 6
-        if(index > 0 && index < 9) {
+        if(index > 3 && index < 7) {
             return super.reject(last);
         } else {
             return false;

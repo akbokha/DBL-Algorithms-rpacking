@@ -38,5 +38,4 @@ public class PrunerDataMining implements Strat_BT_PrunerInterface{
         }
         return prune;
     }
-    
 }

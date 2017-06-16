@@ -1,5 +1,4 @@
 import java.util.ArrayList;
-import java.util.Arrays;
 
 /*
  * @todo requires rotate rectangle function
@@ -17,7 +16,7 @@ public class ADT_AreaExtended extends ADT_Area implements Cloneable {
     
     public ADT_AreaExtended(int width, int height, boolean flippable, ADT_Rectangle[] rectangles) {
         super(width, height, flippable, rectangles);
-        Arrays.sort(rectangles);
+        sortAs(rectangles, new ADT_SortOnDimension());
         setDimensions(width, height);
         this.rectangles = rectangles;
         this.placedRectangles = new boolean[rectangles.length];
