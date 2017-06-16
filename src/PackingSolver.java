@@ -5,6 +5,8 @@
 
 public class PackingSolver {
     private static long curTime;
+    private static ADT_Area result;
+    final static private int TIME_LIMIT = 60 * 5 - 15; // Stop 15 seconds early, just to be on the safe side.
     
     /**
      * @param args the command line arguments
@@ -51,10 +53,34 @@ public class PackingSolver {
         StrategyPicker.area = area;
         Strat_AbstractStrat strategy = StrategyPicker.pickStrategy();
 
-        ADT_Area result = strategy.compute();
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                result = strategy.compute();
+            }
+        });
+        thread.start();
+
+        long msToWait = TIME_LIMIT * 1000 - (System.currentTimeMillis() - PackingSolver.getStartTime());
+
+        boolean finished = false;
+        try {
+            thread.join(msToWait);
+
+            finished = thread.isInterrupted();
+            if(! finished) {
+                thread.stop();
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        if (! finished) {
+            result = strategy.getIntermediateResult();
+        }
 
         if (result == null) {
-            System.err.println("strategy computation failed");
+            System.err.println("\nstrategy computation failed");
             return;
         }
 

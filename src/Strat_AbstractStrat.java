@@ -31,4 +31,8 @@ public abstract class Strat_AbstractStrat {
     public String toString() {
         return getClass().toString();
     }
+
+    public ADT_Area getIntermediateResult() {
+        return null;
+    }
 }

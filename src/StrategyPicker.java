@@ -24,6 +24,8 @@ public class StrategyPicker {
         // Ensure we always have some result.
         magazine.add(new Strat_HorizontalStrip(area));
 
+        // @todo add another fast strategy for cases which make the BTP fail.
+
         // Favor the binary tree packer without location tracking for small amounts of rectangles.
         if (count <= 25) {
             magazine.add(new Strat_ORP_BinaryTreePacker(area));

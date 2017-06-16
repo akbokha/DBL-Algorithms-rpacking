@@ -2,6 +2,8 @@ import java.util.ArrayList;
 
 public class Strat_ORP_Shotgun extends Strat_AbstractStrat {
     ArrayList<Strat_AbstractStrat> strategies;
+    private ADT_Area bestArea = null;
+    private Strat_AbstractStrat currentStrategy = null;
 
     public Strat_ORP_Shotgun (ADT_Area area, ArrayList<Strat_AbstractStrat> strategies) {
         super(area);
@@ -10,7 +12,6 @@ public class Strat_ORP_Shotgun extends Strat_AbstractStrat {
     
     @Override
     public ADT_Area compute() {
-        ADT_Area bestArea = null;
         int minimumArea = Integer.MAX_VALUE;
         for (Strat_AbstractStrat strategy : strategies) {
             try {
@@ -20,6 +21,7 @@ public class Strat_ORP_Shotgun extends Strat_AbstractStrat {
                     strategy = new Strat_ORP_AnyTime(original.getArea(), original.getPruners(), bestArea);
                 }
 
+                currentStrategy = strategy;
                 ADT_Area result = strategy.compute();
                 int area = result.getArea();
 
@@ -36,6 +38,20 @@ public class Strat_ORP_Shotgun extends Strat_AbstractStrat {
                 System.err.println("Strategy '" + strategy.getClass() + "' threw an exception:" + e.getMessage());
             }
         }
+
         return bestArea;
-    }   
+    }
+
+    @Override
+    public ADT_Area getIntermediateResult() {
+        if (currentStrategy != null) {
+            ADT_Area currentStrategyBestArea = currentStrategy.getIntermediateResult();
+
+            if (currentStrategyBestArea != null && currentStrategyBestArea.getArea() < bestArea.getArea()) {
+                return currentStrategyBestArea;
+            }
+        }
+
+        return bestArea;
+    }
 }
