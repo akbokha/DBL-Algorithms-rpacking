@@ -75,7 +75,7 @@ public class ADT_AreaExtended extends ADT_Area implements Cloneable {
      * @return 
      */
     boolean isEmptyAt(int x, int y) {
-        assert x >= 0 && y >= 0 && x < width && y < height;
+        assert y >= 0;
 
         int i = getIndex(x, y);
         if(i >= array.length || i < 0) {

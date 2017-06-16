@@ -92,7 +92,7 @@ public class Strat_ORP_AnyTime extends Strat_AbstractStrat {
                     if(area.getHeight() != ADT_Area.INF/* || (height+1) * (width) >= bestResult.getWidth() * bestResult.getHeight()*/) {// but if the height was fixed, no better solution can be found
                         break;
                     }
-                    height += 1;
+                    height++;
                 } else {//If this area is not possible try one larger width
                     width += stepsize;
                     stepsize = 1;
