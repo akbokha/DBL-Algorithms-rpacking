@@ -267,8 +267,8 @@ public class ADT_Area extends ADT_Rectangle implements Cloneable {
      * rectangles in this. This can be used for e.g. pruning
      * @return the area of all the rectangles in this
      */
-    protected int getTotalAreaRectangles() {
-        int totalArea = 0;
+    protected long getTotalAreaRectangles() {
+        long totalArea = 0;
         for(Iterator<ADT_Rectangle> rectangles = getRectangleIterator(); rectangles.hasNext();) {
              ADT_Rectangle rec = rectangles.next();
              totalArea += (rec.getWidth() * rec.getHeight());   

@@ -13,9 +13,10 @@ public class PackerTester {
     private static long curTime;
 
     private static final int NUMBER_OF_TESTS = 1;
-    private static final int STARTING_TEST = 4;
+    private static final int STARTING_TEST = 1;
     private static final int NUMBER_OF_PERMUTATIONS = 1;
     private static final int NUMBER_OF_RECTANGLES = 10;
+    public static DataMining data = new DataMining();
 
     private Random sortRandom = new Random();
 
@@ -47,7 +48,7 @@ public class PackerTester {
     private void readTests(ArrayList<TestRunTuple> tuples) {
         for(int i = STARTING_TEST; i < NUMBER_OF_TESTS + STARTING_TEST; i++) {
             String file = ".\\test\\custom\\10_0_hf_rn_min1_max10_" + Integer.toString(i) + ".txt";
-//            file = ".\\test\\10_01_h11_rn.txt";
+            file = ".\\test\\10_01_h11_rn.txt";
             
             Input_Scanner input = new Input_File(file);
             
@@ -57,12 +58,12 @@ public class PackerTester {
             
             long time = System.currentTimeMillis();
             
-            ADT_Area result = StrategyPicker.pickStrategy().compute();
+            ADT_Area result = runTest(area);
             
             int endTime = (int)(System.currentTimeMillis() - time);
             
-            TestRunTuple tuple = calculateTuple(i, 0, result, endTime);
-            tuples.add(tuple);
+//            TestRunTuple tuple = calculateTuple(i, 0, result, endTime);
+//            tuples.add(tuple);
             
             new Output_GraphicalOutput(result).draw();
             System.err.println("next");
@@ -124,7 +125,14 @@ public class PackerTester {
     }
 
     private ADT_Area runTest(ADT_Area area) {
-        return new StrategyPicker(area).pickStrategy().compute();
+        
+        
+        
+        Strat_BT_PrunerInterface[] pruners = new Strat_BT_PrunerInterface[]{
+            /*new Strat_BT_PrunerPerfectRectangle()/*, new Strat_BT_Pruner_NarrowEmptyStrips()*/
+        };
+        
+        return new Strat_ORP_AnyTime(area, pruners).compute();
     }
 
     private ADT_Rectangle[] generateInput() {

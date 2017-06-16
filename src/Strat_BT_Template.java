@@ -69,7 +69,7 @@ abstract public class Strat_BT_Template extends Strat_AbstractStrat {
         revert();
         int endTime = (int)(System.nanoTime()- time);
         
-        DataMining.dataSet.add(new Tuple(areaEx.getCount()-areaEx.getRectanglesToBePlaced().length, 100f*areaEx.getFillRate(), endTime, 100f*areaEx.getTotalAreaRectangles()/(areaEx.getHeight()*areaEx.getWidth()), endTimePruner, pruned));
+        PackerTester.data.dataSet.add(new Tuple(areaEx.getCount()-areaEx.getRectanglesToBePlaced().length, 100f*areaEx.getFillRate(), endTime, 100f*areaEx.getExpectedFillRate(), endTimePruner, pruned));
         
         return false;
     }

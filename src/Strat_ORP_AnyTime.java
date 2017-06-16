@@ -4,7 +4,7 @@ public class Strat_ORP_AnyTime extends Strat_AbstractStrat {
     private int bestArea = Integer.MAX_VALUE;
     private Strat_BT_PrunerInterface[] pruners;
     private ADT_Area bestResult;
-    DataMining data;
+//    DataMining data;
 
     final int TIME_LIMIT_MS = 270000; // Time from start when to stop algorithm
 
@@ -20,7 +20,7 @@ public class Strat_ORP_AnyTime extends Strat_AbstractStrat {
 
     Strat_ORP_AnyTime(ADT_Area area, Strat_BT_PrunerInterface[] pruners, ADT_Area previousResult) {
         super(area);
-        data = new DataMining();
+//        data = new DataMining();
         
         /*new Strat_BT_PrunerEmptySpace(), new Strat_BT_Pruner_WS2(), new Strat_BT_PrunerPerfectRectangle(), new Strat_BT_Pruner_NarrowEmptyStrips()*/
 //        pruners = new Strat_BT_PrunerInterface[]{
@@ -62,7 +62,7 @@ public class Strat_ORP_AnyTime extends Strat_AbstractStrat {
 
     public ADT_Area computeLoop() {
 
-        int rectanglesArea = area.getTotalAreaRectangles();
+        long rectanglesArea = area.getTotalAreaRectangles();
 
         //Used to initialize an average starting width and height
         ADT_Area horizontalStripResult = new Strat_HorizontalStrip(area.clone()).compute();
@@ -121,7 +121,7 @@ public class Strat_ORP_AnyTime extends Strat_AbstractStrat {
         bestResult.sortAs(area.getRectangles()); // Sort the area in the same manner as it originally was.
         
         CSV_Parser parser = new CSV_Parser();
-        parser.parse(".\\" + area.getRectangles().length + "_h" + area.getHeight() + "_r" + area.canFlip(), data);
+        parser.parse(".\\" + area.getRectangles().length + "_h" + area.getHeight() + "_r" + area.canFlip(), PackerTester.data);
 
         return bestResult;
     }

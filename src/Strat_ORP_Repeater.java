@@ -23,6 +23,7 @@ public class Strat_ORP_Repeater extends Strat_AbstractStrat {
     public ADT_Area compute() {
         ADT_Area bestArea = null;
         int leastArea = Integer.MAX_VALUE;
+        // @todo Do not check for time manually, but wait for the interrupt.
         while(System.currentTimeMillis()-startTime < timeLimit && 
                 leastArea > desiredArea){
             strategy = new Strat_ORP_BTP2D(area.clone(), null);

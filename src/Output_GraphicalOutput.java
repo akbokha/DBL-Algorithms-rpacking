@@ -21,7 +21,7 @@ public class Output_GraphicalOutput extends Output_AbstractOutput {
 
         scale = Math.min(maxWindowWidth/rectWidth, maxWindowHeight/rectHeight);
 
-        int windowWidth = (int) (rectWidth * scale) + 2 * border + 15;
+        int windowWidth = Math.max(400, (int) (rectWidth * scale) + 2 * border + 15);
         int windowHeight = (int) (rectHeight * scale) + 2 * border + 40;
 
         window = new JFrame();
@@ -67,8 +67,8 @@ public class Output_GraphicalOutput extends Output_AbstractOutput {
 
     private void setTitle() {
         // Print fillrate such that it can only be printed out of Momotor (-g)
-        double surface = area.getDimensions().x*area.getDimensions().y;
-        double fillRate = ((double) area.getTotalAreaRectangles() / surface) * 100;
+        long surface = area.getDimensions().x*area.getDimensions().y;
+        float fillRate = ((float) area.getTotalAreaRectangles() / surface) * 100;
         DecimalFormat df = new DecimalFormat("#0.0000");
 
         window.setTitle("Width: " + rectWidth + " Height: " + rectHeight + " Area: " + rectWidth * rectHeight

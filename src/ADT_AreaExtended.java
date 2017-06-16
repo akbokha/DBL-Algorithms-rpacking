@@ -378,19 +378,17 @@ public class ADT_AreaExtended extends ADT_Area implements Cloneable {
         float total = 0;
         for(int i = 0; i < rectangles.length; i++){
             if(placedRectangles[i]) {
-                total += rectangles[i].getHeight() * rectangles[i].getHeight();
+                total += (float)(rectangles[i].getHeight() * rectangles[i].getHeight());
             }
         }
-        return total/(width*height);
+        return total/(float)(width*height);
     }
     
-    @Override
-    public int getTotalAreaRectangles(){
-        int total = 0;
-        for(ADT_Rectangle rec : rectangles){
-            total += rec.getHeight() * rec.getHeight();
-        }
-        return total;
+    float getExpectedFillRate() {
+        float total = 0;
+        float areaRecs = (float)getTotalAreaRectangles();
+        float areaArea = getWidth() * getHeight();
+        return areaRecs / areaArea;
     }
 
     @Override
