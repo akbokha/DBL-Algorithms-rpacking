@@ -269,8 +269,8 @@ public class ADT_Area extends ADT_Rectangle implements Cloneable {
      */
     protected long getTotalAreaRectangles() {
         long totalArea = 0;
-        for(Iterator<ADT_Rectangle> rectangles = getRectangleIterator(); rectangles.hasNext();) {
-             ADT_Rectangle rec = rectangles.next();
+        ADT_Rectangle[] recs = getRectangles();
+        for(ADT_Rectangle rec : recs) {
              totalArea += (rec.getWidth() * rec.getHeight());   
          }
         return totalArea;

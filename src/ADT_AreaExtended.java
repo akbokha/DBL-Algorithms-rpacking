@@ -12,7 +12,7 @@ public class ADT_AreaExtended extends ADT_Area implements Cloneable {
     private final short EMPTY_INDEX = Short.MIN_VALUE;
     private ADT_Rectangle[] rectangles;
     private boolean[] placedRectangles;
-    private short[] array;
+    public short[] array;
     private final int version; // 3, 5, 10, 25 or 10000
     
     public ADT_AreaExtended(int width, int height, boolean flippable, ADT_Rectangle[] rectangles) {
@@ -389,7 +389,7 @@ public class ADT_AreaExtended extends ADT_Area implements Cloneable {
     public long getTotalAreaRectangles(){
         long total = 0;
         for(ADT_Rectangle rec : rectangles){
-            total += rec.getHeight() * rec.getHeight();
+            total += rec.getWidth() * rec.getHeight();
         }
         return total;
     }
