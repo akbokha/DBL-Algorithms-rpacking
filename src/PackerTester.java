@@ -49,6 +49,7 @@ public class PackerTester {
         for(int p = 0; p < NUMBER_OF_PERMUTATIONS; p++) {
             shuffleArray(area.getRectangles());
             long startTime = System.currentTimeMillis();
+            System.err.println("Run test");
             ADT_Area result = runTest(area);
 
             float surface = result.getDimensions().x*result.getDimensions().y;
@@ -111,7 +112,7 @@ public class PackerTester {
     }
 
     private ADT_Area runTest(ADT_Area area) {
-        return new Strat_ORP_BTP2D(area,new ADT_SortRecOnArea() ).compute();
+        return new Strat_ORP_BTP2D(area).compute();
     }
 
     private ADT_Rectangle[] generateInput() {
