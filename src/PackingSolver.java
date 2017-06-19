@@ -36,7 +36,7 @@ public class PackingSolver {
                     break;
                 default:
                     System.err.println("Invalid parameter '" + args[index] + "' given.");
-                    return;
+                    break;
             }
 
             ++index;
@@ -63,19 +63,19 @@ public class PackingSolver {
 
         long msToWait = TIME_LIMIT * 1000 - (System.currentTimeMillis() - PackingSolver.getStartTime());
 
-        boolean finished = false;
+        boolean wasStillRunningAfterTimeLimit = false;
         try {
             thread.join(msToWait);
 
-            finished = thread.isInterrupted();
-            if(! finished) {
-                thread.stop();
+            wasStillRunningAfterTimeLimit = thread.isAlive();
+            if(wasStillRunningAfterTimeLimit) {
+                thread.interrupt();
             }
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
 
-        if (! finished) {
+        if (wasStillRunningAfterTimeLimit) {
             result = strategy.getIntermediateResult();
         }
 
@@ -96,6 +96,10 @@ public class PackingSolver {
         
         long endTime = System.currentTimeMillis(); // end time
         System.err.println((endTime - curTime) + "ms");
+        if(!graphical) {
+            //Force close all other running threads
+            System.exit(0);
+        }
     }
     
     /**

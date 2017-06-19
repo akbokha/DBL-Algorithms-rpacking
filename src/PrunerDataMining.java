@@ -22,13 +22,13 @@ public class PrunerDataMining implements Strat_BT_PrunerInterface{
     }
     
     @Override
-    public boolean reject(ADT_AreaExtended area, ADT_Rectangle last) {
+    public boolean reject(ADT_AreaExtended area, ADT_Rectangle last, int index) {
         int depth = area.getCount() - area.getRectanglesToBePlaced().length;
         float frWhenCalled = 100f*area.getFillRate();
         long startTime = System.nanoTime();
         float expectedFR = 100f*(float)area.getTotalAreaRectangles()/(float)(area.getHeight()*area.getWidth());
         
-        boolean prune = pruner.reject(area, last);
+        boolean prune = pruner.reject(area, last, index);
         long endTime = System.nanoTime();
         long time = endTime - startTime;
         if(prune) {

@@ -1,5 +1,4 @@
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
@@ -15,7 +14,8 @@ public class Strat_BT_Pruner_WS2 implements Strat_BT_PrunerInterface {
     private int[] rectangleAreas; // index = area, a[i] = sum of all the areas of the rectangles with area == index
     private int [] capacityBins; // index = capacity, a[i] = sum of capacities of all the bins that have a capacity == index
     
-    private long totalAreaRectangles; // the total area of all the input rectangles
+    private int totalAreaRectangles; // the total area of all the input rectangles
+    private static final int NOTSET = -2;
     int maxAreaOfRectangles = 0;
     int maxCapacity = 1;
     
@@ -23,46 +23,63 @@ public class Strat_BT_Pruner_WS2 implements Strat_BT_PrunerInterface {
     private int carryOver;
     
     @Override
-    public boolean reject (ADT_AreaExtended area, ADT_Rectangle last) {
+    public boolean reject (ADT_AreaExtended area, ADT_Rectangle last, int index) {
+         totalAreaRectangles = area.getTotalAreaRectanglesToBePlaced(); // store sum areas rectangle
+         
+         /**
+          * Operations that are needed to initialize and fill the array
+          * The index of the array represents the area value
+          * The value at array[index] = the sum of all the rectangles that have 
+          * an area that is equal to the index
+          */
+         rectanglesToBePlaced = new ArrayList<>();
+         collectRectanglesToBePlaced(area); // add the rectangles that still neet to be placed to the collection
+         rectangleAreas = new int[maxAreaOfRectangles+1]; // initialize the described array
+         fillRectangleAreaArray(); // fill the rectangle area array
+         
+         emptyCells = new ArrayList<>();
+         findAndInitializeEmptyCells(area); // fill the collection with all the empty cells and 
+         bins = new ArrayList<>();
+         makeBins(); // fills the collection that will hold the bins
+         capacityBins = new int[maxCapacity+1];
+         fillCapacityBinsArray(); // fill the bin capacity array
+         
+         wastedSpace = 0;
+         carryOver = 0;
+         
+         for (int i = 1; i < rectangleAreas.length; i++) {
+             if (capacityBins[i] > (rectangleAreas[i] + carryOver)) {
+                 wastedSpace += (capacityBins[i] - (rectangleAreas[i] + carryOver));
+                 carryOver = 0;
+             } else if (capacityBins[i] == (rectangleAreas[i] + carryOver)){
+                 carryOver = 0;   
+             } else if (capacityBins[i] < (rectangleAreas[i] + carryOver)) {
+                 carryOver = (rectangleAreas[i] + carryOver) - capacityBins[i];
+             }
+         }
         
-        totalAreaRectangles = area.getTotalAreaRectangles(); // store sum areas rectangle
-        
-        /**
-         * Operations that are needed to initialize and fill the array
-         * The index of the array represents the area value
-         * The value at array[index] = the sum of all the rectangles that have 
-         * an area that is equal to the index
-         */
-        rectanglesToBePlaced = Arrays.asList(area.getRectanglesToBePlaced());
-        if(rectanglesToBePlaced.isEmpty()) {
-            return false;
+         return ((wastedSpace + totalAreaRectangles) > (area.getWidth() * area.getHeight()));
+    }
+    
+    /**
+     * Collects the rectangles that still need to be placed
+     * And sets {@code MaxAreaOfRectangles} to the right value 
+     */
+    private void collectRectanglesToBePlaced (ADT_AreaExtended area) {
+        for (Iterator<ADT_Rectangle> rectangles = area.getRectangleIterator(); rectangles.hasNext();) {
+            ADT_Rectangle current_rec = rectangles.next(); // next rectangle
+            if (current_rec.getX() == NOTSET && current_rec.getY() == NOTSET) { // rectangle not placed yet
+                rectanglesToBePlaced.add(current_rec); // add to collection
+                /**
+                 * need to keep track of the largest area we encounter among the rectangles that still
+                 * need to be placed. This will be used in the initialization of {@code rectangleAreas}
+                 */
+                int areaRectangle = current_rec.getWidth() * current_rec.getHeight();
+                if (areaRectangle > maxAreaOfRectangles) { 
+                    maxAreaOfRectangles = areaRectangle;
+                }
+            }  
         }
-        maxAreaOfRectangles = rectanglesToBePlaced.get(0).getWidth() * rectanglesToBePlaced.get(0).getHeight();
-        rectangleAreas = new int[maxAreaOfRectangles+1]; // initialize the described array
-        fillRectangleAreaArray(); // fill the rectangle area array
-
-        emptyCells = new ArrayList<>();
-        findAndInitializeEmptyCells(area); // fill the collection with all the empty cells and 
-        bins = new ArrayList<>();
-        makeBins(); // fills the collection that will hold the bins
-        capacityBins = new int[maxCapacity+1];
-        fillCapacityBinsArray(); // fill the bin capacity array
-
-        wastedSpace = 0;
-        carryOver = 0;
-
-        for (int i = 1; i < rectangleAreas.length; i++) {
-            if (capacityBins[i] > (rectangleAreas[i] + carryOver)) {
-                wastedSpace += (capacityBins[i] - (rectangleAreas[i] + carryOver));
-                carryOver = 0;
-            } else if (capacityBins[i] == (rectangleAreas[i] + carryOver)){
-                carryOver = 0;   
-            } else if (capacityBins[i] < (rectangleAreas[i] + carryOver)) {
-                carryOver = (rectangleAreas[i] + carryOver) - capacityBins[i];
-            }
-        }
-
-        return ((wastedSpace + totalAreaRectangles) > (area.getWidth() * area.getHeight()));
     }
     
     /**
@@ -73,7 +90,7 @@ public class Strat_BT_Pruner_WS2 implements Strat_BT_PrunerInterface {
     private void fillRectangleAreaArray () {
         for (ADT_Rectangle rectangle : rectanglesToBePlaced) {
             int areaOfRectangle = rectangle.getWidth() * rectangle.getHeight();
-            rectangleAreas[areaOfRectangle] += areaOfRectangle; 
+            rectangleAreas[areaOfRectangle] = rectangleAreas[areaOfRectangle] + areaOfRectangle; 
         }
     }
     
@@ -98,17 +115,11 @@ public class Strat_BT_Pruner_WS2 implements Strat_BT_PrunerInterface {
     private int emptyHorizontalSpace (int x, int y, int maxWidth, ADT_AreaExtended area) {
         int emptyHorizontalSpace = 1; // the emptycell itself has a width of 1
         // go to the right
-        for (int i = x; i < maxWidth; i++) {
-            if(area.isOccupied(new ADT_Vector(i, y))) {
-                break;
-            }
+        for (int i = x; i < maxWidth && ! area.isOccupied(new ADT_Vector(i, y)); i++) {
             emptyHorizontalSpace++;
         }
         // go to the left
-        for (int j = x; j >= 0; j--) {
-            if(area.isOccupied(new ADT_Vector(j, y))) {
-                break;
-            }
+        for (int j = x; j >= 0 && ! area.isOccupied(new ADT_Vector(j, y)); j--) {
             emptyHorizontalSpace++;
         }
         return emptyHorizontalSpace;
@@ -118,17 +129,11 @@ public class Strat_BT_Pruner_WS2 implements Strat_BT_PrunerInterface {
     private int emptyVerticalSpace (int x, int y, int maxHeight, ADT_AreaExtended area) {
         int emptyVerticalSpace = 1; // the emptycell itself has a height of 1
         // go up
-        for (int i = y; i < maxHeight; i++) {
-            if(area.isOccupied(new ADT_Vector(x, i))) {
-                break;
-            }
+        for (int i = y; i < maxHeight && ! area.isOccupied(new ADT_Vector(x, i)); i++) {
             emptyVerticalSpace++;
         }
         // go down
-        for (int j = y; j >= 0; j--) {
-            if(area.isOccupied(new ADT_Vector(x, j))) {
-                break;
-            }
+        for (int j = y; j >= 0 && ! area.isOccupied(new ADT_Vector(x, j)); j--) {
             emptyVerticalSpace++;
         }
         return emptyVerticalSpace;
@@ -161,7 +166,7 @@ public class Strat_BT_Pruner_WS2 implements Strat_BT_PrunerInterface {
     // fill the capacityBins array
     private void fillCapacityBinsArray() {
         for (Bin bin : bins) {
-            capacityBins[bin.capacity] += bin.capacity;
+            capacityBins[bin.capacity] = capacityBins[bin.capacity] + bin.capacity;
         }
     }
     

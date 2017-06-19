@@ -6,6 +6,7 @@ import java.util.Collection;
  * pseudo-code from https://en.wikipedia.org/wiki/Backtracking#Pseudocode.
  */
 abstract public class Strat_BT_Template extends Strat_AbstractStrat {
+    int index = -1;
 
     private Collection<Strat_BT_PrunerInterface> pruners;
 
@@ -42,6 +43,7 @@ abstract public class Strat_BT_Template extends Strat_AbstractStrat {
      * @return a valid solution if it exists, else null.
      */
     private boolean computeBranch() {
+        index ++;
         long time = System.nanoTime();
         int endTimePruner = 0;
         boolean pruned = false;
@@ -51,7 +53,7 @@ abstract public class Strat_BT_Template extends Strat_AbstractStrat {
             ADT_Rectangle last = last();
             long timePruner = System.nanoTime();
             // Check if this iteration can be pruned.
-            pruned = reject(last);
+            pruned = reject(last, index);
                 
             endTimePruner = (int)(System.nanoTime()- timePruner);
 
@@ -60,6 +62,7 @@ abstract public class Strat_BT_Template extends Strat_AbstractStrat {
                 long endTime = System.nanoTime()- time;
                 PackerTester.data.dataSet.add(new Tuple(areaEx.getCount()-areaEx.getRectanglesToBePlaced().length, 100f*areaEx.getFillRate(), endTime, 100f*areaEx.getExpectedFillRate(), endTimePruner, pruned));
                 Strat_ORP_AnyTime.parser.parse();
+                index--;
                 return true;
             }
             // Compute the next result and check if it is valid.
@@ -67,6 +70,7 @@ abstract public class Strat_BT_Template extends Strat_AbstractStrat {
                 long endTime = System.nanoTime()- time;
                 PackerTester.data.dataSet.add(new Tuple(areaEx.getCount()-areaEx.getRectanglesToBePlaced().length, 100f*areaEx.getFillRate(), endTime, 100f*areaEx.getExpectedFillRate(), endTimePruner, pruned));
                 Strat_ORP_AnyTime.parser.parse();
+                index--;
                 return true;
             }
             
@@ -77,18 +81,20 @@ abstract public class Strat_BT_Template extends Strat_AbstractStrat {
         }
         Strat_ORP_AnyTime.parser.parse();
         revert();
+        index--;
         return false;
     }
 
     /**
      * Evaluates all pruners to detect if this branch could be rejected.
      * @param last the rectangle changed last.
+     * @param index
      * @return true if any of the pruners think that this branch should be rejected, else false.
      */
-    protected boolean reject(ADT_Rectangle last) {
+    protected boolean reject(ADT_Rectangle last, int index) {
         if(last != null) {
             for (Strat_BT_PrunerInterface pruner : pruners) {
-                if (pruner.reject(areaEx, last)) {
+                if (pruner.reject(areaEx, last, index)) {
                     return true;
                 }
             }

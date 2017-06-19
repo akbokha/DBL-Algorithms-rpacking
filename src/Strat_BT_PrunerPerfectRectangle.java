@@ -7,12 +7,15 @@
 public class Strat_BT_PrunerPerfectRectangle implements Strat_BT_PrunerInterface {
 
     @Override
-    public boolean reject(ADT_AreaExtended area, ADT_Rectangle last) {
+    public boolean reject(ADT_AreaExtended area, ADT_Rectangle last, int index) {
         /*
          * If there is a perfect rectangle under or to the left of the position
          * of the current rectangle, this position is dominated, hence reject.
          */
-        return perfectRectBelow(area, last) || perfectRectLeft(area, last);
+        if(index < 5 || index == 7 || index == 6 || index == 8) {
+            return perfectRectLeft(area, last) || perfectRectBelow(area, last);
+        }
+        return false;
     }
     
     /**

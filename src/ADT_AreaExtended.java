@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /*
  * @todo requires rotate rectangle function
@@ -11,16 +12,23 @@ public class ADT_AreaExtended extends ADT_Area implements Cloneable {
     private final short EMPTY_INDEX = Short.MIN_VALUE;
     private ADT_Rectangle[] rectangles;
     private boolean[] placedRectangles;
-    private short[] array;
+    public short[] array;
     private final int version; // 3, 5, 10, 25 or 10000
     
     public ADT_AreaExtended(int width, int height, boolean flippable, ADT_Rectangle[] rectangles) {
         super(width, height, flippable, rectangles);
-        sortAs(rectangles, new ADT_SortOnDimension());
+        Arrays.sort(rectangles);
         setDimensions(width, height);
         this.rectangles = rectangles;
         this.placedRectangles = new boolean[rectangles.length];
         this.version = rectangles.length;
+    }
+    
+    float getExpectedFillRate() {
+        float total = 0;
+        float areaRecs = (float)getTotalAreaRectangles();
+        float areaArea = getWidth() * getHeight();
+        return areaRecs / areaArea;
     }
     
     /**
@@ -378,17 +386,19 @@ public class ADT_AreaExtended extends ADT_Area implements Cloneable {
         float total = 0;
         for(int i = 0; i < rectangles.length; i++){
             if(placedRectangles[i]) {
-                total += (float)(rectangles[i].getHeight() * rectangles[i].getHeight());
+                total += rectangles[i].getHeight() * rectangles[i].getHeight();
             }
         }
-        return total/(float)(width*height);
+        return total/(width*height);
     }
     
-    float getExpectedFillRate() {
-        float total = 0;
-        float areaRecs = (float)getTotalAreaRectangles();
-        float areaArea = getWidth() * getHeight();
-        return areaRecs / areaArea;
+    @Override
+    public long getTotalAreaRectangles(){
+        long total = 0;
+        for(ADT_Rectangle rec : rectangles){
+            total += rec.getWidth() * rec.getHeight();
+        }
+        return total;
     }
 
     @Override
