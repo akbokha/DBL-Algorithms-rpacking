@@ -63,19 +63,19 @@ public class PackingSolver {
 
         long msToWait = TIME_LIMIT * 1000 - (System.currentTimeMillis() - PackingSolver.getStartTime());
 
-        boolean finished = false;
+        boolean wasStillRunningAfterTimeLimit = false;
         try {
             thread.join(msToWait);
 
-            finished = thread.isInterrupted();
-            if(! finished) {
-                thread.stop();
+            wasStillRunningAfterTimeLimit = thread.isAlive();
+            if(wasStillRunningAfterTimeLimit) {
+                thread.interrupt();
             }
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
 
-        if (! finished) {
+        if (wasStillRunningAfterTimeLimit) {
             result = strategy.getIntermediateResult();
         }
 
