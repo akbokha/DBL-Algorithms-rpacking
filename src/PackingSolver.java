@@ -36,7 +36,7 @@ public class PackingSolver {
                     break;
                 default:
                     System.err.println("Invalid parameter '" + args[index] + "' given.");
-                    return;
+                    break;
             }
 
             ++index;
