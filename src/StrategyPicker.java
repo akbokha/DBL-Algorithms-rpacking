@@ -44,9 +44,9 @@ public class StrategyPicker {
 
         // Use the AnyTime for 10 or less rectangles.
         if (count <= 10) {
-//            Strat_BT_PrunerInterface[] pruners = new Strat_BT_PrunerInterface[]{
-//                    new Strat_BT_PrunerPerfectRectangle(), new Strat_BT_Pruner_NarrowEmptyStrips()
-//            };
+            Strat_BT_PrunerInterface[] pruners = new Strat_BT_PrunerInterface[]{
+                    /*new Strat_BT_PrunerPerfectRectangle(), new Strat_BT_Pruner_NarrowEmptyStrips()*/
+            };
             magazine.add(new Strat_ORP_AnyTime(area));
         }
 

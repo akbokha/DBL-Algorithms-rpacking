@@ -30,7 +30,7 @@ public class PrunerDataMining implements Strat_BT_PrunerInterface{
         
         boolean prune = pruner.reject(area, last);
         long endTime = System.nanoTime();
-        int time = (int)(endTime - startTime);
+        long time = endTime - startTime;
         if(prune) {
 //            System.err.println("pruned");
             Tuple tuple = new Tuple(depth, frWhenCalled, time, expectedFR);

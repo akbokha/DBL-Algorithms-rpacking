@@ -125,14 +125,7 @@ public class PackerTester {
     }
 
     private ADT_Area runTest(ADT_Area area) {
-        
-        
-        
-        Strat_BT_PrunerInterface[] pruners = new Strat_BT_PrunerInterface[]{
-            /*new Strat_BT_PrunerPerfectRectangle()/*, new Strat_BT_Pruner_NarrowEmptyStrips()*/
-        };
-        
-        return new Strat_ORP_AnyTime(area, pruners).compute();
+        return StrategyPicker.pickStrategy().compute();
     }
 
     private ADT_Rectangle[] generateInput() {

@@ -52,13 +52,13 @@ public class PackingSolver {
         
         StrategyPicker.area = area;
         Strat_AbstractStrat strategy = StrategyPicker.pickStrategy();
-
-        Thread thread = new Thread(new Runnable() {
+        Runnable t = new Runnable() {
             @Override
             public void run() {
                 result = strategy.compute();
             }
-        });
+        };
+        Thread thread = new Thread();
         thread.start();
 
         long msToWait = TIME_LIMIT * 1000 - (System.currentTimeMillis() - PackingSolver.getStartTime());
