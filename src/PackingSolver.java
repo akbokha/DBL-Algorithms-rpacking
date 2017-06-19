@@ -104,6 +104,7 @@ public class PackingSolver {
     
     /**
      * Returns time at which process started.
+     * @return 
      */
     public static long getStartTime(){
         return curTime;

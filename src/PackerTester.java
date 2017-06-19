@@ -13,7 +13,7 @@ public class PackerTester {
 
     private static final int NUMBER_OF_TESTS = 1;
     private static final int NUMBER_OF_PERMUTATIONS = 100;
-    private static final int NUMBER_OF_RECTANGLES = 1000;
+    private static final int NUMBER_OF_RECTANGLES = 10000;
 
     private Random sortRandom = new Random();
 
@@ -47,7 +47,6 @@ public class PackerTester {
         ADT_Area bestArea = null;
 
         for(int p = 0; p < NUMBER_OF_PERMUTATIONS; p++) {
-            shuffleArray(area.getRectangles());
             long startTime = System.currentTimeMillis();
             System.err.println("Run test");
             ADT_Area result = runTest(area);
@@ -65,21 +64,6 @@ public class PackerTester {
             TestRunTuple tuple = calculateTuple(run, p, result, compTime);
             tuples.add(tuple);
         }
-    }
-
-    private void shuffleArray(ADT_Rectangle[] array) {
-            int index;
-            Random random = new Random();
-            for (int i = array.length - 1; i > 0; i--)
-            {
-                index = random.nextInt(i + 1);
-                if (index != i)
-                {
-                    ADT_Rectangle temp = array[index];
-                    array[index] = array[i];
-                    array[i] = temp;
-                }
-            }
     }
 
     private void generateCSV(ArrayList<TestRunTuple> tuples, String path) {
@@ -112,7 +96,7 @@ public class PackerTester {
     }
 
     private ADT_Area runTest(ADT_Area area) {
-        return new Strat_ORP_BTP2D(area).compute();
+        return new Strat_ORP_BTP2D(area, null).compute();
     }
 
     private ADT_Rectangle[] generateInput() {
