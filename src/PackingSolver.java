@@ -96,6 +96,10 @@ public class PackingSolver {
         
         long endTime = System.currentTimeMillis(); // end time
         System.err.println((endTime - curTime) + "ms");
+        if(!graphical) {
+            //Force close all other running threads
+            System.exit(0);
+        }
     }
     
     /**
