@@ -400,8 +400,10 @@ public class Strat_ORP_BinaryTreePacker extends Strat_AbstractStrat {
         }
         // check if there are empty collections (and remove them)
         for (Integer i : checkIfEmpty) {
-            if (binaryTree.points.get(i).isEmpty()) {
-                binaryTree.points.remove(i);
+            if (binaryTree.points.get(i) != null) {
+                if (binaryTree.points.get(i).isEmpty()) {
+                    binaryTree.points.remove(i);
+                }    
             }
         }
     }

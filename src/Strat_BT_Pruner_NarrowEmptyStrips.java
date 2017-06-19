@@ -52,7 +52,7 @@ public class Strat_BT_Pruner_NarrowEmptyStrips implements Strat_BT_PrunerInterfa
                     area.canFlip(), fittingRecs.toArray(new ADT_Rectangle[fittingRecs.size()]));
             
             // First check if they might fit by comparing size
-            int fillRate = stripArea.getTotalAreaRectangles()/(stripArea.getWidth()*stripArea.getHeight());
+            long fillRate = stripArea.getTotalAreaRectangles()/(stripArea.getWidth()*stripArea.getHeight());
             if(fillRate < STRICTNESS){
                 // Call algorithm
                 if(stripArea.getCount() > 10 || fillRate < ESTIMATE){ // estimate containment
@@ -91,7 +91,7 @@ public class Strat_BT_Pruner_NarrowEmptyStrips implements Strat_BT_PrunerInterfa
                     area.canFlip(), fittingRecs.toArray(new ADT_Rectangle[fittingRecs.size()]));
             
             // First check if they might fit by comparing size
-            int fillRate = stripArea.getTotalAreaRectangles()/(stripArea.getWidth()*stripArea.getHeight());
+            long fillRate = stripArea.getTotalAreaRectangles()/(stripArea.getWidth()*stripArea.getHeight());
             if(fillRate < STRICTNESS){
                 // Call algorithm
                 if(stripArea.getCount() > 10 || fillRate < ESTIMATE){ // estimate containment

@@ -42,21 +42,22 @@ abstract public class Strat_BT_Template extends Strat_AbstractStrat {
      * @return a valid solution if it exists, else null.
      */
     private boolean computeBranch() {
-        ADT_Rectangle last = last();
-
-        // Check if this iteration can be pruned.
-        if (reject(last)) {
-            return false;
-        }
-
-        // Check if this is a valid solution.
-        if (accept(last)) {
-            return true;
-        }
 
         // Dispatch all other calls.
         boolean hasNext = first(); // Select the first branch.
         while (hasNext) {
+            ADT_Rectangle last = last();
+            
+            // Check if this is a valid solution.
+            if (accept(last)) {
+                return true;
+            }
+            
+            // Check if this iteration can be pruned.
+            if (reject(last)) {
+                return false;
+            }
+            
             // Compute the next result and check if it is valid.
             if (computeBranch()) {
                 return true;
