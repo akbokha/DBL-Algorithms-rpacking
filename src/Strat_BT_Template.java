@@ -55,7 +55,8 @@ abstract public class Strat_BT_Template extends Strat_AbstractStrat {
             
             // Check if this iteration can be pruned.
             if (reject(last)) {
-                return false;
+                hasNext = next();
+                continue;
             }
             
             // Compute the next result and check if it is valid.
@@ -64,8 +65,8 @@ abstract public class Strat_BT_Template extends Strat_AbstractStrat {
             }
 
             hasNext = next(); // Compute the next branch, if there is one.
-        }
-
+            }
+        
         revert();
 
         return false;
