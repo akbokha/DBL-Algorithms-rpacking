@@ -30,7 +30,7 @@ public class Strat_ORP_Shotgun extends Strat_AbstractStrat {
                 if (area < minimumArea) {
                     System.err.print(" (new best)");
                     minimumArea = area;
-                    bestArea = result;
+                    bestArea = result.clone();
                 }
 
                 System.err.print("\n");
