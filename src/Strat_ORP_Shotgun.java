@@ -35,7 +35,7 @@ public class Strat_ORP_Shotgun extends Strat_AbstractStrat {
 
                 System.err.print("\n");
             } catch (Exception e) {
-                System.err.println("Strategy '" + strategy.getClass() + "' threw an exception:" + e.getMessage());
+                System.err.println("Strategy '" + strategy.getClass() + "' threw an exception");
             }
         }
 
