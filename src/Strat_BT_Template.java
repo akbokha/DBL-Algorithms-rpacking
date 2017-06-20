@@ -44,9 +44,9 @@ abstract public class Strat_BT_Template extends Strat_AbstractStrat {
      */
     private boolean computeBranch() {
         index ++;
-        long time = System.nanoTime();
-        int endTimePruner = 0;
-        boolean pruned = false;
+        long time;
+        int endTimePruner;
+        boolean pruned;
         // Dispatch all other calls.
         boolean hasNext = first(); // Select the first branch.
         while (hasNext) {
@@ -56,11 +56,11 @@ abstract public class Strat_BT_Template extends Strat_AbstractStrat {
             pruned = reject(last, index);
                 
             endTimePruner = (int)(System.nanoTime()- timePruner);
-
+            time = System.nanoTime();
             // Check if this is a valid solution.
             if (accept(last)) {
                 long endTime = System.nanoTime()- time;
-                PackerTester.data.dataSet.add(new Tuple(areaEx.getCount()-areaEx.getRectanglesToBePlaced().length, 100f*areaEx.getFillRate(), endTime, 100f*areaEx.getExpectedFillRate(), endTimePruner, pruned));
+                PackerTester.data.dataSet.add(new Tuple(index, 100f*areaEx.getFillRate(), endTime, 100f*areaEx.getExpectedFillRate(), endTimePruner, pruned));
                 Strat_ORP_AnyTime.parser.parse();
                 index--;
                 return true;
@@ -68,18 +68,17 @@ abstract public class Strat_BT_Template extends Strat_AbstractStrat {
             // Compute the next result and check if it is valid.
             if (computeBranch()) {
                 long endTime = System.nanoTime()- time;
-                PackerTester.data.dataSet.add(new Tuple(areaEx.getCount()-areaEx.getRectanglesToBePlaced().length, 100f*areaEx.getFillRate(), endTime, 100f*areaEx.getExpectedFillRate(), endTimePruner, pruned));
+                PackerTester.data.dataSet.add(new Tuple(index, 100f*areaEx.getFillRate(), endTime, 100f*areaEx.getExpectedFillRate(), endTimePruner, pruned));
                 Strat_ORP_AnyTime.parser.parse();
                 index--;
                 return true;
             }
-            
-            hasNext = next(); // Compute the next branch, if there is one.
             int endTime = (int)(System.nanoTime()- time);
-            PackerTester.data.dataSet.add(new Tuple(areaEx.getCount()-areaEx.getRectanglesToBePlaced().length, 100f*areaEx.getFillRate(), endTime, 100f*areaEx.getExpectedFillRate(), endTimePruner, pruned));
+            PackerTester.data.dataSet.add(new Tuple(index, 100f*areaEx.getFillRate(), endTime, 100f*areaEx.getExpectedFillRate(), endTimePruner, pruned));
             Strat_ORP_AnyTime.parser.parse();
+            hasNext = next(); // Compute the next branch, if there is one.
+            
         }
-        Strat_ORP_AnyTime.parser.parse();
         revert();
         index--;
         return false;

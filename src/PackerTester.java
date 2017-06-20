@@ -46,9 +46,9 @@ public class PackerTester {
     }
     
     private void readTests(ArrayList<TestRunTuple> tuples) {
-        for(int i = STARTING_TEST; i < NUMBER_OF_TESTS + STARTING_TEST; i++) {
-            String file = ".\\test\\custom\\10_0_hf_rn_min1_max10_" + Integer.toString(i) + ".txt";
-            file = ".\\test\\10_01_h11_rn.txt";
+        String[] files = {".\\test\\10_01_h11_rn.txt", ".\\test\\10_02_h15_ry.txt", ".\\test\\10_03_hf_ry.txt", ".\\test\\10_04_hf_rn.txt"};
+        for(String file : files) {
+//            String file = ".\\test\\custom\\10_0_hf_rn_min1_max10_" + Integer.toString(i) + ".txt";
             
             Input_Scanner input = new Input_File(file);
             

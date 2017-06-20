@@ -24,11 +24,6 @@ public class Strat_ORP_AnyTime extends Strat_AbstractStrat {
         data = new DataMining();
         parser = new CSV_Parser("E:\\" + Integer.toString(area.getRectangles().length) + "_h" + Integer.toString(area.getHeight()) + "_r" + Boolean.toString(area.canFlip()), PackerTester.data);
         
-        /*new Strat_BT_PrunerEmptySpace(), new Strat_BT_Pruner_WS2(), new Strat_BT_PrunerPerfectRectangle(), new Strat_BT_Pruner_NarrowEmptyStrips()*/
-//        pruners = new Strat_BT_PrunerInterface[]{
-//            new PrunerDataMining(new Strat_BT_PrunerPerfectRectangle(), data.dataSet)
-//        };
-        
         bestResult = previousResult;
         
         this.pruners = pruners;
