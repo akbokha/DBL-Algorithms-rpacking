@@ -20,7 +20,7 @@ public class Strat_BT_Pruner_NarrowEmptyStrips implements Strat_BT_PrunerInterfa
 
     @Override
     public boolean reject(ADT_AreaExtended area, ADT_Rectangle last, int index) {
-        if(index > 5) {
+        if(index == 0 || index > 5) {
             return false;
         }
         this.area = area;
