@@ -18,11 +18,11 @@ public class Strat_ORP_Shotgun extends Strat_AbstractStrat {
                 // Add the best area to the Anytime strategy.
                 if (strategy.getClass().equals(Strat_ORP_AnyTime.class)) {
                     Strat_ORP_AnyTime original = (Strat_ORP_AnyTime) strategy;
-                    strategy = new Strat_ORP_AnyTime(original.getArea(), original.getPruners(), bestArea);
+                    strategy = new Strat_ORP_AnyTime(original.getArea().clone(), original.getPruners(), bestArea.clone());
                 }
 
                 currentStrategy = strategy;
-                ADT_Area result = strategy.compute();
+                ADT_Area result = strategy.compute().clone();
                 int area = result.getArea();
 
                 System.err.print("Shotgun result: " + area + " with " + strategy);
@@ -30,7 +30,7 @@ public class Strat_ORP_Shotgun extends Strat_AbstractStrat {
                 if (area < minimumArea) {
                     System.err.print(" (new best)");
                     minimumArea = area;
-                    bestArea = result.clone();
+                    bestArea = result;
                 }
 
                 System.err.print("\n");
@@ -39,7 +39,7 @@ public class Strat_ORP_Shotgun extends Strat_AbstractStrat {
             }
         }
 
-        return bestArea;
+        return bestArea.clone();
     }
 
     @Override
