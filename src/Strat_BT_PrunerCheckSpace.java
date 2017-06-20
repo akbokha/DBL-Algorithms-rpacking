@@ -8,9 +8,6 @@ public class Strat_BT_PrunerCheckSpace implements Strat_BT_PrunerInterface {
     
     @Override
     public boolean reject(ADT_AreaExtended area, ADT_Rectangle last, int index) {
-        if(index != 5 && index != 0) {
-            return false;
-        }
         recs = area.getRectangles();
         return (checkRight(area, last) && checkLeft(area, last) && checkBottom(area, last)) || (checkBot(area, last) && checkTop(area, last) && leftCheck(area, last));
     }
