@@ -12,10 +12,10 @@ public class Strat_BT_PrunerPerfectRectangle implements Strat_BT_PrunerInterface
          * If there is a perfect rectangle under or to the left of the position
          * of the current rectangle, this position is dominated, hence reject.
          */
-        if(index < 5 || index == 7 || index == 6 || index == 8) {
-            return perfectRectLeft(area, last) || perfectRectBelow(area, last);
+        if(index > 4 && index != 6 && index != 7 && index != 8) {
+            return false;
         }
-        return false;
+        return perfectRectLeft(area, last) || perfectRectBelow(area, last);
     }
     
     /**
