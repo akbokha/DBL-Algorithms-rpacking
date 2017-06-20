@@ -7,13 +7,13 @@ public class PackingSolver {
     private static long curTime;
     private static ADT_Area result;
     final static private int TIME_LIMIT = 60 * 5 - 15; // Stop 15 seconds early, just to be on the safe side.
-
+    
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) throws Exception {
         curTime = System.currentTimeMillis(); // to check running time
-
+        
         Input_Scanner input = null;
         boolean graphical = false;
 
@@ -36,7 +36,7 @@ public class PackingSolver {
                     break;
                 default:
                     System.err.println("Invalid parameter '" + args[index] + "' given.");
-                    return;
+                    break;
             }
 
             ++index;
@@ -47,9 +47,9 @@ public class PackingSolver {
         }
 
         ADT_Area area;
-
+        
         area = input.read();
-
+        
         StrategyPicker.area = area;
         Strat_AbstractStrat strategy = StrategyPicker.pickStrategy();
 
@@ -93,16 +93,20 @@ public class PackingSolver {
             Output_AbstractOutput graphicalOutput = new Output_GraphicalOutput(result);
             graphicalOutput.draw();
         }
-
+        
         long endTime = System.currentTimeMillis(); // end time
         System.err.println((endTime - curTime) + "ms");
+        if(!graphical) {
+            //Force close all other running threads
+            System.exit(0);
+        }
     }
-
+    
     /**
      * Returns time at which process started.
      */
     public static long getStartTime(){
         return curTime;
     }
-
+    
 }
