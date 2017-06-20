@@ -23,7 +23,7 @@ public class Strat_BT_Pruner_WS2 implements Strat_BT_PrunerInterface {
     private int carryOver;
     
     @Override
-    public boolean reject (ADT_AreaExtended area, ADT_Rectangle last) {
+    public boolean reject (ADT_AreaExtended area, ADT_Rectangle last, int index) {
          totalAreaRectangles = area.getTotalAreaRectanglesToBePlaced(); // store sum areas rectangle
          
          /**

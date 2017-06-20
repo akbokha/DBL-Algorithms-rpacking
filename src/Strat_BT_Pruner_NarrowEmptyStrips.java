@@ -19,15 +19,13 @@ public class Strat_BT_Pruner_NarrowEmptyStrips implements Strat_BT_PrunerInterfa
     private final double ESTIMATE = 0.7;
 
     @Override
-    public boolean reject(ADT_AreaExtended area, ADT_Rectangle last) {
+    public boolean reject(ADT_AreaExtended area, ADT_Rectangle last, int index) {
+        if(index < 3) {
+            return false;
+        }
         this.area = area;
         
-        // To ensure immediate return if bottom returns true
-        if(bottomStrip(last)){
-            return true;
-        }else{
-            return leftStrip(last);
-        }
+        return bottomStrip(last) || leftStrip(last);
     }
 
     /**
